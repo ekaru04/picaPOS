@@ -14,7 +14,7 @@ $queryData = mysql_query("SELECT c.categoryName, SUM(t.productSubtotal) AS jumla
 FROM taborderdetail t 
 JOIN mproduct m ON m.productID  = t.productID 
 JOIN mcategory c ON m.categoryID = c.categoryID
-WHERE t.dateCreated = '$today'
+WHERE t.dateCreated = '$today' AND t.status != 3
 group by c.categoryID");
 
 $array = array();

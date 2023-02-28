@@ -53,7 +53,7 @@ $totalPrice = "Rp. ".number_format($row["total"]).",-";
                 <input type='text' class='form-control-plaintext' disabled value='ORDER ID' />
               </div>
               <div class='col-4'>
-                <input type='text' class='form-control' style='width:300px' value='<?php echo $orderID; ?>' disabled required />
+                <input type='text' class='form-control' style='width:300px' value='<?php echo $orderID; ?>' disabled/>
               </div>
             </div>
 
@@ -61,11 +61,11 @@ $totalPrice = "Rp. ".number_format($row["total"]).",-";
               <div class='col-2 label'>
                 <input type='text' class='form-control-plaintext' disabled value='Order Method' />
               </div>
-              <div class='col-3'>
+              <div class='col-4'>
                 <?php if($row[orderMethod] == 1): ?>
-                <input type='text' class='form-control' style='width:300px' value='<?php echo "Dine In"; ?>' disabled required />
+                <input type='text' class='form-control' style='width:300px' value='<?php echo "Dine In"; ?>' disabled/>
                 <?php else: ?>
-                <input type='text' class='form-control' style='width:300px' value='<?php echo "Take Away"; ?>' disabled required />
+                <input type='text' class='form-control' style='width:300px' value='<?php echo "Take Away"; ?>' disabled/>
               <?php endif; ?>
               </div>
             </div>
@@ -74,8 +74,8 @@ $totalPrice = "Rp. ".number_format($row["total"]).",-";
               <div class='col-2 label'>
                 <input type='text' class='form-control-plaintext' disabled value='Total Product' />
               </div>
-              <div class='col-3'>
-                <input type='text' class='form-control' style='width:300px' value='<?php echo $row[orderAmount]; ?>' disabled required />
+              <div class='col-4'>
+                <input type='text' class='form-control' style='width:300px' value='<?php echo $row[orderAmount]; ?>' disabled/>
               </div>
             </div>
 
@@ -83,8 +83,8 @@ $totalPrice = "Rp. ".number_format($row["total"]).",-";
               <div class='col-2 label'>
                 <input type='text' class='form-control-plaintext' disabled value='Total Payment' />
               </div>
-              <div class='col-3'>
-                <input type='text' class='form-control' style='width:300px' value='<?php echo $totalPrice; ?>' disabled required />
+              <div class='col-4'>
+                <input type='text' class='form-control' style='width:300px' value='<?php echo $totalPrice; ?>' disabled/>
               </div>
             </div>
 
@@ -92,8 +92,8 @@ $totalPrice = "Rp. ".number_format($row["total"]).",-";
               <div class='col-2 label'>
                 <input type='text' class='form-control-plaintext' disabled value='Payment Method' />
               </div>
-              <div class='col-3'>
-                <input type='text' class='form-control' style='width:300px' value='<?php echo $row[methodName]; ?>' disabled required />
+              <div class='col-4'>
+                <input type='text' class='form-control' style='width:300px' value='<?php echo $row[methodName]; ?>' disabled/>
               </div>
             </div>
 
@@ -101,7 +101,7 @@ $totalPrice = "Rp. ".number_format($row["total"]).",-";
               <div class='col-2 label'>
                 <input type='text' class='form-control-plaintext' disabled value='REMARKS' />
               </div>
-              <div class='col-3'>
+              <div class='col-4'>
                 <textarea class='form-control' rows='4' cols='50' disabled><?php echo $row[remarks]; ?></textarea>
               </div>
             </div>     

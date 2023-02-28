@@ -1178,7 +1178,7 @@ date_default_timezone_set('Asia/Jakarta');
 				}else{
 					
 					if(payment>=grand){
-						$('#status').val('1');
+						$('#status').val('4');
 						$('form#formOrder').submit();   
 					}else{
 						alert("ERROR: INSUFFICIENT PAYMENT");
@@ -1189,7 +1189,7 @@ date_default_timezone_set('Asia/Jakarta');
 				$("#payment").prop('required',false);
 				$("#paymentMethod").prop('required',false);
 				
-				$('#status').val('0');
+				$('#status').val('3');
 				$('form#formOrder').submit();
 				break;
 			case "cancel":

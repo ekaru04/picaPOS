@@ -21,7 +21,7 @@ FROM taborderdetail t
 JOIN mproduct m ON m.productID  = t.productID 
 JOIN mcategory c ON m.categoryID = c.categoryID
 JOIN taborderheader h ON h.orderID = t.orderID
-WHERE t.dateCreated = '$today' AND c.categoryID = '$categoryID' AND (h.orderDate BETWEEN '$dateA' AND '$dateB') GROUP BY c.categoryID";
+WHERE t.dateCreated = '$today' AND c.categoryID = '$categoryID' AND (h.orderDate BETWEEN '$dateA' AND '$dateB') AND t.status != 3 GROUP BY c.categoryID";
 $res = mysql_query($query);
 
 $x=0;
