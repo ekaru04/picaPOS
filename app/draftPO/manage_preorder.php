@@ -120,11 +120,11 @@ date_default_timezone_set('Asia/Jakarta');
 					<div class='col-lg-4'>
 						<div class='leftist'>
 							<div class='row mb-2'>
-								<div class='col-3'>
+								<div class='col-4'>
 									<input type='text' readonly class="form-control-plaintext" style='width:100%;' value='Pre Order No:'/>
 									<input type='hidden' name ='preorderID' value='<?php echo $preorderID;?>'/>
 								</div>
-								<div class='col-3'>
+								<div class='col-2'>
 									<input type='text' readonly class="form-control-plaintext" id ='preorderNo' name ='preorderNo' style='margin-left:5px;width:100%;font-weight:bold;' value='<?php echo $preorderNo;?>'/>
 								</div>
 								<div class='col-3'>
