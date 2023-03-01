@@ -78,20 +78,18 @@ $point = $fetchinLoyal['point'];
 
 $countArr = count($productID);
 
-	if($status == 3){
+	if($status == 0){
 		//DP
-		// $checkID = mysql_query("SELECT * FROM tabpreorderheader WHERE preorderID='$preorderID' AND outletID='$outletID' AND paymentType = 'DOWNPAYMENT'");
-		$checkID = mysql_query("SELECT * FROM taborderheader WHERE orderID='$preorderID' AND outletID='$outletID' AND paymentType = 'DOWNPAYMENT'");
+		$checkID = mysql_query("SELECT * FROM tabpreorderheader WHERE preorderID='$preorderID' AND outletID='$outletID' AND paymentType = 'DOWNPAYMENT'");
 			$rowCheck = mysql_fetch_array($checkID);
 		if(mysql_num_rows($checkID)!=0){
 
-		/* Update OrderHeader status 3 */
+		/* Update OrderHeader status 2 */
 
-		// $query = mysql_query("UPDATE tabpreorderheader SET preorderAmount='$preorderAmount', status='0', remarks='$remarks', lastChanged='$lastChanged'	WHERE preorderID = '$preorderID' AND outletID = '$outletID'");
-		$query = mysql_query("UPDATE taborderheader SET orderAmount='$preorderAmount', status='3', remarks='$remarks', lastChanged='$lastChanged'	WHERE orderID = '$preorderID' AND outletID = '$outletID'");
+		$query = mysql_query("UPDATE tabpreorderheader SET preorderAmount='$preorderAmount', status='0', remarks='$remarks', lastChanged='$lastChanged'	WHERE preorderID = '$preorderID' AND outletID = '$outletID'");
 
 		$queryPayment = mysql_query("UPDATE tabpaymentorder SET paymentMethod = '$paymentMethod', paymentAmount = '$paymentAmount', dpp = '$dpp', VAT = '$VAT', discountPrice = '$discountPrice', total = '$total', promoID = '$promoID', isVoucher = '$isVoucher',  
-									voucherID = '$voucherCode', status = '3', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
+									voucherID = '$voucherCode', status = '0', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
 		// $query = "UPDATE tabpreorderheader SET 
 		// 		orderAmount='$orderAmount',
 		// 		dpp='$dpp',
@@ -128,28 +126,21 @@ $countArr = count($productID);
 				// $queryD = "INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 0, '$dateCreated', '$lastChanged')";
 
 				#check apakah order detailnya ada, kalau gaada insert.
-				// $resChk = mysql_query("SELECT * FROM tabpreorderdetail WHERE preorderID = '$preorderID' AND id = '$detailID'");
-				$resChk = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$preorderID' AND id = '$detailID'");
-
+				$resChk = mysql_query("SELECT * FROM tabpreorderdetail WHERE preorderID = '$preorderID' AND id = '$detailID'");
+				
 				if(mysql_num_rows($resChk)==0){
-					// $queryD = mysql_query("INSERT INTO tabpreorderdetail(id,preorderID,productID,productAmount,productPrice,productSubtotal,status,dateCreated,lastChanged)VALUES('$detailID','$preorderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
-					$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status,dateCreated,lastChanged)VALUES('$detailID','$preorderID', '$product', '$amount', '$price','$subtotal', 3, '$dateCreated', '$lastChanged')");
+					$queryD = mysql_query("INSERT INTO tabpreorderdetail(id,preorderID,productID,productAmount,productPrice,productSubtotal,status,dateCreated,lastChanged)VALUES('$detailID','$preorderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
 				}else{
-					// $queryD = mysql_query("UPDATE tabpreorderdetail SET productID='$product',productAmount='$amount',
-					// 						productPrice='$price',productSubtotal='$subtotal',status='2',lastChanged='$lastChanged' WHERE preorderID = '$preorderID' AND id='$detailID'");
-					$queryD = mysql_query("UPDATE taborderdetail SET productID='$product',productAmount='$amount',
-											productPrice='$price',productSubtotal='$subtotal',status='2',lastChanged='$lastChanged' WHERE orderID = '$preorderID' AND id='$detailID'");
+					$queryD = mysql_query("UPDATE tabpreorderdetail SET productID='$product',productAmount='$amount',
+											productPrice='$price',productSubtotal='$subtotal',status='2',lastChanged='$lastChanged' WHERE preorderID = '$preorderID' AND id='$detailID'");
 				}
 				/* END */
 			}
-			/* Ambil status 3 dan hapus */
-			// $delOrder = mysql_query("DELETE FROM tabpreorderdetail WHERE preorderID='$preorderID' AND status='0'");
-			$delOrder = mysql_query("DELETE FROM taborderdetail WHERE orderID='$preorderID' AND status='3'");
+			/* Ambil status 0 dan hapus */
+			$delOrder = mysql_query("DELETE FROM tabpreorderdetail WHERE preorderID='$preorderID' AND status='0'");
 			/* END */
 
 			/* Ubah status 2 ke 0 */
-			// $queryDetail = mysql_query("UPDATE tabpreorderdetail SET status='0', lastChanged='$lastChanged' 
-			// 							WHERE preorderID = '$preorderID' AND status ='2'");
 			$queryDetail = mysql_query("UPDATE tabpreorderdetail SET status='0', lastChanged='$lastChanged' 
 										WHERE preorderID = '$preorderID' AND status ='2'");
 			/* END */	

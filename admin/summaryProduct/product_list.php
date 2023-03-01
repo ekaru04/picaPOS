@@ -13,7 +13,7 @@ $today = date('Y-m-d');
 $queryData = mysql_query("SELECT m.productName, SUM(t.productAmount) AS jumlah_pembelian 
 FROM taborderdetail t 
 JOIN mproduct m ON m.productID  = t.productID
-JOIN mcategory c ON m.categoryID = c.categoryID WHERE t.dateCreated = '$today' GROUP BY c.categoryID");
+JOIN mcategory c ON m.categoryID = c.categoryID WHERE t.dateCreated = '$today' AND t.status != 3 AND t.status != 0 GROUP BY c.categoryID");
 $array = array();
 	while ($data=mysql_fetch_assoc($queryData)) {
 		$array[]=$data;

@@ -121,11 +121,6 @@ $countArr = count($productID);
 				$price = $productPrice[$x];
 				$subtotal = $productSubtotal[$x];
 
-				// echo "id ".$product;
-				// echo "jumlah ".$amount;
-				// echo "harga ".$price;
-				// echo "total ".$subtotal;
-
 				/* Insert product ke DB OrderDetail */
 				$id = $x+1;
 				$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 0, '$dateCreated', '$lastChanged')");

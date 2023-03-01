@@ -9,8 +9,8 @@ include("../../assets/config/db.php");
 
 $requestData = $_REQUEST;
 
-$dateA = $requestData['date1'] == null ? date("Y-m-d") : $requestData['date1'];
-$dateB = $requestData['date2'] == null ? date("Y-m-d") : $requestData['date2'];
+$date1 = $requestData['date1'] == null ? date("Y-m-d") : $requestData['date1'];
+$date2 = $requestData['date2'] == null ? date("Y-m-d") : $requestData['date2'];
 
 $categoryID = $_GET['categoryID'];
 
@@ -21,7 +21,7 @@ FROM taborderdetail t
 JOIN mproduct m ON m.productID  = t.productID 
 JOIN mcategory c ON m.categoryID = c.categoryID
 JOIN taborderheader h ON h.orderID = t.orderID
-WHERE c.categoryID = '$categoryID' AND h.orderDate BETWEEN '$dateA' AND '$dateB' GROUP BY c.categoryID";
+WHERE c.categoryID = '$categoryID' AND h.orderDate BETWEEN '$date1' AND '$date2' AND t.status != 3 AND t.status != 0 GROUP BY c.categoryID";
 $res = mysql_query($query);
 
 $x=0;

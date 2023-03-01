@@ -85,8 +85,7 @@ $countArr = count($productID);
 						lastChanged='$lastChanged'
 						WHERE orderID = '$orderID' AND outletID = '$outletID'");
 		$queryPayment = mysql_query("UPDATE tabpaymentorder SET paymentMethod = '$paymentMethod', paymentAmount = '$paymentAmount', dpp = '$dpp', 
-									VAT = '$VAT', discountPrice = '$discountPrice', total = '$total', promoID = '$promoID', isVoucher = '$isVoucher',  
-									voucherID = '$voucherCode', status = '0', lastChanged = '$lastChanged'");	
+									VAT = '$VAT', discountPrice = '$discountPrice', total = '$total', promoID = '$promoID', isVoucher = '$isVoucher',voucherID = '$voucherCode', status = '0', lastChanged = '$lastChanged'");	
 
 
 		// $query = mysql_query("UPDATE taborderheader SET orderAmount='$orderAmount',	dpp='$dpp',	discountPrice='$discountPrice',	total='$total',
@@ -101,7 +100,7 @@ $countArr = count($productID);
 			/* Loop produk */
 			for($x = 0;$x<$countArr;$x++) {
 
-				$detailID= $id[$x];
+				// $detailID= $id[$x];
 				$product = $productID[$x];
 				$amount = $productAmount[$x];
 				$price = $productPrice[$x];
@@ -114,16 +113,17 @@ $countArr = count($productID);
 
 				/* update product ke DB OrderDetail */
 				$id = $x+1;
+
 				// $queryD = "INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 0, '$dateCreated', '$lastChanged')";
 
 				#check apakah order detailnya ada, kalau gaada insert.
-				$resChk = mysql_query("SELECT * FROM tabOrderDetail WHERE orderID = '$orderID' AND id = '$detailID'");
+				$resChk = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$orderID' AND id = '$id'");
 				
 				if(mysql_num_rows($resChk)==0){
-					$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$detailID','$orderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
+					$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
 				}else{
 					$queryD = mysql_query("UPDATE taborderdetail SET productID='$product',productAmount='$amount',
-											productPrice='$price',productSubtotal='$subtotal',status='2',lastChanged='$lastChanged' WHERE orderID = '$orderID' AND id='$detailID'");
+											productPrice='$price',productSubtotal='$subtotal',status='2',lastChanged='$lastChanged' WHERE orderID = '$orderID' AND id = '$id'");
 				}
 				/* END */
 			}
@@ -133,7 +133,7 @@ $countArr = count($productID);
 
 			/* Ubah status 2 ke 0 */
 			$queryDetail = mysql_query("UPDATE taborderdetail SET 
-									status='0',lastChanged='$lastChanged'	WHERE orderID = '$orderID' AND status ='2'");
+									status='0',lastChanged='$lastChanged' WHERE orderID = '$orderID' AND status ='2'");
 			/* END */	
 			
 			/* Insert SystemJournal */

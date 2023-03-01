@@ -4,15 +4,15 @@ include("../../assets/config/db.php");
 
 $requestData = $_REQUEST;
 
-$dateA = $requestData['date1'] == null ? date("Y-m-d") : $requestData['date1'];
-$dateB = $requestData['date2'] == null ? date("Y-m-d") : $requestData['date2'];
+$date1 = $requestData['date1'] == null ? date("Y-m-d") : $requestData['date1'];
+$date2 = $requestData['date2'] == null ? date("Y-m-d") : $requestData['date2'];
 
 $query = "SELECT m.productName, SUM(t.productAmount) AS totals 
             FROM taborderdetail t 
                 JOIN mproduct m ON m.productID  = t.productID 
                 JOIN mcategory c ON m.categoryID = c.categoryID
                 JOIN taborderheader h ON t.orderID = h.orderID
-                WHERE h.orderDate BETWEEN '$dateA' AND '$dateB'
+                WHERE h.orderDate BETWEEN '$date1' AND '$date2'
             GROUP BY c.categoryID";
 $res = mysql_query($query);
 

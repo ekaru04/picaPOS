@@ -100,7 +100,10 @@ $countArr = count($productID);
 		/* Input ke PreOrderHeader status 0 */
 		$query = mysql_query("INSERT INTO taborderheader(orderID, orderNo, orderDate, orderPeriode, orderAmount, orderMethod, outletID, payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated, lastChanged) VALUES('$preorderID','$preorderNo','$preorderDate','$preorderPeriode','$preorderAmount',0,'$outletID','$payerName','$payerPhone','$payerEmail','$remarks',3,'$user','$dateCreated','$lastChanged')");
 		// $query = mysql_query("INSERT INTO tabpreorderheader(preorderID, preorderNo, preorderDate, preorderPeriode, preorderAmount, outletID, payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated, lastChanged) VALUES('$preorderID','$preorderNo','$preorderDate','$preorderPeriode','$preorderAmount','$outletID','$payerName','$payerPhone','$payerEmail','$remarks',0,'$user','$dateCreated','$lastChanged')");
+
+		/* Status 3 = DOWN PAYMENT */
 		$queryPaymentDP = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES('$paymentOrderID','$preorderID','PRE-ORDER','$paymentType','$paymentMethod','$paymentAmount','$paymentDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',3,'$dateCreated','$lastChanged')");
+
 		// $query = mysql_query("INSERT INTO tabpreorderheader(preorderID, preorderNo, preorderDate, preorderPeriode, preorderAmount, outletID, dpp, VAT, discountPrice, total, promoID, isVoucher, voucherID, paymentType, paymentDate, paymentAmount, downPayment, paymentMethod, payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated, lastChanged) VALUES('$preorderID','$preorderNo','$preorderDate','$preorderPeriode','$preorderAmount','$outletID','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$paymentType','$paymentDate','$paymentAmount','$downPayment','$paymentMethod','$payerName','$payerPhone','$payerEmail','$remarks',0,'$user','$dateCreated','$lastChanged')");
 		}
 		/* END */	
@@ -201,7 +204,9 @@ $countArr = count($productID);
 		$query = mysql_query("INSERT INTO taborderheader(orderID, orderNo, orderDate, orderPeriode, orderAmount, orderMethod, outletID, payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated, lastChanged) VALUES('$preorderID','$preorderNo','$preorderDate','$preorderPeriode','$preorderAmount','$orderMethod','$outletID','$payerName','$payerPhone','$payerEmail','$remarks',4,'$user','$dateCreated','$lastChanged')");
 		// $query = mysql_query("INSERT INTO tabpreorderheader(preorderID, preorderNo, preorderDate, preorderPeriode, preorderAmount, outletID, payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated, lastChanged) VALUES('$preorderID','$preorderNo','$preorderDate','$preorderPeriode','$preorderAmount','$outletID','$payerName','$payerPhone','$payerEmail','$remarks',1,'$user','$dateCreated','$lastChanged')");
 
-		$queryPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$preorderID','PRE-ORDER','$paymentType','$paymentMethod','$paymentAmount','$paymentDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',1,'$dateCreated','$lastChanged')");
+		/* Status 4 = FULL PAYMENT */
+
+		$queryPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$preorderID','PRE-ORDER','$paymentType','$paymentMethod','$paymentAmount','$paymentDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',4,'$dateCreated','$lastChanged')");
 
 		}
 		
@@ -230,7 +235,7 @@ $countArr = count($productID);
 
 				/* Insert product ke DB OrderDetail */
 				$id = $x+1;
-				$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$preorderID', '$product', '$amount', '$price','$subtotal', 1, '$dateCreated', '$lastChanged')");
+				$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$preorderID', '$product', '$amount', '$price','$subtotal', 4, '$dateCreated', '$lastChanged')");
 				// $queryD = mysql_query("INSERT INTO tabpreorderdetail(id,preorderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$preorderID', '$product', '$amount', '$price','$subtotal', 1, '$dateCreated', '$lastChanged')");
 
 				/* Cek produk curStock dan Update curStock */
@@ -246,7 +251,7 @@ $countArr = count($productID);
 
 				/* Insert ProductHistory */
 				$journalID = date("YmdHis");
-				$queryProHistory = mysql_query("INSERT INTO tabproducthistory(id,transType,productID,amount,itemAmount,measurementID,userID,status,remarks,dateCreated,lastChanged)VALUES('$journalID','OUT','$product','$amount','$stock','$measurement','$user',1,'$orderID','$dateCreated','$lastChanged')");
+				$queryProHistory = mysql_query("INSERT INTO tabproducthistory(id,transType,productID,amount,itemAmount,measurementID,userID,status,remarks,dateCreated,lastChanged)VALUES('$journalID','OUT','$product','$amount','$stock','$measurement','$user', 1,'$orderID','$dateCreated','$lastChanged')");
 
 			}
 			
