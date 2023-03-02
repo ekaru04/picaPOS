@@ -261,6 +261,12 @@ echo"		<li>
 echo"   </ul>
       </li>";
 }
+
+?>
+	<li class="nav-item">
+        <a class="nav-link" href='../activityLog'><b>Activity Log</b></a>
+    </li>
+<?php
 		
 if(validMenuAccess('F001')==1||validMenuAccess('F002')==1||validMenuAccess('F003')==1||validMenuAccess('F004')==1){
 echo" <li class='nav-item dropdown'>
