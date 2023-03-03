@@ -129,7 +129,7 @@ $countArr = count($productID);
 
 				#check apakah order detailnya ada, kalau gaada insert.
 				// $resChk = mysql_query("SELECT * FROM tabpreorderdetail WHERE preorderID = '$preorderID' AND id = '$detailID'");
-				$resChk = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$preorderID' AND id = '$id'");
+				$resChk = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$preorderID' AND id = '$detailID'");
 
 				if(mysql_num_rows($resChk)==0){
 					// $queryD = mysql_query("INSERT INTO tabpreorderdetail(id,preorderID,productID,productAmount,productPrice,productSubtotal,status,dateCreated,lastChanged)VALUES('$detailID','$preorderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
@@ -165,11 +165,10 @@ $countArr = count($productID);
 			// echo "<script type='text/javascript'>location.replace('$URL');</script>";
 		}
    
-   }elseif($status == 4){
+   }else{
    		//PELUNASAN
 
-   		// $checkID = mysql_query("SELECT * FROM tabpreorderheader WHERE preorderID='$preorderID' AND outletID='$outletID'");
-   		$checkID = mysql_query("SELECT * FROM taborderheader WHERE orderID='$preorderID' AND outletID='$outletID'");
+   		$checkID = mysql_query("SELECT * FROM tabpreorderheader WHERE preorderID='$preorderID' AND outletID='$outletID'");
 		$rowCheck = mysql_fetch_array($checkID);
 
 		/* Input ke OrderHeader status 1 */
@@ -180,17 +179,13 @@ $countArr = count($productID);
 
 		/* Update OrderHeader status 2 */
 
-		// $query = mysql_query("UPDATE tabpreorderheader SET 
-		// 				preorderAmount = '$preorderAmount', status = '1', remarks = '$remarks', lastChanged = '$lastChanged'
-		// 				WHERE preorderID = '$preorderID' AND outletID = '$outletID'");
+		$query = mysql_query("UPDATE tabpreorderheader SET 
+						preorderAmount = '$preorderAmount', status = '1', remarks = '$remarks', lastChanged = '$lastChanged'
+						WHERE preorderID = '$preorderID' AND outletID = '$outletID'");
 
-		$query = mysql_query("UPDATE taborderheader SET 
-						orderAmount = '$preorderAmount', status = '4', remarks = '$remarks', lastChanged = '$lastChanged'
-						WHERE orderID = '$preorderID' AND outletID = '$outletID'");
+		$updatePayment = mysql_query("UPDATE tabpaymentorder SET paymentMethod = '$paymentMethod', status = '1', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
 
-		$updatePayment = mysql_query("UPDATE tabpaymentorder SET paymentMethod = '$paymentMethod', status = '4', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
-
-		// $insertPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$preorderID','PRE-ORDER','$paymentType','$paymentMethod','$paymentAmount','$paymentDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherID','$remarks',4,'$dateCreated','$lastChanged')");
+		$insertPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$preorderID','PRE-ORDER','$paymentType','$paymentMethod','$paymentAmount','$paymentDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherID','$remarks',1,'$dateCreated','$lastChanged')");
 
 		// $query = "UPDATE tabpreorderheader SET 
 		// 		orderAmount='$orderAmount',
@@ -282,17 +277,13 @@ $countArr = count($productID);
 				// echo "total ".$subtotal;
 				
 				#check apakah order detailnya ada, kalau gaada insert.
-				// $resChk = mysql_query("SELECT * FROM tabpreorderDetail WHERE preorderID = '$preorderID' AND id = '$detailID'");
+				$resChk = mysql_query("SELECT * FROM tabpreorderDetail WHERE preorderID = '$preorderID' AND id = '$detailID'");
 				
-				$resChk = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$preorderID' AND id = '$id'");
-
 				if(mysql_num_rows($resChk)==0){
 					/* Insert product ke DB OrderDetail */
-					// $queryD = mysql_query("INSERT INTO tabpreorderdetail(id,preorderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$detailID','$preorderID', '$product', '$amount', '$price','$subtotal', 1, '$dateCreated', '$lastChanged')");
-					$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$preorderID', '$product', '$amount', '$price','$subtotal', 4, '$dateCreated', '$lastChanged')");
+					$queryD = mysql_query("INSERT INTO tabpreorderdetail(id,preorderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$detailID','$preorderID', '$product', '$amount', '$price','$subtotal', 1, '$dateCreated', '$lastChanged')");
 				}else{
-					// $queryD = mysql_query("UPDATE tabpreorderdetail SET productID='$product', productAmount='$amount', productPrice='$price',productSubtotal='$subtotal',status='1',lastChanged='$lastChanged' WHERE preorderID = '$preorderID' AND id='$detailID'");
-					$queryD = mysql_query("UPDATE taborderdetail SET productID='$product', productAmount='$amount', productPrice='$price',productSubtotal='$subtotal',status='4',lastChanged='$lastChanged' WHERE orderID = '$preorderID' AND id='$id'");
+					$queryD = mysql_query("UPDATE tabpreorderdetail SET productID='$product', productAmount='$amount', productPrice='$price',productSubtotal='$subtotal',status='1',lastChanged='$lastChanged' WHERE preorderID = '$preorderID' AND id='$detailID'");
 				}
 				
 				/* Cek produk curStock dan Update curStock */
@@ -317,7 +308,7 @@ $countArr = count($productID);
 			/* Insert SystemJournal */
 			$act = "ORDER_".$orderNo."_".$orderID."_COMPLETE";
 
-			$queryJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','PRE_ORDER_COMPLETE','$user','$dateCreated','$lastChanged', 'SUCCESS')");
+			$queryJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','ORDER_COMPLETE','$user','$dateCreated','$lastChanged', 'SUCCESS')");
 			
 			//printOrder($data,$datas);
 			$data_enc = json_encode($data);

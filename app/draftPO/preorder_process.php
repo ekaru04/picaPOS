@@ -1,0 +1,221 @@
+<?php 
+include("../../assets/config/db.php");
+session_start();
+
+$user = $_SESSION['userID'];
+$outletID = $_SESSION['outletID'];
+
+if(isset($_POST['preorderID']))
+{
+
+
+$preorderID = $_POST['preorderID'];
+$preorderNo = $_POST['preorderNo'];
+$preorderDate = $_POST['preorderDate'];
+$preorderAmount = $_POST['totalProduct'];
+$dpp = $_POST['dpp'];
+$VAT = 0;
+$discountPrice = $_POST['discount'];
+$total = $_POST['totalPrice'];
+$promoID = $_POST['promo'];
+$voucherCode = $_POST['voucherCode'];
+
+$isVoucher = 0;
+if($voucherCode)
+{
+	$isVoucher = 1;
+}
+	
+$paymentAmount = $_POST['payment'];
+$paymentType = $_POST['paymentType'];
+$paymentDate = date('Y-m-d', strtotime($_POST['paymentDate']));
+$downPayment = $_POST['downPayment'];
+$paymentMethod = $_POST['paymentMethod'];
+$changeAmount = $_POST['changeAmount'];
+$payerID = $_POST['customerID'];
+$payerName = strtoupper($_POST['customerName']);
+$payerPhone = $_POST['customerPhone'];
+$payerEmail = $_POST['customerEmail'];
+$status = $_POST['status'];
+$remarks = $_POST['remarks'];
+$dateCreated = date("Y-m-d");
+$lastChanged = date("Y-m-d H:i:s");
+
+$productID = $_POST['productID'];
+$productAmount = $_POST['productQty'];
+$productPrice = $_POST['productPrice'];
+$productSubtotal = $_POST['productSubtotal'];
+	
+$data = array();
+$datas = array();
+	
+$data[orderID] = $orderID;
+$data[orderNo] = $orderNo;
+$data[orderDate] = $orderDate;
+$data[orderAmount] = $orderAmount;
+$data[dpp] = $dpp;
+$data[vat] = $VAT;
+$data[discountPrice] = $discountPrice;
+$data[total] = $total;
+$data[promoID] = $promoID;
+$data[voucherCode] = $voucherCode;
+$data[isVoucher] = $isVoucher;
+$data[paymentAmount] = $paymentAmount;
+$data[paymentMethod] = $paymentMethod;
+$data[changeAmount] = $changeAmount;
+$data[payerName] = $payerName;
+$data[payerPhone] = $payerPhone;
+$data[payerEmail] = $payerEmail;
+$data[remarks] = $remarks;
+
+// print_r($productID);
+// print_r($productAmount);
+// print_r($productPrice);
+
+$paymentOrderID = date('Ymd');
+
+$queryIDLoyal = mysql_query("SELECT COUNT(loyaltyID)+1 as loyaltyID FROM tabloyalty");
+$fetchinLoyal = mysql_fetch_array($queryIDLoyal);
+$point = $fetchinLoyal['point'];
+
+$countArr = count($productID);
+
+
+// echo $preorderID;
+// echo $outletID;
+
+/* Jika Status 4 atau Pelunasan */
+if($status == 4)
+{ 
+
+	/* Ambil data berdasarkan orderID */
+	$checkPO = mysql_query("SELECT * FROM taborderheader WHERE orderID = '$preorderID' AND outletID = '$outletID'"); 
+	$rowPO = mysql_fetch_array($checkPO); // <-- Buat ngecek Data $checkPO, gak terlalu dipake
+
+	/* Cek jika datanya ada maka update data taborderheader TERUTAMA STATUS nya harus berubah jadi LUNAS */
+	if($checkData = mysql_num_rows($checkPO) != 0)
+	{
+
+		/* Update Data taborderheader berdasarkan orderID sebelumnya, perhatikan STATUS nya harus 4(pelunasan) */
+		$updateStatus = mysql_query("UPDATE taborderheader SET 
+						orderAmount = '$preorderAmount', status = '4', remarks = '$remarks', lastChanged = '$lastChanged'
+						WHERE orderID = '$preorderID' AND outletID = '$outletID'");
+
+		/* Update data tabpaymentorder berdasarkan orderID, STATUS harus 4(pelunasan) */
+		$updateStatusPayment = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', paymentMethod = '$paymentMethod', status = '4', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
+
+		/* Mengambil data customer untuk dicek apakah customer yang PO datanya ada atau tidak berdasarkan customerNamenya */
+		$checkCustomer = mysql_query("SELECT * FROM mcustomer WHERE customerName = '$payerName'");
+		$rowCustomer = mysql_fetch_array($checkCustomer); // <-- Cek data
+		$customerID = $rowCustomer['customerID']; // <-- variabel customerID
+		echo $rowCustomer['customerName']; // <-- Ngecek saja, gak terlalu dipake
+
+		/* Mengambil data loyalty customer bedasarkan customerNamenya */
+		$checkLoyalty = mysql_query("SELECT * FROM tabloyalty l	INNER JOIN mcustomer c ON c.customerID = l.customerID
+									WHERE c.customerName = '$payerName'");
+	   	$fetchinLoyalty = mysql_fetch_array($checkLoyalty); // <-- cek data loyalty customer
+	   	$currentLoyalty = $fetchinLoyalty['loyaltyPoint']; // <-- Disimpan dalam variabel loyaltyPoint customer tadi
+	   	$loyaltyIDCust = $fetchinLoyal['loyaltyID']; // <-- menyimpan loyaltyID milik customer
+
+	   	// echo $loyaltyP; // <-- Buat ngecek beneran ada atau tidak loyaltynya, berapa loyalty yang dimiliki
+
+	   	/* Mengambil point loyalty yang ada di tabel mloyalty */
+	   	$masterLoyalty = mysql_query("SELECT * FROM mloyalty");
+	   	$getPoint = mysql_fetch_array($masterLoyalty);
+	   	$point = $getPoint['point'];
+
+
+	   	/* Melakukan cek data customer, apabila data customer tidak ada sama sekali didatabase maka data customer tersebut akan ditambahkan ke dalam database */
+	   	if(mysql_num_rows($checkCustomer)==0)
+	   	{
+
+	   		/* Melakukan validasi, apabila field nama dan telepon terisi maka data customer akan ditambahkan kedalam tabel mcustomer */
+	   		if($payerName != null && $payerPhone != null)
+	   		{
+
+	   			/* Menambahkan data customer baru kedalam tabel mcustomer */
+		   		$queryAddCust = mysql_query("INSERT INTO mcustomer(customerID, customerName, customerPhone, customerEmail, status, dateCreated, lastChanged) VALUES('$payerID', '$payerName', '$payerPhone', '$payerEmail', 1, '$dateCreated', '$lastChanged')");
+
+		   		/* Menambahkan variabel act untuk diinput ke systemJournal */
+		   		$actAddCust = "NEW_CUSTOMER_".$payerName;
+
+		   		/* Menambahkan data ke systemJournal sebagai activity log */
+				$journalID = date("YmdHis");
+				$queryJournal = mysql_query("INSERT INTO systemJournal(journalID, activity, menu, userID, dateCreated, logCreated, status) VALUES('$journalIDC','$actAddCust','ADD_CUST_FROM_PO_FORM','$user','$dateCreated','$lastChanged', 'SUCCESS')");
+			}
+	   	}
+
+	   	/* Melakukan cek loyalty apakah ada atau tidak, apabila tidak ada */
+	   	if(mysql_num_rows($checkLoyalty)==0)
+	   	{
+	   		/* Apabila total pembelian lebih dari sekian, maka mendapatkan point loyalty kedalam database untuk customer tersebut */
+	   		if($total > 0)
+	   		{
+
+	   			/* Menambahkan point loyalty kepada customer ke tabel tabloyalty untuk customer tersebut */
+	   			$insertNewLoyalty = mysql_query("INSERT INTO tabloyalty(loyaltyID, customerID, outletID, loyaltyPoint, status, dateCreated, lastChanged)VALUES('$loyaltyIDCust', '$payerID', '$outletID', '$point', 1, '$dateCreated', '$lastChanged')");
+
+	   		}
+	   	}
+	   	/* Apabila data loyalty customer ada */
+	   	else
+	   	{
+	   		/* Apabila total pembelian lebih dari sekian, maka mendapatkan point loyalty kedalam database untuk customer tersebut */
+	   		if($total > 0)
+	   		{
+	   			$increaseLoyalty = $currentLoyalty+$point;
+	   			$updateCurrentLoyalty = mysql_query("UPDATE tabloyalty SET loyaltyPoint = '$increaseLoyalty', lastChanged = '$lastChanged' WHERE customerID = '$customerID'");
+	   		}
+	   	}
+
+	   	/* Update status voucher apabila menggunakan voucher */
+	   	if($voucherCode!="")
+	   	{
+			$updateVoucher = mysql_query("UPDATE mvoucher SET status = 2 WHERE voucherCode='$voucherCode'");
+		}
+
+		if($countArr!=0)
+		{
+			for($x=0; $x<$countArr;$x++)
+			{
+				$id = $x+1;
+				$product = $productID[$x];
+				$amount = $productAmount[$x];
+				$price = $productPrice[$x];
+				$subTotal = $productSubtotal[$x];
+
+				$checkDetailOrder = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$preorderID'");
+				$rowCheck = mysql_fetch_array($checkDetailOrder);
+				echo $rowCheck['id'];
+				echo "<hr>";
+				echo $rowCheck['orderID'];
+				echo "<hr>";
+				echo $rowCheck['productID'];
+				echo "<hr>";
+				echo $rowCheck['productAmount'];
+				echo "<hr>";
+				echo $rowCheck['productPrice'];
+				echo "<hr>";
+				echo $rowCheck['productSubtotal'];
+				echo "<hr>";
+
+			}
+		}	   	
+
+
+	}
+	else
+	{
+		echo "tidak ada";
+	}
+
+	// exit;
+
+}
+
+}
+
+
+
+
+?>

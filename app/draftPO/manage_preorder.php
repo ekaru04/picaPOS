@@ -115,7 +115,7 @@ date_default_timezone_set('Asia/Jakarta');
 			<?php
 			echo $preorderID;
 			 ?>
-			<form id='formOrder' method='POST' action='order_process.php'>
+			<form id='formOrder' method='POST' action='preorder_process.php'>
 				<div class='row'>
 					<div class='col-lg-4'>
 						<div class='leftist'>
@@ -198,15 +198,9 @@ date_default_timezone_set('Asia/Jakarta');
 												</td>
 												<td class = 'table-details' style='text-align:left;width:1%;padding-left:5px;'>Rp. </td>
 												<td class = 'table-details' style='text-align:right;width:24%;padding-right:5px;'>
-													<input type='text' name='productSutot[]' readonly style='width:100px;' value='$subtot'>
+													<input type='text' name='productSutot[]' readonly style='width:100px;' readonly value='$subtot'>
 												</td>
 												<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>
-													<button type='button' class='del' style='border:none;margin-left:-10px;background-color:rgba(255, 255, 255, 0);'>
-														<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-trash' viewBox='0 0 16 16'>
-														<path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/>
-														<path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/>
-														</svg>
-												   </button>
 												</td>
 											</tr>	
 									";
@@ -299,10 +293,8 @@ date_default_timezone_set('Asia/Jakarta');
 									<select class="form-control" id ='paymentType' name ='paymentType' style='width:100%;'>
 									<?php
 										if($row['paymentType'] != null){
-											echo "<option value='$row[paymentType]' selected>$row[paymentType]</option>";
-										}else{
-											echo "<option value='DOWNPAYMENT'>Down Payment</option>
-                                					<option value='FULLPAYMENT'>Full Payment</option>";
+											echo "<option value='$row[paymentType]' selected>$row[paymentType]</option>
+													<option value='FULLPAYMENT'>FULLPAYMENT</option>";
 										}
 
 									?>
@@ -362,7 +354,7 @@ date_default_timezone_set('Asia/Jakarta');
 									<div class='d-flex justify-content-center'>
 										<button type='button' id='cancel' class='btn btn-danger submit' style='width:33%;'>CANCEL</button>
 										<button type='button' id='draft' class='btn btn-warning submit' style='width:34%;'>DRAFT</button>
-                            			<button type='button' id='order' class='btn btn-success submit' style='width:33%;'>ORDER</button>
+                            			<button type='button' id='order' class='btn btn-success submit' style='width:33%;'>PAID</button>
 									</div>
                                 	
 								</div>
@@ -523,9 +515,9 @@ date_default_timezone_set('Asia/Jakarta');
 				html += "<input type='text' name='productQty[]' class='inps' style='width:40px;' value='1'/>";
 				html += "<input type='hidden' name='productSubtotal[]' style='width:40px;' value='"+productPrice+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:left;width:1%;padding-left:5px;'>Rp. </td>";
-				html += "<td class = 'table-details' style='text-align:right;width:24%;padding-right:5px;'><input type='text' name='productSutot[]' readonly style='width:100px;' value='"+numbering+"'/></td>";
+				html += "<td class = 'table-details' style='text-align:right;width:24%;padding-right:5px;'><input type='text' name='productSutot[]' readonly style='width:100px;' readonly value='"+numbering+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>";
-				html += "<button type='button' class='del' style='border:none;margin-left:-10px;background-color:rgba(255, 255, 255, 0);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-trash' viewBox='0 0 16 16'><path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/><path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/></svg></button></td></tr>";
+				
 
 				$('#tableProduct tbody').append(html);
 				$('#itemCount').val(new_chq_no);
@@ -805,7 +797,7 @@ date_default_timezone_set('Asia/Jakarta');
 				html += "<td class = 'table-details' style='text-align:left;width:1%;padding-left:5px;'>Rp. </td>";
 				html += "<td class = 'table-details' style='text-align:right;width:24%;padding-right:5px;'><input type='text' name='productSutot[]' readonly style='width:100px;' value='0'/></td>";
 				html += "<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>";
-				html += "<button type='button' class='del' style='border:none;margin-left:-10px;background-color:rgba(255, 255, 255, 0);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-trash' viewBox='0 0 16 16'><path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/><path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/></svg></button></td></tr>";
+				
 
 				$('#tableProduct tbody').append(html);     
 				totProd = 0;
