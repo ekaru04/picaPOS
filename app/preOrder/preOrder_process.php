@@ -265,13 +265,14 @@ $countArr = count($productID);
 		//printOrder($data,$datas);
 		$data_enc = json_encode($data);
 		$datas_enc = json_encode($datas);
-		
+
+
+	}
+			
 		$URL="/picaPOS/app/preOrder"; 
 		$URL2="order_print.php?data=$data_enc&datas=$datas_enc"; 
 
 		echo "<script>window.open('$URL2');</script>";
 		echo "<script type='text/javascript'>location.replace('$URL');</script>";
-
-	}
 }
 ?>

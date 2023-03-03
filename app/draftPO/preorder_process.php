@@ -102,7 +102,7 @@ if($status == 4)
 						WHERE orderID = '$preorderID' AND outletID = '$outletID'");
 
 		/* Update data tabpaymentorder berdasarkan orderID, STATUS harus 4(pelunasan) */
-		$updateStatusPayment = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', paymentMethod = '$paymentMethod', status = '4', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
+		$updateStatusPayment = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', dpp='$dpp', paymentMethod = '$paymentMethod', total='$total', status = '4', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
 
 		/* Mengambil data customer untuk dicek apakah customer yang PO datanya ada atau tidak berdasarkan customerNamenya */
 		$checkCustomer = mysql_query("SELECT * FROM mcustomer WHERE customerName = '$payerName'");
@@ -184,20 +184,23 @@ if($status == 4)
 				$price = $productPrice[$x];
 				$subTotal = $productSubtotal[$x];
 
+				$subdatas = array();
+				// $subdatas[id] = $detailID;
+				$subdatas[productID] = $product;
+				$subdatas[amount] = $amount;
+				$subdatas[price] = $price;
+				$subdatas[subtotal] = $subTotal;
+				$datas[] = $subdatas;
+
 				$checkDetailOrder = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$preorderID'");
 				$rowCheck = mysql_fetch_array($checkDetailOrder);
-				echo $rowCheck['id'];
-				echo "<hr>";
-				echo $rowCheck['orderID'];
-				echo "<hr>";
-				echo $rowCheck['productID'];
-				echo "<hr>";
-				echo $rowCheck['productAmount'];
-				echo "<hr>";
-				echo $rowCheck['productPrice'];
-				echo "<hr>";
-				echo $rowCheck['productSubtotal'];
-				echo "<hr>";
+
+				/* Cek produk yang dibeli di taborderdetail */
+				if(mysql_num_rows($checkDetailOrder)!=0)
+				{
+					/* Update Data produk terutama STATUS harus 4 (Pelunasan) */
+					$queryD = mysql_query("UPDATE taborderdetail SET productID='$product', productAmount='$amount', productPrice='$price', productSubtotal='$subTotal', status='4', lastChanged='$lastChanged' WHERE orderID = '$preorderID' AND productID='$product'");
+				}
 
 			}
 		}	   	

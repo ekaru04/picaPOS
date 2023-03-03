@@ -346,7 +346,7 @@ date_default_timezone_set('Asia/Jakarta');
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<textarea width='100' placeholder='Insert notes here' class="form-control" ><?php echo $row[remarks];?></textarea>
+									<textarea width='100' name='remarks' placeholder='Insert notes here' class="form-control" ><?php echo $row[remarks];?></textarea>
 								</div>	
 							</div>
 							<div class='row mb-2'>
