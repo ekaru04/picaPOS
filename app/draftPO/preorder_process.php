@@ -202,19 +202,33 @@ if($status == 4)
 					$queryD = mysql_query("UPDATE taborderdetail SET productID='$product', productAmount='$amount', productPrice='$price', productSubtotal='$subTotal', status='4', lastChanged='$lastChanged' WHERE orderID = '$preorderID' AND productID='$product'");
 				}
 
+				/* Cek data produk */
+				$masterProduct = mysql_query("SELECT * FROM mproduct WHERE productID = '$product' AND outletID = '$outletID' AND status != 0");
+				$dataProduct = mysql_fetch_array($masterProduct);
+
+				$measurementProduct = $dataProduct['measurementID']; // <-- Megambil data measurement untuk di insert ke product history
+				$stockNow = $dataProduct['curStock']; // <-- Mengambil stok saat ini dan disimpan dalam variabel
+
+				$decreaseStock = $stockNow-$amount; // <-- Stok saat ini dikurang jumlah item yang dibeli pada produk tertentu
+
+				/* Mengupdate stok saat ini pada tabel master data produk */
+				$updateStock = mysql_query("UPDATE mproduct SET curStock = '$decreaseStock' WHERE productID = '$product' AND outletID = '$outletID'");
+
+				/* Update ke product history untuk merecord pengeluaran suatu produk */
+				$journalID = date('YmdHis'); // <-- Sebagai ID saja
+				$productHistory = mysql_query("INSERT INTO tabproducthistory(id, transType, productID, amount, itemAmount, measurementID, userID, status, remarks, dateCreated, lastChanged)VALUES()");
 			}
+
+			/* Tambah activity ke systemJournal */
+			$activity = "PREORDER_".$orderNo."_".$orderID."_COMPLETE";
+			$queryJournal = mysql_query("INSERT INTO systemjournal(journalID, activity, menu, userID, dateCreated, logCreated, status) VALUES('$journalID', '$acttivity', 'PELUNASAN_PO_COMPLETE', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
 		}	   	
-
-
 	}
 	else
 	{
 		echo "tidak ada";
 	}
-
-	// exit;
-
-}
+  }
 
 }
 
