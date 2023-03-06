@@ -10,10 +10,10 @@ if (!isset($_SESSION["username"]))
 $query = mysql_query("SELECT * FROM muser WHERE username = '$_SESSION[username]'");
 $data = mysql_fetch_array($query);
 
-/* Mengambil data request production dan meyimpannya dalam variabel */
+
 if(isset($_POST['requestID'])){
 	$requestID = $_POST['requestID'];
-	$statusApprove = $_POST['status'];
+	$status = $_POST['status'];
 	$reason = $_POST['reason'];
 	$today = date("Y-m-d"); 
 
@@ -21,15 +21,11 @@ if(isset($_POST['requestID'])){
 	$lastChanged = date("Y-m-d H:i:s");
 	$user = $data['userID'];
 
-	/* Mengambil data dari tabel berdasarkan requestID yang diminta */
-	$requestProductionData = mysql_query("SELECT * FROM tabrequestheader WHERE requestID='$requestID'");
-	$rowRequest = mysql_fetch_array($requestProductionData); // <-- Mengecek data
-	$productRequest = $rowRequest['productID']; // <-- Menyimpan data produk ID ke variabel
-	$outlet = $rowRequest['outletID'];	
-	$amountRequest = $rowRequest['amount']; // <-- Menyimpan stok yang diminta sebelumnya kedalam variabel
 
-	/* Logika tentang status approval */
-	switch($statusApprove){
+	$queryS = mysql_query("SELECT * FROM tabrequestheader WHERE requestID='$requestID'");
+	$rowCheck = mysql_fetch_array($queryS);
+	
+	switch($status){
 		case 1:
 			$isPending = 1;
 			break;
@@ -41,41 +37,36 @@ if(isset($_POST['requestID'])){
 			break;
 	}
 	
-	/* Apabila status approval 2 (Di approve) */
-	if($statusApprove==2){
+	
+	if($status==2){
+		$queryProduct = mysql_query("SELECT * FROM mproduct WHERE productID='$rowCheck[productID]' AND outletID = '$rowCheck[outletID]'");
+		$rowC = mysql_fetch_array($queryProduct);
+		$curStock = $rowC['curStock']+$rowCheck['amount'];
 
-		/* Mengambil data master produk berdasarkan  */
-		$masterProduct = mysql_query("SELECT * FROM mproduct WHERE productID='$productRequest' AND outletID = '$outlet'");
-		$rowProduct = mysql_fetch_array($masterProduct); // <-- Cek data produk
-		$stockNow = $rowProduct['curStock']; // <-- Menyimpan stok saat ini dari master produk ke variabel
-
-		/* Menambahkan stok produk saat ini dengan stok yang akan diproduksi kedalam variabel */
-		$curStock = $stockNow+$amountRequest;
-
-		/*  */
-		$updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
+		$queyUpd = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowCheck[productID]' AND outletID = '$rowCheck[outletID]'");
 
 		$journalID = date("YmdHis");
 
-		$activityUpdateStock = "UPDATE_STOCK_PRODUCT_".$rowProduct['productID']."_FROM_REQUEST".$requestID;
+		$actStock = "UPDATE_STOCK_PRODUCT_".$rowCheck['productID']."_FROM_REQUEST".$requestID;
 
-		$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'TRANSACTION_RESTOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
+		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','TRANSACTION_RESTOCK','$user','$dateCreated','$lastChanged', 'SUCCESS')";
+		$resJournal = mysql_query($queryJournal);
 
-		$getRequestDetail = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $statusApprove-1 ");
+		$queryIng = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $status-1 ");
 
-		while($fetchRequestDetail = mysql_fetch_array($getRequestDetail)){
+		while($rowIng = mysql_fetch_array($queryIng)){
 			
 			//update current stock
 
-			$masterIngredient = mysql_query("SELECT * FROM mingredient WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' AND status = 1");
-			$fetchIngredient = mysql_fetch_array($masterIngredient);
-			$ingredientCurStock = $fetchIngredient[curStock];
-			$ingredientMinStock = $fetchIngredient[minStock];
+			$resI = mysql_query("SELECT * FROM mingredient WHERE ingredientID = '$rowIng[ingredientID]' AND outletID = '$rowCheck[outletID]' AND status = 1");
+			$rowI = mysql_fetch_array($resI);
+			$curStock = $rowI[curStock];
+			$minStock = $rowI[minStock];
 			
-			$requestAmount = $fetchRequestDetail[amount];
-			$ingredientNewStock = $ingredientCurStock-$requestAmount;
+			$amount = $rowIng[amount];
+			$amountNow = $curStock-$amount;
 			
-			if($ingredientNewStock < $ingredientMinStock || $ingredientNewStock < 0){
+			if($amountNow < $minStock || $amountNow < 0){
 				echo "<script type='text/javascript'>alert('Jumlah stok kurang! Transaksi tidak dapat diproses!')</script>";
 
 				$journalID = date("YmdHis");
@@ -89,19 +80,19 @@ if(isset($_POST['requestID'])){
      			echo "<script type='text/javascript'>location.replace('$URL');</script>";
 			}else{
 				$lastChanged = date("Y-m-d H:i:s");
-				$res = mysql_query("UPDATE mingredient SET curStock = '$amountNow', lastChanged = '$lastChanged' WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
+				$res = mysql_query("UPDATE mingredient SET curStock = '$amountNow', lastChanged = '$lastChanged' WHERE ingredientID = '$rowIng[ingredientID]' AND outletID = '$rowCheck[outletID]' and status = 1");
 
 				$journalID = date("YmdHis");
 
-				$actStock = "UPDATE_STOCK_INGREDIENT_".$fetchRequestDetail['ingredientID']."_FROM_REQUEST".$requestID;
+				$actStock = "UPDATE_STOCK_INGREDIENT_".$rowIng['ingredientID']."_FROM_REQUEST".$requestID;
 
 				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','AMOUNT_STOCK','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 				$resJournal = mysql_query($queryJournal);
 				
 				//update saldo sisa (ingin berkata kasar)
-				$resSaldo = mysql_query("SELECT * FROM tabItemSaldo s  WHERE s.ingredientID = '$fetchRequestDetail[ingredientID]' AND s.outletID = '$rowRequest[outletID]' AND s.status = 1");
+				$resSaldo = mysql_query("SELECT * FROM tabItemSaldo s  WHERE s.ingredientID = '$rowIng[ingredientID]' AND s.outletID = '$rowCheck[outletID]' AND s.status = 1");
 				
-				$amountLeft = $requestAmount; 
+				$amountLeft = $amount; 
 				$duitTotal = 0;
 				while($rowSaldo = mysql_fetch_array($resSaldo)){
 					if($amountLeft <= 0){
@@ -137,7 +128,7 @@ if(isset($_POST['requestID'])){
 							$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$saldo);
 						}
 						
-						$res = mysql_query("UPDATE tabItemSaldo SET amountUsed = '$amountUsed',saldo='$saldoPrice' WHERE id ='$id' AND ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
+						$res = mysql_query("UPDATE tabItemSaldo SET amountUsed = '$amountUsed',saldo='$saldoPrice' WHERE id ='$id' AND ingredientID = '$rowIng[ingredientID]' AND outletID = '$rowCheck[outletID]' and status = 1");
 
 						$journalID = date("YmdHis");
 						$actStock = "UPDATE_SALDO_FROM_REQUEST".$requestID;

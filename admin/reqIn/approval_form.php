@@ -194,7 +194,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 					
                     <div class='row  mt-3 '>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='REASON' />
+                                <input type='text' class='form-control-plaintext' disabled value='REMARKS' />
                             </div>
                                 <div class='col-3'>
                                     <textarea class='type-input form-control' name='reason' placeholder='Insert notes here' rows='4' cols='50'></textarea>
