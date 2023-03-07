@@ -12,7 +12,7 @@ $data = mysql_fetch_array($query);
 
 /* Mengambil data request production dan meyimpannya dalam variabel */
 if(isset($_POST['requestID'])){
-	$requestID = $_POST['requestID'];
+	$tempID = $_POST['requestID'];
 	$statusApprove = $_POST['status'];
 	$reason = $_POST['reason'];
 	$today = date("Y-m-d"); 
@@ -52,14 +52,16 @@ if(isset($_POST['requestID'])){
 		/* Menambahkan stok produk saat ini dengan stok yang akan diproduksi kedalam variabel */
 		$curStock = $stockNow+$amountRequest;
 
-		/*  */
+		/* Mengupdate stock produk sebelumnya dengan stock yang telah diapprove */
 		$updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
+
+		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productID', '$amountRequest', '', '$dateCreated', '$lastChanged')");
 
 		$journalID = date("YmdHis");
 
 		$activityUpdateStock = "UPDATE_STOCK_PRODUCT_".$rowProduct['productID']."_FROM_REQUEST".$requestID;
 
-		$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'TRANSACTION_RESTOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
+		$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'RESTOCK_PRODUCT_STOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
 
 		$getRequestDetail = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $statusApprove-1 ");
 
