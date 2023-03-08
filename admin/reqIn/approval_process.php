@@ -55,6 +55,7 @@ if(isset($_POST['requestID'])){
 		/* Mengupdate stock produk sebelumnya dengan stock yang telah diapprove */
 		$updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
 
+		/* Tampung ke tabel temp stok product */
 		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productID', '$amountRequest', '', '$dateCreated', '$lastChanged')");
 
 		$journalID = date("YmdHis");
