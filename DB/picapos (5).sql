@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 06, 2023 at 04:32 PM
+-- Generation Time: Mar 09, 2023 at 04:38 PM
 -- Server version: 5.1.37
 -- PHP Version: 5.3.0
 
@@ -689,7 +689,17 @@ INSERT INTO `systemjournal` (`journalID`, `activity`, `menu`, `userID`, `dateCre
 ('20230303090252', 'PREORDER_1_PCA/RPO/202303/0003_DRAFT', 'PREORDER_DRAFT', '2', '2023-03-03', '2023-03-03 09:02:52', 'SUCCESS'),
 ('20230303090756', 'ORDER___COMPLETE', 'PRE_ORDER_COMPLETE', '2', '2023-03-03', '2023-03-03 09:07:56', 'SUCCESS'),
 ('20230303091104', 'PREORDER_1_PCA/RPO/202303/0003_DRAFT', 'PREORDER_DRAFT', '2', '2023-03-03', '2023-03-03 09:11:04', 'SUCCESS'),
-('20230304102150', '', 'PELUNASAN_PO_COMPLETE', '2', '2023-03-04', '2023-03-04 10:21:50', 'SUCCESS');
+('20230304102150', '', 'PELUNASAN_PO_COMPLETE', '2', '2023-03-04', '2023-03-04 10:21:50', 'SUCCESS'),
+('20230309144630', 'INSERT_REQUESTING_PCA/REQ/202303/0004', 'REQUEST_INGREDIENT', '2', '2023-03-09', '2023-03-09 14:46:30', 'SUCCESS'),
+('20230309144635', 'INSERT_REQUESTING_PCA/REQ/202303/0004INGREDIENT(6)', 'REQUEST_DETAIL_INGREDIENT', '', '2023-03-09', '2023-03-09 14:46:35', 'SUCCESS'),
+('20230309144635', 'INSERT_REQUESTING_PCA/REQ/202303/0004INGREDIENT(4)', 'REQUEST_DETAIL_INGREDIENT', '', '2023-03-09', '2023-03-09 14:46:35', 'SUCCESS'),
+('20230309144635', 'INSERT_REQUESTING_PCA/REQ/202303/0004INGREDIENT(2)', 'REQUEST_DETAIL_INGREDIENT', '', '2023-03-09', '2023-03-09 14:46:35', 'SUCCESS'),
+('20230309145503', 'UPDATE_STOCK_PRODUCT__FROM_REQUEST', 'RESTOCK_PRODUCT_STOCK', '2', '2023-03-09', '2023-03-09 14:55:03', 'SUCCESS'),
+('20230309145503', 'UPDATE_REQ_HEADER_', 'APPROVAL_REQUEST', '2', '2023-03-09', '2023-03-09 14:55:03', 'SUCCESS'),
+('20230309145503', 'UPDATE_REQ_DETAIL_', 'STATUS_REQUEST', '2', '2023-03-09', '2023-03-09 14:55:03', 'SUCCESS'),
+('20230309145653', 'UPDATE_STOCK_PRODUCT__FROM_REQUEST', 'RESTOCK_PRODUCT_STOCK', '2', '2023-03-09', '2023-03-09 14:56:53', 'SUCCESS'),
+('20230309145653', 'UPDATE_REQ_HEADER_', 'APPROVAL_REQUEST', '2', '2023-03-09', '2023-03-09 14:56:53', 'SUCCESS'),
+('20230309145653', 'UPDATE_REQ_DETAIL_', 'STATUS_REQUEST', '2', '2023-03-09', '2023-03-09 14:56:53', 'SUCCESS');
 
 -- --------------------------------------------------------
 
@@ -1690,6 +1700,8 @@ CREATE TABLE IF NOT EXISTS `tabproductstocktemp` (
 -- Dumping data for table `tabproductstocktemp`
 --
 
+INSERT INTO `tabproductstocktemp` (`tempID`, `requestID`, `productID`, `newStock`, `outletID`, `dateCreated`, `lastChanged`) VALUES
+('PCA/RPO/202303/0000', '', '', 0, '', '2023-03-09', '2023-03-09 14:56:53');
 
 -- --------------------------------------------------------
 
@@ -1721,7 +1733,10 @@ INSERT INTO `tabrequestdetail` (`detailID`, `requestID`, `ingredientID`, `amount
 ('20221202075246002', '2', '2', 2, '2', 1, '2022-12-02', '2022-12-02 07:52:46'),
 ('20230227030454000', '3', '8', 20, '2', 1, '2023-02-27', '2023-02-27 15:04:54'),
 ('20230227030454001', '3', '2', 20, '2', 1, '2023-02-27', '2023-02-27 15:04:54'),
-('20230227030454002', '3', '4', 20, '2', 1, '2023-02-27', '2023-02-27 15:04:54');
+('20230227030454002', '3', '4', 20, '2', 1, '2023-02-27', '2023-02-27 15:04:54'),
+('20230309024635000', 'PCA/REQ/202303/0004', '6', 10, '2', 1, '2023-03-09', '2023-03-09 14:46:35'),
+('20230309024635001', 'PCA/REQ/202303/0004', '4', 10, '2', 1, '2023-03-09', '2023-03-09 14:46:35'),
+('20230309024635002', 'PCA/REQ/202303/0004', '2', 10, '2', 1, '2023-03-09', '2023-03-09 14:46:35');
 
 -- --------------------------------------------------------
 
@@ -1755,7 +1770,8 @@ CREATE TABLE IF NOT EXISTS `tabrequestheader` (
 INSERT INTO `tabrequestheader` (`requestID`, `requestDate`, `categoryID`, `outletID`, `productID`, `amount`, `measurementID`, `userID`, `status`, `remarks`, `dateCreated`, `lastChanged`, `isPending`, `approvedBy`, `approvedDate`, `approvedReason`) VALUES
 ('3', '2023-02-27', '3', '1', '2', 10, '5', '2', 1, '', '2023-02-27', '2023-02-27 15:04:34', NULL, NULL, NULL, NULL),
 ('2', '2022-12-02', '3', '1', '1', 2, '5', '2', 1, '', '2022-12-02', '2022-12-02 07:50:00', NULL, NULL, NULL, NULL),
-('1', '2022-11-21', '3', '1', '1', 10, '5', '2', 2, '10 picis', '2022-11-21', '2022-11-21 14:02:54', 0, '2', '2022-11-21', 'Mantab, gassss');
+('1', '2022-11-21', '3', '1', '1', 10, '5', '2', 2, '10 picis', '2022-11-21', '2022-11-21 14:02:54', 0, '2', '2022-11-21', 'Mantab, gassss'),
+('PCA/REQ/202303/0004', '2023-03-09', '3', '1', '1', 10, '5', '2', 1, '10 pcs', '2023-03-09', '2023-03-09 14:46:30', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
