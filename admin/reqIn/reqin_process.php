@@ -7,7 +7,7 @@ if (!isset($_SESSION["username"]))
 } 
 include("../../assets/config/db.php");
 
-print_r($_POST['requestID']);
+// print_r($_POST['requestID']);
 $user      = $_SESSION["userID"];
 if (isset($_POST['requestID']))
 {
@@ -22,6 +22,12 @@ if (isset($_POST['requestID']))
 	$remarks = $_POST['remarks'];
 	$dateCreated = date("Y-m-d");
     $lastChanged = date("Y-m-d H:i:s");
+
+    $per = date("Ym");
+	$requestData = mysql_query("SELECT count(requestID)+1 AS countID FROM tabrequestheader");
+	$rowRequestData = mysql_fetch_array($requestData);
+	$countRequestData = $rowRequestData['countID'];
+	$requestID = "PCA/REQ/$per/".str_pad($countRequestData,4,"0",STR_PAD_LEFT); 
 
 
 	$checkID = mysql_query("SELECT * FROM tabrequestheader WHERE requestID='$requestID'");

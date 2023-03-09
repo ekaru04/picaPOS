@@ -17,6 +17,15 @@ if(isset($_POST['requestID'])){
 	$reason = $_POST['reason'];
 	$today = date("Y-m-d"); 
 
+	echo $_POST['requestID'];
+	exit;
+
+	$per = date("Ym");
+	$tempData = mysql_query("SELECT count(tempID)+1 AS countID FROM tabproductstocktemp");
+	$rowTempData = mysql_fetch_array($tempData);
+	$countTempData = $rowTempData['countID'];
+	$tempID = "PCA/RPO/$per/".str_pad($count,4,"0",STR_PAD_LEFT);
+
 	$dateCreated = date("Y-m-d");
 	$lastChanged = date("Y-m-d H:i:s");
 	$user = $data['userID'];
@@ -50,13 +59,13 @@ if(isset($_POST['requestID'])){
 		$stockNow = $rowProduct['curStock']; // <-- Menyimpan stok saat ini dari master produk ke variabel
 
 		/* Menambahkan stok produk saat ini dengan stok yang akan diproduksi kedalam variabel */
-		$curStock = $stockNow+$amountRequest;
+		// $curStock = $stockNow+$amountRequest;
 
 		/* Mengupdate stock produk sebelumnya dengan stock yang telah diapprove */
-		$updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
+		// $updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
 
 		/* Tampung ke tabel temp stok product */
-		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productID', '$amountRequest', '', '$dateCreated', '$lastChanged')");
+		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
 
 		$journalID = date("YmdHis");
 
