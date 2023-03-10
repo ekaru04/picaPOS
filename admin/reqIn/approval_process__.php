@@ -158,7 +158,7 @@ if(isset($_POST['requestID'])){
 		}
 		
 		
-		$query = "UPDATE tabrequestheader SET status = '$status',isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
+		$query = "UPDATE tabrequestheader SET status = '$status', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");

@@ -12,19 +12,19 @@ $data = mysql_fetch_array($query);
 
 /* Mengambil data request production dan meyimpannya dalam variabel */
 if(isset($_POST['requestID'])){
-	$tempID = $_POST['requestID'];
+	$requestID = $_POST['requestID'];
 	$statusApprove = $_POST['status'];
 	$reason = $_POST['reason'];
 	$today = date("Y-m-d"); 
 
-	echo $_POST['requestID'];
-	exit;
+	// echo $_POST['requestID'];
+	// exit;
 
 	$per = date("Ym");
 	$tempData = mysql_query("SELECT count(tempID)+1 AS countID FROM tabproductstocktemp");
 	$rowTempData = mysql_fetch_array($tempData);
 	$countTempData = $rowTempData['countID'];
-	$tempID = "PCA/RPO/$per/".str_pad($count,4,"0",STR_PAD_LEFT);
+	$tempID = "PCA/TEMP/$per/".str_pad($count,4,"0",STR_PAD_LEFT);
 
 	$dateCreated = date("Y-m-d");
 	$lastChanged = date("Y-m-d H:i:s");
@@ -179,7 +179,7 @@ if(isset($_POST['requestID'])){
 		}
 		
 		
-		$query = "UPDATE tabrequestheader SET status = '$status',isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
+		$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -187,7 +187,7 @@ if(isset($_POST['requestID'])){
 		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','APPROVAL_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 		$resJournal = mysql_query($queryJournal);
 		
-		$query = "UPDATE tabrequestdetail SET status = '$status' WHERE requestID = '$requestID'";
+		$query = "UPDATE tabrequestdetail SET status = '$statusApprove' WHERE requestID = '$requestID'";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -196,7 +196,7 @@ if(isset($_POST['requestID'])){
 		$resJournal = mysql_query($queryJournal);
 		
 	}else{
-		$query = "UPDATE tabrequestheader SET status = '$status',isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
+		$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -204,7 +204,7 @@ if(isset($_POST['requestID'])){
 		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','APPROVAL_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 		$resJournal = mysql_query($queryJournal);
 		
-		$query = "UPDATE tabrequestdetail SET status = '$status' WHERE requestID = '$requestID'";
+		$query = "UPDATE tabrequestdetail SET status = '$statusApprove' WHERE requestID = '$requestID'";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
