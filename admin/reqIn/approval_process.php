@@ -101,7 +101,7 @@ if(isset($_POST['requestID'])){
      			echo "<script type='text/javascript'>location.replace('$URL');</script>";
 			}else{
 				$lastChanged = date("Y-m-d H:i:s");
-				$res = mysql_query("UPDATE mingredient SET curStock = '$amountNow', lastChanged = '$lastChanged' WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
+				$res = mysql_query("UPDATE mingredient SET curStock = '$ingredientNewStock', lastChanged = '$lastChanged' WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
 
 				$journalID = date("YmdHis");
 
