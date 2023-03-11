@@ -180,6 +180,7 @@ echo"     <a class='dropdown-item' href='../promo'><b>Promo</b></a>";
 	}
 	if(validMenuAccess('C006')==1){
 echo"     <a class='dropdown-item' href='../activeVouchers'><b>Vouchers</b></a>";
+echo"     <a class='dropdown-item' href='../sentToStore'><b>Restock Product</b></a>";
 	}
 echo"   </div>
       </li>";
@@ -200,6 +201,7 @@ echo"     <a class='dropdown-item' href='../recipes'><b>Recipes</b></a>";
 echo"     <a class='dropdown-item' href='../products'><b>Products</b></a>";
 echo"     <a class='dropdown-item' href='../itemStock'><b>Stock Item</b></a>";
 echo"     <a class='dropdown-item' href='../bundle'><b>Bundle Item</b></a>";
+echo"     <a class='dropdown-item' href='../kitchen'><b>Stock Kitchen</b></a>";
 	}
 echo"   </div>
       </li>";

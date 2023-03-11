@@ -19,9 +19,9 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='row'>
-        <div class='col-lg-8'>
+        <div class='col-lg'>
           <div class='entry-box-basic'>
-          <h4 align='center'>ACTIVITY LOG</h4>
+          <h4 align='center'>KITCHEN STOCK</h4>
   <div class="row mb-2">
     <div class="col">
       <h1 class="m-0 text-dark text-center"></h1>
@@ -29,12 +29,6 @@ if (!isset($_SESSION["username"]))
       <table id='searchDateBox'>
         <tr>
           <input type='date' id='date1'/> - <input type='date' id='date2'/>
-            <select class="ml-1 col-3" name="status" id="status">
-              <option value="">STATUS</option>
-              <option value="0">ALL</option>
-              <option value="1">SUCCESS</option>
-              <option value="9">FAILED</option>
-            </select>
           <button type='button' id='searchDate' class='btn btn-primary ml-1' style='font-size:10px;'>Search</button>
         </tr>
       </table>
@@ -45,12 +39,12 @@ if (!isset($_SESSION["username"]))
             <table class='table' id='itemTable' style='font-size:13px;'>
               <thead>
                 <tr>
-                  <th style='vertical-align:middle;'>JOURNAL ID</th>
-                  <th style='vertical-align:middle;'>ACTIVITY</th>
-                  <th style='vertical-align:middle;'>MENU</th>
-                  <th style='vertical-align:middle;'>PIC</th>
+                  <th style='vertical-align:middle;'>TEMP ID</th>
+                  <th style='vertical-align:middle;'>REQUEST ID</th>
+                  <th style='vertical-align:middle;'>PRODUCT</th>
+                  <th style='vertical-align:middle;'>KITCHEN STOCK</th>
                   <th style='vertical-align:middle;'>ACTIVITY DATE</th>
-                  <th style='vertical-align:middle;'>STATUS</th>
+                  <th style='vertical-align:middle;'>PRODUCT CREATED</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,27 +53,6 @@ if (!isset($_SESSION["username"]))
             </table>
           </div>          
         </div>
-        <div class='col-lg-4'>
-          <div class='entry-box-basic'>
-          <h4 align='center'>ACTIVITY LOG</h4>
-          <div class='height-10'></div>
-            <table class='table' id='itemTable' style='font-size:13px;'>
-              <thead>
-                <tr>
-                  <th style='vertical-align:middle;'>JOURNAL ID</th>
-                  <th style='vertical-align:middle;'>ACTIVITY</th>
-                  <th style='vertical-align:middle;'>MENU</th>
-                  <th style='vertical-align:middle;'>PIC</th>
-                  <th style='vertical-align:middle;'>ACTIVITY DATE</th>
-                  <th style='vertical-align:middle;'>STATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-
-              </tbody>
-            </table>
-          </div>  
-          </div>
       </div>
     </div>
     <!-- /.content -->
@@ -117,17 +90,17 @@ var itemTable = $('#itemTable').DataTable(
         processing : false,
         responsive : true,
         ajax: {
-            url: "activity_data.php",
+            url: "stockTemp_data.php",
             data: 'data'
         },
         columns: [
             // { data: 'no' },
-            { data: 'journalID' },
-            { data: 'activity' },
-            { data: 'menu' },
-            { data: 'userID' },
-            { data: 'logCreated' },
-            { data: 'status' }
+            { data: 'tempID' },
+            { data: 'requestID' },
+            { data: 'productName' },
+            { data: 'newStock' },
+            { data: 'outletName' },
+            { data: 'dateCreated' }
         ],
     "columnDefs": [
         {"className": "dt-center", "targets": "_all"}
@@ -151,14 +124,6 @@ var itemTable = $('#itemTable').DataTable(
     }
         
 );
-    
-function excel(){
-    location.href='item_list_xls.php';
-}
-    
-$("#add").click(function(){
-    location.replace('outlet_input.php');
-});
     
 </script>
 
