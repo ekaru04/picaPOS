@@ -33,7 +33,8 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[newStock] = $row["newStock"];
     $nestedData[outletName] = $row["outletName"];
     $nestedData[dateCreated] = $row["dateCreated"];
-    // $nestedData[action] = "<a href='promo_input.php?promoID=$row[promoID]'>EDIT</a>";
+
+    if($row['newStock'])
     
     $data[] = $nestedData;
 }

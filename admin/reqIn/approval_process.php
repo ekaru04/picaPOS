@@ -64,6 +64,17 @@ if(isset($_POST['requestID'])){
 		/* Mengupdate stock produk sebelumnya dengan stock yang telah diapprove */
 		// $updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
 
+		$getDataTempStock = mysql_query("SELECT * FROM tabproductstocktemp WHERE productID = '$productRequest'");
+		$rowTempStock = mysql_fetch_array($getDataTempStock);
+		$productTemp = $rowTempStock['productID'];
+		$stockTemp = $rowTempStock['newStock'];
+		// echo "Ini ID produk nya ".$rowTempStock['productID'];
+		// echo "<br>";
+		// echo "Ini stok di dapurnya ".$rowTempStock['newStock'];
+		// exit;
+
+		if($productTemp == null){
+
 		/* Tampung ke tabel temp stok product */
 		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
 
@@ -72,6 +83,19 @@ if(isset($_POST['requestID'])){
 		$activityUpdateStock = "UPDATE_STOCK_PRODUCT_".$rowProduct['productID']."_FROM_REQUEST".$requestID;
 
 		$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'RESTOCK_PRODUCT_STOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
+			
+		}else{
+
+		/* Update Stock produk di tabel productstocktemp */
+		$updateTempStock = mysql_query("UPDATE tabproductstocktemp SET newStock = '$stockTemp', lastChanged = '$rowTempStock[lastChanged]' WHERE productID = '$productTemp' AND outletID = '$rowTempStock[outletID]'");
+
+		$journalID = date("YmdHis");
+
+		$activityUpdateStock = "UPDATE_STOCK_PRODUCT_".$rowProduct['productID']."_FROM_REQUEST".$requestID;
+
+		$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'RESTOCK_PRODUCT_STOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
+
+		}
 
 		$getRequestDetail = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $statusApprove-1 ");
 
@@ -165,7 +189,7 @@ if(isset($_POST['requestID'])){
 				$dateCreated = date("Y-m-d");
 				$lastChanged = date("Y-m-d H:i:s");
 				
-				$queryT = "INSERT INTO tabitemhistory(id,transType,ingredientID,amount,itemAmount,measurementID,cost,userID,status,dateCreated,lastChanged) VALUES('$journalID', 'OUT', '$rowIng[ingredientID]', '$amount', '$amountNow','$rowIng[measurementID]','$duitTotal','$user', 1, '$dateCreated', '$lastChanged')";
+				$queryT = "INSERT INTO tabitemhistory(id,transType,ingredientID,amount,itemAmount,measurementID,cost,userID,status,dateCreated,lastChanged) VALUES('$journalID', 'OUT', '$fetchRequestDetail[ingredientID]', '$amount', '$amountNow','$fetchRequestDetail[measurementID]','$duitTotal','$user', 1, '$dateCreated', '$lastChanged')";
 					
 				$resT = mysql_query($queryT);
 
