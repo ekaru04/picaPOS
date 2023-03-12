@@ -150,7 +150,7 @@ echo" <li class='nav-item dropdown'>
         <div class='dropdown-menu'>";
 		  
 	if(validMenuAccess('B001')==1){
-echo"     <a class='dropdown-item' href='../restock'><b>Restock Ingredient</b></a>";
+echo"     <a class='dropdown-item' href='../restockIngredient'><b>Restock Ingredient</b></a>";
 	}
 		
 	if(validMenuAccess('B002')==1){
