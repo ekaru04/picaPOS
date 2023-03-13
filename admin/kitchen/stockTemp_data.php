@@ -14,7 +14,7 @@ $data = mysql_fetch_array($query);
 
 $outlet = $data['outletID'];
 
-$query = "SELECT t.tempID, t.requestID, p.productName, t.newStock, o.outletName, t.dateCreated FROM tabproductstocktemp t 
+$query = "SELECT t.tempID, t.requestID, p.productName, SUM(t.newStock) AS newStock, o.outletName, t.dateCreated FROM tabproductstocktemp t 
         INNER JOIN mproduct p ON p.productID = t.productID 
         INNER JOIN moutlet o ON o.outletID = t.outletID 
         WHERE t.outletID = '$outlet'";
