@@ -20,7 +20,7 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='entry-box-basic'>
-      <h4 align='center'>PRODUCTION INPUT</h4>
+      <h4 align='center'>REQUEST STOCK PRODUCT</h4>
       <div class="row mb-2">
           <div class="col">
             <h1 class="m-0 text-dark text-center"></h1>
@@ -29,7 +29,7 @@ if (!isset($_SESSION["username"]))
           </div>
           <div class="">
             <!-- <button type='button' id='addStock' class='btn btn-primary mr-1' style='float: right;margin-top:13px; font-size:13px;'>ADD CURRENT STOCK</button> -->
-            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>ADD NEW PRODUCTIONS</button>
+            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>MAKE NEW REQUEST STOCK</button>
           </a>
           </div>
           <div class="col">

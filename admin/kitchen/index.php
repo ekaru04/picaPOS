@@ -38,12 +38,12 @@ if (!isset($_SESSION["username"]))
           <div class='height-10'></div>
             <table class='table' id='itemTable' style='font-size:13px;'>
               <thead>
-                <tr>
+                <tr><!-- 
                   <th style='vertical-align:middle;'>TEMP ID</th>
-                  <th style='vertical-align:middle;'>REQUEST ID</th>
+                  <th style='vertical-align:middle;'>REQUEST ID</th> -->
                   <th style='vertical-align:middle;'>PRODUCT</th>
                   <th style='vertical-align:middle;'>KITCHEN STOCK</th>
-                  <th style='vertical-align:middle;'>ACTIVITY DATE</th>
+                  <th style='vertical-align:middle;'>KITCHEN OUTLET</th>
                   <th style='vertical-align:middle;'>PRODUCT CREATED</th>
                 </tr>
               </thead>
@@ -95,8 +95,8 @@ var itemTable = $('#itemTable').DataTable(
         },
         columns: [
             // { data: 'no' },
-            { data: 'tempID' },
-            { data: 'requestID' },
+            // { data: 'tempID' },
+            // { data: 'requestID' },
             { data: 'productName' },
             { data: 'newStock' },
             { data: 'outletName' },
@@ -104,22 +104,7 @@ var itemTable = $('#itemTable').DataTable(
         ],
     "columnDefs": [
         {"className": "dt-center", "targets": "_all"}
-      ],
-      dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6]
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6]
-                }
-            }
-        ]
+      ]
         
     }
         

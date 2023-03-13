@@ -14,10 +14,10 @@ $data = mysql_fetch_array($query);
 
 $outlet = $data['outletID'];
 
-$query = "SELECT t.tempID, t.requestID, p.productName, SUM(t.newStock) AS newStock, o.outletName, t.dateCreated FROM tabproductstocktemp t 
+$query = "SELECT p.productName, SUM(t.newStock) AS newStock, o.outletName, t.dateCreated FROM tabproductstocktemp t 
         INNER JOIN mproduct p ON p.productID = t.productID 
         INNER JOIN moutlet o ON o.outletID = t.outletID 
-        WHERE t.outletID = '$outlet'";
+        WHERE t.outletID = '$outlet' GROUP BY p.productName";
 $res = mysql_query($query);
 
 $x=0;
@@ -27,8 +27,8 @@ while ($row=mysql_fetch_array($res)){
     $nestedData = array();
     
     $nestedData[no] = $x;
-    $nestedData[tempID] = $row["tempID"];
-    $nestedData[requestID] = $row["requestID"];
+    // $nestedData[tempID] = $row["tempID"];
+    // $nestedData[requestID] = $row["requestID"];
     $nestedData[productName] = $row["productName"];
     $nestedData[newStock] = $row["newStock"];
     $nestedData[outletName] = $row["outletName"];
