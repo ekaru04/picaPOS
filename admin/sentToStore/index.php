@@ -42,15 +42,9 @@ if (!isset($_SESSION["username"]))
           <thead>
             <tr>
               <th style='vertical-align:middle;'>NO</th>
-              <th style='vertical-align:middle;'>REQUEST DATE</th>
               <th style='vertical-align:middle;'>PRODUCT NAME</th>
-              <th style='vertical-align:middle;'>CATEGORY NAME</th>
+              <th style='vertical-align:middle;'>STOCK KITCHEN</th>
               <th style='vertical-align:middle;'>OUTLET</th>
-              <th style='vertical-align:middle;'>AMOUNT REQUEST</th>
-              <th style='vertical-align:middle;'>FULLNAME</th>
-              <th style='vertical-align:middle;'>MEASUREMENT</th>
-              <th style='vertical-align:middle;'>REMARKS</th>
-              <th style='vertical-align:middle;'>STATUS</th>
               <th style='vertical-align:middle;'>ACTION</th>
             </tr>
           </thead>
@@ -90,40 +84,19 @@ var itemTable = $('#itemTable').DataTable(
         processing : false,
         responsive : true,
         ajax: {
-            url: "reqin_data.php",
+            url: "temp_data.php",
             data: 'data'
         },
         columns: [
             { data: 'no' },
-            { data: 'requestDate' },
             { data: 'productName' },
-            { data: 'categoryName' },
+            { data: 'newStock' },
             { data: 'outletName' },
-            { data: 'amount' },
-            { data: 'fullname' },
-            { data: 'measurementName' },
-            { data: 'remarks' },
-            { data: 'status' },
-            { data: 'action'}
+            { data: 'sent'}
         ],
     "columnDefs": [
         {"className": "dt-center", "targets": "_all"}
-      ],
-      dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-                }
-            }
-        ]
+      ]
         
     }
         
