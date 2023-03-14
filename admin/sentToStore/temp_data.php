@@ -14,10 +14,10 @@ $data = mysql_fetch_array($query);
 
 $outlet = $data['outletID'];
 
-$query = "SELECT p.productName, t.newStock, o.outletName FROM tabproductstocktemp t
+$query = "SELECT p.productName,  SUM(t.newStock) AS newStock, o.outletName FROM tabproductstocktemp t
             INNER JOIN mproduct p ON p.productID = t.productID 
             INNER JOIN moutlet o ON o.outletID = t.outletID 
-            WHERE t.outletID = '$outlet'";
+            WHERE t.outletID = '$outlet' GROUP BY p.productName";
 $res = mysql_query($query);
 
 $x=0;
