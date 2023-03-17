@@ -50,6 +50,7 @@ if (!isset($_SESSION["username"]))
               <th style='vertical-align:middle;'>CURRENT STOCK</th>
               <th style='vertical-align:middle;'>TOTAL PRICE</th>
               <th style='vertical-align:middle;'>DISCOUNT PRICE</th>
+              <th style='vertical-align:middle;'>AFTER DISCOUNT</th>
               <th style='vertical-align:middle;'>MEASUREMENT</th>
               <th style='vertical-align:middle;'>USER</th>
               
@@ -97,6 +98,7 @@ var itemTable = $('#itemTable').DataTable(
             { data: 'curStock' },
             { data: 'totalPrice' },
             { data: 'discountPrice' },
+            { data: 'afterDiscount' },
             { data: 'measurementName' },
             { data: 'fullname' }
         ],

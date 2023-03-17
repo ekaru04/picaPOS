@@ -54,6 +54,7 @@ while ($row=mysql_fetch_array($res)){
 
     $totalPrice = "Rp. ".number_format($row["totalPrice"]).",-";
     $discountPrice = "Rp. ".number_format($row["discountPrice"]).",-";
+    $afterDiscount = "Rp. ".number_format($row["afterDiscount"]).",-";
 
     
     $nestedData[no] = $x;
@@ -64,6 +65,7 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[curStock] = $row["curStock"];
     $nestedData[totalPrice] = $totalPrice;
     $nestedData[discountPrice] = $discountPrice;
+    $nestedData[afterDiscount] = $afterDiscount;
     $nestedData[measurementName] = $row["measurementName"];
     $nestedData[fullname] = $row["fullname"];
 	
