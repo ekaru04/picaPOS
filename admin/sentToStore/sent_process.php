@@ -14,10 +14,12 @@ $user = $_SESSION["userID"];
 		$productID = $_POST['productID'];
 		$currentStock = $_POST['newStock'];
 		$sentStock = $_POST['sentStock'];
+		$lastChanged = date("Y-m-d H:i:s");
 
 		$masterDataProduct = mysql_query("SELECT * FROM mproduct WHERE productID = '$productID'");
 		$rowMasterDataProduct = mysql_fetch_array($masterDataProduct);
 		$masterProduct = $rowMasterDataProduct['productID'];
+		$masterProductName = $rowMasterDataProduct['productName'];
 		$masterStock = $rowMasterDataProduct['curStock'];
 
 		$dataTempStock = mysql_query("SELECT * FROM tabproductstocktemp WHERE productID = '$productID'");
@@ -27,6 +29,8 @@ $user = $_SESSION["userID"];
 
 		$toStore = $rowStock - $sentStock;
 
+		$newMasterStock = $masterStock + $sentStock;
+
 		if($rowStock < $sentStock)
 		{
 			echo "<script type='text/javascript'>alert('Jumlah stok kurang! Transaksi tidak dapat diproses!')</script>";
@@ -35,6 +39,8 @@ $user = $_SESSION["userID"];
 		else
 		{
 			$updateStockTemp = mysql_query("UPDATE tabproductstocktemp SET newStock = '$toStore' WHERE productID = '$productID'");
+			$updateStockMaster = mysql_query("UPDATE mproduct SET curStock = '$newMasterStock', lastChanged = '$lastChanged' WHERE productID = '$productID'");
+			echo "<script type='text/javascript'>alert('Stok product ".$masterProductName." berhasil dikirim ke Toko!')</script>";
 			echo "<script type='text/javascript'>location.replace('/picaPOS/admin/sentToStore/stock_input.php?productID=$rowProduct')</script>";
 		}
 

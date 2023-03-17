@@ -68,6 +68,8 @@ if(isset($_POST['requestID'])){
 		$rowTempStock = mysql_fetch_array($getDataTempStock);
 		$productTemp = $rowTempStock['productID'];
 		$stockTemp = $rowTempStock['newStock'];
+
+		$addNewStock = $stockTemp + $amountRequest;
 		// echo "Ini ID produk nya ".$rowTempStock['productID'];
 		// echo "<br>";
 		// echo "Ini stok di dapurnya ".$rowTempStock['newStock'];
@@ -76,7 +78,8 @@ if(isset($_POST['requestID'])){
 		if($productTemp == null){
 
 		/* Tampung ke tabel temp stok product */
-		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
+		// $tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
+		$tempStock = mysql_query("INSERT INTO tabproductstocktemp(productID, newStock, outletID, dateCreated, lastChanged) VALUES('$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
 
 		$journalID = date("YmdHis");
 
@@ -87,7 +90,7 @@ if(isset($_POST['requestID'])){
 		}else{
 
 		/* Update Stock produk di tabel productstocktemp */
-		$updateTempStock = mysql_query("UPDATE tabproductstocktemp SET newStock = '$stockTemp', lastChanged = '$rowTempStock[lastChanged]' WHERE productID = '$productTemp' AND outletID = '$rowTempStock[outletID]'");
+		$updateTempStock = mysql_query("UPDATE tabproductstocktemp SET newStock = '$addNewStock', lastChanged = '$rowTempStock[lastChanged]' WHERE productID = '$productRequest' AND outletID = '$rowTempStock[outletID]'");
 
 		$journalID = date("YmdHis");
 

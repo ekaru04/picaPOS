@@ -10,13 +10,13 @@ include('../../assets/template/navbar.php');
 
 
 if($_GET['productID']==""){
-    $queryItemID = "SELECT count(productID)+1 as productID FROM tabproductstocktemp";
+    $queryItemID = "SELECT count(productID)+1 as productID, SUM(newStock) AS newStock FROM tabproductstocktemp";
     $resItemID = mysql_query($queryItemID);
     $row = mysql_fetch_array($resItemID);
     $productID = $row['productID'];
 }else{
     $productID = $_GET['productID'];
-    $query = "SELECT p.productName, t.newStock FROM tabproductstocktemp t 
+    $query = "SELECT p.productName, SUM(t.newStock) AS newStock FROM tabproductstocktemp t 
     			INNER JOIN mproduct p ON p.productID = t.productID WHERE t.productID ='$productID'";
     $res = mysql_query($query);
     $row = mysql_fetch_array($res);
