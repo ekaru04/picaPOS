@@ -94,6 +94,6 @@ if (isset($_POST['transID']))
 	// $res = mysql_query($query);
 	
 }
-	$URL="/picaPOS/admin/restock"; 
+	$URL="/picaPOS/admin/restockIngredient"; 
     echo "<script type='text/javascript'>location.replace('$URL');</script>";
 ?>
