@@ -75,16 +75,9 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 	                            <input type='text' class='type-input form-control' name='sentStock' placeholder='Insert Amount Stock' style='width:300px;'/>
 	                        </div>	                    	
 	                    </div>
-
-	                    <div class='row  mt-3'>
-	                        <div class='col-6'>
-	                        	<label>Insert Amount Stock Product</label>
-	                            <textarea class='type-input' name='remarks' placeholder='Insert notes here' rows='4' cols='40'><?php echo $row[remarks]; ?></textarea>
-	                        </div>
-	                    </div>
 	                    
 	                    <div class='row  mt-3'>
-	                        <div class='col-3'>
+	                        <div class='col-4'>
 	                            <input id='save' type='submit' value='SENT' name='submit' class='btn btn-success' />
 	                            <button type='button' id='cancel' class='btn btn-danger' >CANCEL</button>  
 	                        </div>
