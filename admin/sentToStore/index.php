@@ -45,7 +45,7 @@ if (!isset($_SESSION["username"]))
               <th style='vertical-align:middle;'>PRODUCT NAME</th>
               <th style='vertical-align:middle;'>STOCK KITCHEN</th>
               <th style='vertical-align:middle;'>OUTLET</th>
-              <th style='vertical-align:middle;'>ACTION</th>
+              <!-- <th style='vertical-align:middle;'>ACTION</th> -->
             </tr>
           </thead>
           <tbody>
@@ -91,8 +91,7 @@ var itemTable = $('#itemTable').DataTable(
             { data: 'no' },
             { data: 'productName' },
             { data: 'newStock' },
-            { data: 'outletName' },
-            { data: 'sent'}
+            { data: 'outletName' }
         ],
     "columnDefs": [
         {"className": "dt-center", "targets": "_all"}
@@ -107,7 +106,7 @@ function excel(){
 }
     
 $("#add").click(function(){
-    location.replace('reqin_input.php');
+    location.replace('sent-stock.php');
 });
     
 </script>
