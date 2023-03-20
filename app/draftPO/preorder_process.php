@@ -84,9 +84,9 @@ $countArr = count($productID);
 // echo $preorderID;
 // echo $outletID;
 
-/* Jika Status 4 atau Pelunasan */
-if($status == 4)
-{ 
+  /* Jika Status 4 atau Pelunasan */
+  if($status == 4)
+  { 
 
 	/* Ambil data berdasarkan orderID */
 	$checkPO = mysql_query("SELECT * FROM taborderheader WHERE orderID = '$preorderID' AND outletID = '$outletID'"); 
@@ -108,7 +108,7 @@ if($status == 4)
 		$checkCustomer = mysql_query("SELECT * FROM mcustomer WHERE customerName = '$payerName'");
 		$rowCustomer = mysql_fetch_array($checkCustomer); // <-- Cek data
 		$customerID = $rowCustomer['customerID']; // <-- variabel customerID
-		echo $rowCustomer['customerName']; // <-- Ngecek saja, gak terlalu dipake
+		// echo $rowCustomer['customerName']; // <-- Ngecek saja, gak terlalu dipake
 
 		/* Mengambil data loyalty customer bedasarkan customerNamenya */
 		$checkLoyalty = mysql_query("SELECT * FROM tabloyalty l	INNER JOIN mcustomer c ON c.customerID = l.customerID
@@ -230,7 +230,22 @@ if($status == 4)
 	}
   }
 
+  /* Jika status 3 atau draft */
+  elseif($status == 3)
+  {
+  	/* Ambil data berdasarkan orderID */
+  	$checkPO = mysql_query("SELECT * FROM taborderheader WHERE orderID = '$preorderID' AND outletID = '$outletID'");
+  	$rowPO = mysql_fetch_array($checkPO);
+
+  	if($checkData = mysql_num_rows($checkPO) !=0)
+  	{
+
+
+  	}
+  }
+
 }
+
 
 
 
