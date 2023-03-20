@@ -86,7 +86,8 @@ date_default_timezone_set('Asia/Jakarta');
 
 <div>
 		<div class='clear height-20 mt-3'></div>
-		<div class="container-fluid">			
+		<div class="container-fluid">
+			
 			<form id='formOrder' method='POST' action='preOrder_process.php'>
 				<div class='row'>
 					<div class='col-lg-4'>
@@ -491,15 +492,15 @@ date_default_timezone_set('Asia/Jakarta');
 			$('tr.deft').remove();
 
 			var html = '';
-			var price = "";
+			var productPrice = "";
 			var productName = "";
-			var get = "getProduct.php?productID="+btn+"&priceID="+orderType;
+			var get = "getProduct.php?productID="+btn;
 
 			$.get(get, function( data ) {
-				price = data.price;
+				productPrice = data.productPrice;
 				productName = data.productName;
 
-				var numbering = price;
+				var numbering = productPrice;
 
 				var numbering = numbering.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 
@@ -507,10 +508,10 @@ date_default_timezone_set('Asia/Jakarta');
 				html += "<td class = 'table-details' style='text-align:left;width:1%;'>&nbsp;&nbsp;Rp. </td>";
 				html += "<td class = 'table-details' style='text-align:right;width:29%;padding-right:5px;'>";
 				html += "<input type='hidden' name='productID[]' value='"+btn+"'/>";
-				html += "<input type='text' name='productPrice[]' class = 'inps' style='width:100px;' value='"+price+"'/></td>";
+				html += "<input type='text' name='productPrice[]' class = 'inps' style='width:100px;' value='"+productPrice+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:center;width:5%;'>";
 				html += "<input type='text' name='productQty[]' class='inps' style='width:40px;' value='1'/>";
-				html += "<input type='hidden' name='productSubtotal[]' style='width:40px;' value='"+price+"'/></td>";
+				html += "<input type='hidden' name='productSubtotal[]' style='width:40px;' value='"+productPrice+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:left;width:1%;padding-left:5px;'>Rp. </td>";
 				html += "<td class = 'table-details' style='text-align:right;width:24%;padding-right:5px;'><input type='text' name='productSutot[]' readonly style='width:100px;' value='"+numbering+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>";
@@ -532,7 +533,7 @@ date_default_timezone_set('Asia/Jakarta');
 				
 				var disc = 0;
 
-				price = parseFloat(price);
+				productPrice = parseFloat(productPrice);
 
 				var sum = 0;
 				var sumVal = 0;
