@@ -114,13 +114,18 @@ $countArr = count($productID);
 				/* update product ke DB OrderDetail */
 				$id = $x+1;
 
+				// echo $id;
+				// exit;
+
 				// $queryD = "INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 0, '$dateCreated', '$lastChanged')";
 
 				#check apakah order detailnya ada, kalau gaada insert.
-				$resChk = mysql_query("SELECT * FROM taborderdetail WHERE orderID = '$orderID' AND id = '$id'");
+				$resChk = mysql_query("SELECT COUNT(id)+1 AS id FROM taborderdetail WHERE orderID = '$orderID'");
+				$countID = mysql_fetch_array($resChk);
+				$rowIDetail = $countID['id'];
 				
 				if(mysql_num_rows($resChk)==0){
-					$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
+					$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$rowIDetail','$orderID', '$product', '$amount', '$price','$subtotal', 2, '$dateCreated', '$lastChanged')");
 				}else{
 					$queryD = mysql_query("UPDATE taborderdetail SET productID='$product',productAmount='$amount',
 											productPrice='$price',productSubtotal='$subtotal',status='2',lastChanged='$lastChanged' WHERE orderID = '$orderID' AND id = '$id'");

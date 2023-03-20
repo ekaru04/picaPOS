@@ -97,8 +97,12 @@ date_default_timezone_set('Asia/Jakarta');
 	$itemCount = $rowD[max];
 
 	/* Ambil ID Customer dari DB */
-	$cust = mysql_query("SELECT * FROM taborderheader h INNER JOIN mcustomer c ON h.payerName = c.customerName WHERE h.payerName = '$row[payerName]'")or die(mysql_error());
+	$cust = mysql_query("SELECT * FROM taborderheader h 
+		INNER JOIN mcustomer c ON h.payerName = c.customerName 
+		INNER JOIN tabpriceheader p ON h.priceID = p.priceID
+		WHERE h.payerName = '$row[payerName]'")or die(mysql_error());
 	$fetch = mysql_fetch_array($cust);
+	$priceID = $fetch[payerName];
 
 
 ?>
@@ -133,13 +137,18 @@ date_default_timezone_set('Asia/Jakarta');
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<select class="mb-2 form-control" id="methodList" required>
+									<select class="mb-2 form-control" id="methodList" disabled>
 										<option value="">-List Order Type-</option>
 										<?php
-										$queryPay = mysql_query("SELECT * FROM tabpriceheader ORDER BY priceID ASC");
+										$queryPay = mysql_query("SELECT * FROM tabpriceheader WHERE priceID = '$row[priceID]' ORDER BY priceID ASC");
+										$fetchPay = mysql_fetch_array($queryPay);
+										if(mysql_num_rows($queryPay)!=0):
+											echo "<option value='$fetchPay[priceID]' selected>$fetchPay[priceName]</option>";
+										else:
 											while($rowMeth = mysql_fetch_array($queryPay)){
 												echo "<option value='$rowMeth[priceID]'>$rowMeth[priceName]</option>";
 											}
+										endif;
 										?>
 									</select>
 								</div>
