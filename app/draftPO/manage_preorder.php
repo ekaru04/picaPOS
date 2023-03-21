@@ -283,6 +283,47 @@ date_default_timezone_set('Asia/Jakarta');
 									<input type='hidden' id = 'voucherReq' name='voucherReq' value='<?php echo $row[voucherRequirement];?>'/>
 								</div>
 							</div>
+							<div class="row mb-2">
+								<div class="col">
+									<tr>
+									  <span>Payment Date (<b>DP</b>)</span>
+									  <?php 
+									  	$queryTrxPayment = mysql_query("SELECT * FROM tabpaymentorder WHERE orderID = '$preorderID'");
+									  	$rowTrxPayment = mysql_fetch_array($queryTrxPayment);
+
+									  	if($rowTrxPayment['paymentDate'] != null):
+									  		?>
+									  	<input class="form-control" type="date" name="paymentDP" readonly value="<?php echo date('Y-m-d', strtotime($rowTrxPayment[paymentDate])); ?>">
+									  	<?php else: ?>
+										<input class='form-control' name='paymentDP' type='date' id='dateDP'/>
+
+							          <?php endif; ?>
+							        </tr>
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col">
+									<tr>
+									  <span>Payment Date (<b>FP</b>)</span>
+									  <?php 
+									  	$queryTrxPayment = mysql_query("SELECT * FROM tabpaymentorder WHERE orderID = '$preorderID'");
+									  	$rowTrxPayment = mysql_fetch_array($queryTrxPayment);
+
+									  	if($rowTrxPayment['paymentDateFP'] != null):
+									  ?>
+
+										<input class='form-control' name='paymentFP' type='date' id='dateFP'/>								  	
+									  <?php 
+									  	else: 
+									  ?>
+										<input class="form-control" type="date" name="paymentFP" readonly value="<?php echo date('Y-m-d', strtotime($rowTrxPayment[paymentDate])); ?>">
+
+							          <?php 
+							      		endif; 
+							      	  ?>
+							        </tr>
+								</div>
+							</div>
 							<div class='row mb-2'>
 								<div class='col'>
 									<input class="form-control" type='text' id ='voucherCode' name ='voucherCode' style='width:100%;' placeholder='Insert Voucher Code' value='<?php echo $row[voucherID];?>'/>

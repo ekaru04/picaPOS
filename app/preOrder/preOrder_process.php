@@ -136,7 +136,7 @@ $countArr = count($productID);
 			
 			echo "<script type='text/javascript'>alert('DRAFT TERSIMPAN!')</script>";
 			$URL="/picaPOS/app/pos"; 
-			// echo "<script type='text/javascript'>location.replace('$URL');</script>";
+			echo "<script type='text/javascript'>location.replace('$URL');</script>";
 		}
    
    }elseif($status == 4){

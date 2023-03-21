@@ -29,6 +29,7 @@ if($voucherCode)
 $paymentAmount = $_POST['payment'];
 $paymentType = $_POST['paymentType'];
 $paymentDate = date('Y-m-d', strtotime($_POST['paymentDate']));
+$paymentDateFP = date('Y-m-d', strtotime($_POST['paymentFP']));
 $downPayment = $_POST['downPayment'];
 $paymentMethod = $_POST['paymentMethod'];
 $changeAmount = $_POST['changeAmount'];
@@ -102,7 +103,7 @@ $countArr = count($productID);
 						WHERE orderID = '$preorderID' AND outletID = '$outletID'");
 
 		/* Update data tabpaymentorder berdasarkan orderID, STATUS harus 4(pelunasan) */
-		$updateStatusPayment = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', dpp='$dpp', paymentMethod = '$paymentMethod', total='$total', status = '4', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
+		$updateStatusPayment = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', paymentDateFP = '$paymentDateFP', dpp='$dpp', paymentMethod = '$paymentMethod', total='$total', status = '4', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
 
 		/* Mengambil data customer untuk dicek apakah customer yang PO datanya ada atau tidak berdasarkan customerNamenya */
 		$checkCustomer = mysql_query("SELECT * FROM mcustomer WHERE customerName = '$payerName'");
@@ -226,8 +227,14 @@ $countArr = count($productID);
 	}
 	else
 	{
-		echo "tidak ada";
+		echo "<script type='text/javascript'>alert('DATA TIDAK TERSEDIA!!!')</script>";
+		$URL="/picaPOS/app/draftPO"; 
+		echo "<script type='text/javascript'>location.replace('$URL');</script>";
 	}
+
+		echo "<script type='text/javascript'>alert('DRAFT TERSIMPAN!')</script>";
+		$URL="/picaPOS/app/draftPO"; 
+		echo "<script type='text/javascript'>location.replace('$URL');</script>";
   }
 
   /* Jika status 3 atau draft */
@@ -239,9 +246,19 @@ $countArr = count($productID);
 
   	if($checkData = mysql_num_rows($checkPO) !=0)
   	{
+  		/* Seharusnya tidak ada data spesifik yang di update, melainkan hanya remarks saja jadi samakan saja seperti query jika status 4 */
+  		$updateStatus = mysql_query("UPDATE taborderheader SET 
+						orderAmount = '$preorderAmount', status = '3', remarks = '$remarks', lastChanged = '$lastChanged'
+						WHERE orderID = '$preorderID' AND outletID = '$outletID'");
 
-
+  		/* Seharusnya hanya mengupdate paymentDP apabila pada form sebelumnya lupa mengisi form paymentDP */
+  		$updatePaymentData = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', paymentDate = '$paymentDate', dpp='$dpp', paymentMethod = '$paymentMethod', total='$total', status = '3', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
   	}
+
+			echo "<script type='text/javascript'>alert('DRAFT TERSIMPAN!')</script>";
+			$URL="/picaPOS/app/draftPO"; 
+			echo "<script type='text/javascript'>location.replace('$URL');</script>";
+
   }
 
 }
