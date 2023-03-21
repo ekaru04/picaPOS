@@ -11,7 +11,7 @@ $closeShift = $requestData[closeShift];
 $query = "SELECT h.orderID, h.orderNo, h.orderDate, h.orderPeriode, h.orderAmount, p.total, p.paymentAmount, p.paymentMethod, h.payerName, m.methodName, h.userID, u.fullname, h.remarks FROM taborderheader h 
 INNER JOIN tabpaymentorder p ON h.orderID = p.orderID
 INNER JOIN mpaymentmethod m ON p.paymentMethod = m.methodID 
-INNER JOIN muser u ON h.userID = u.userID WHERE h.status = 1 AND h.userID = '$_SESSION[userID]' AND h.outletID = '$outletID' AND h.orderDate = '$closeDate' ORDER BY h.orderNo";
+INNER JOIN muser u ON h.userID = u.userID WHERE h.status != 0 AND h.userID = '$_SESSION[userID]' AND h.outletID = '$outletID' AND h.orderDate = '$closeDate' ORDER BY h.orderNo";
 $res = mysql_query($query);
 
 $x=0;

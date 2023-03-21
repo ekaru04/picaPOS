@@ -255,7 +255,7 @@ $countArr = count($productID);
   		$updatePaymentData = mysql_query("UPDATE tabpaymentorder SET paymentType = '$paymentType', paymentAmount = '$paymentAmount', paymentDate = '$paymentDate', dpp='$dpp', paymentMethod = '$paymentMethod', total='$total', status = '3', remarks = '$remarks', lastChanged = '$lastChanged' WHERE orderID = '$preorderID'");
   	}
 
-			echo "<script type='text/javascript'>alert('DRAFT TERSIMPAN!')</script>";
+			echo "<script type='text/javascript'>alert('DRAFT PO TERSIMPAN!')</script>";
 			$URL="/picaPOS/app/draftPO"; 
 			echo "<script type='text/javascript'>location.replace('$URL');</script>";
 
