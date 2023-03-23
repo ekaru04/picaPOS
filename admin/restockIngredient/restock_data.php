@@ -42,6 +42,7 @@ $query = "SELECT * FROM tabitemtransaction a
             INNER JOIN mingredient i ON a.ingredientID = i.ingredientID
             INNER JOIN muser u ON a.userID = u.userID
             INNER JOIN mmeasurement e ON a.measurementID = e.measurementID
+            INNER JOIN tabitemsaldo o ON a.transID = o.transID
             WHERE a.outletID = '$outlet'";
 $res = mysql_query($query);
 
@@ -54,7 +55,7 @@ while ($row=mysql_fetch_array($res)){
 
     $totalPrice = "Rp. ".number_format($row["totalPrice"]).",-";
     $discountPrice = "Rp. ".number_format($row["discountPrice"]).",-";
-    $afterDiscount = "Rp. ".number_format($row["afterDiscount"]).",-";
+    $afterDiscount = "Rp. ".number_format($row["totalPrice"]).",-";
 
     
     $nestedData[no] = $x;
@@ -65,7 +66,7 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[curStock] = $row["curStock"];
     $nestedData[totalPrice] = $totalPrice;
     $nestedData[discountPrice] = $discountPrice;
-    // $nestedData[afterDiscount] = $afterDiscount;
+    $nestedData[afterDiscount] = $afterDiscount;
     $nestedData[measurementName] = $row["measurementName"];
     $nestedData[fullname] = $row["fullname"];
 	
