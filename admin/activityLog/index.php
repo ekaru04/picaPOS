@@ -117,7 +117,7 @@ var itemTable = $('#itemTable').DataTable(
         processing : false,
         responsive : true,
         ajax: {
-            url: "activity_data.php",
+            url: "activity_data.php?date1="+"<?php echo date('Y-m-d', strtotime("-1 month"));?>"+"&date2="+"<?php echo date('Y-m-d');?>"+"&status=0",
             data: 'data'
         },
         columns: [
@@ -151,6 +151,19 @@ var itemTable = $('#itemTable').DataTable(
     }
         
 );
+
+function searchDateJournal()
+{
+    var startDate = new Date($('#date1').val());
+    var endDate = new Date($('#date2').val());
+    var stat = $('#status').val();
+      if (startDate <= endDate){
+          var urlS = "activity_data.php?date1="+$("#date1").val()+"&date2="+$("#date2").val()+"&status="+$("#status").val();
+          itemTable.ajax.url(urlS).load();
+      }else{
+          alert("Invalid Date Range!");
+      }
+};
     
 function excel(){
     location.href='item_list_xls.php';
