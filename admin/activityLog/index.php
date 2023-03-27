@@ -18,8 +18,8 @@ if (!isset($_SESSION["username"]))
     <!-- Main content -->
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
-      <div class='row'>
-        <div class='col-lg-8'>
+      <div class=''>
+        <div class=''>
           <div class='entry-box-basic'>
           <h4 align='center'>ACTIVITY LOG</h4>
   <div class="row mb-2">
@@ -58,7 +58,7 @@ if (!isset($_SESSION["username"]))
               </tbody>
             </table>
           </div>          
-        </div>
+        </div><!-- 
         <div class='col-lg-4'>
           <div class='entry-box-basic'>
           <h4 align='center'>ACTIVITY LOG</h4>
@@ -79,7 +79,7 @@ if (!isset($_SESSION["username"]))
               </tbody>
             </table>
           </div>  
-          </div>
+          </div> -->
       </div>
     </div>
     <!-- /.content -->
@@ -117,7 +117,7 @@ var itemTable = $('#itemTable').DataTable(
         processing : false,
         responsive : true,
         ajax: {
-            url: "activity_data.php?date1="+"<?php echo date('Y-m-d', strtotime("-1 month"));?>"+"&date2="+"<?php echo date('Y-m-d');?>"+"&status=0",
+            url: "activity_data.php?date1="+"<?php echo date('Y-m-d');?>"+"&date2="+"<?php echo date('Y-m-d');?>"+"&status=0",
             data: 'data'
         },
         columns: [
@@ -132,20 +132,9 @@ var itemTable = $('#itemTable').DataTable(
     "columnDefs": [
         {"className": "dt-center", "targets": "_all"}
       ],
-      dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6]
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6]
-                }
-            }
+      lengthMenu: [
+            [100, -1],
+            [100, 200, 'All'],
         ]
         
     }

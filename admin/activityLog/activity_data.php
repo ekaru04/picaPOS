@@ -11,7 +11,7 @@ $requestData = $_REQUEST;
 
 $today = date('Y-m-d');
 
-$query = "SELECT * FROM systemjournal WHERE menu LIKE '%ORDER_COMPLETE%' AND dateCreated = '$today'";
+$query = "SELECT * FROM systemjournal WHERE dateCreated BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]'";
 $res = mysql_query($query);
 
 $x=0;
