@@ -32,11 +32,10 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[productName] = $row['productName'];
     $nestedData[newStock] = $newStock;
     $nestedData[outletName] = $row["outletName"];
-<<<<<<< Updated upstream
+
+//     $nestedData[sent] = "<a href='stock_input.php?productID=$row[productID]'>SENT TO STORE</a>";
+// =======
     $nestedData[sent] = "<a href='stock_input.php?productID=$row[productID]'>SENT TO STORE</a>";
-=======
-    // $nestedData[sent] = "<a href='sent-stock.php?productID=$row[productID]'>SENT TO STORE</a>";
->>>>>>> Stashed changes
 
     $data[] = $nestedData;
 }
