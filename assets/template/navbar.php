@@ -252,9 +252,6 @@ echo"		<li>
 	if(validMenuAccess('E003')==1||validMenuAccess('GST1')==1){
 echo"		<li>
 				<a class='dropdown-item' href='../transactionReport'><b>Transactions Reports</b></a>
-			</li
-			<li>
-				<a class='dropdown-item' href='../preorderReport'><b>Transactions Pre-Order</b></a>
 			</li>";
 // echo"		<li>
 // 				<a class='dropdown-item' href='../incomeReport'><b>Income</b></a>
