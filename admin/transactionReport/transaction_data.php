@@ -26,14 +26,13 @@ INNER JOIN moutlet o ON h.outletID = o.outletID
 INNER JOIN tabpaymentorder p ON h.orderID = p.orderID
 INNER JOIN muser u ON h.userID = u.userID
 WHERE (h.orderDate BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]') $stat ORDER BY h.dateCreated ASC";
-
 $res = mysql_query($query);
 
 $x=0;
 $data = array();
 while ($row=mysql_fetch_array($res)){
     $x+=1;
-    $nestedData = array();
+    $nestedData = array(); 
     
     $nestedData[no] = $x;
     $nestedData[orderID] = $row['orderID'];

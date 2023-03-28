@@ -19,6 +19,9 @@ WHERE h.orderID = '$orderID'";
 
 $res = mysql_query($query);
 
+$guest = mysql_query("SELECT * FROM tabusermenu WHERE userID = '$_SESSION[userID]'");
+$rowGuest = mysql_fetch_array($guest);
+
 $x=0;
 $data = array();
 while ($row=mysql_fetch_array($res)){
@@ -29,7 +32,11 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[orderID] = $row['orderID'];
     $nestedData[productName] = $row["productName"];
     $nestedData[productAmount] = $row["productAmount"];
+if($rowGuest['menuID']=='GST1'):
+    $nestedData[productSubtotal] = $row["productSubtotal"]/2;
+else:
     $nestedData[productSubtotal] = $row["productSubtotal"];
+endif;
     $nestedData[lastChanged] = $row["lastChanged"];
     
     $data[] = $nestedData;

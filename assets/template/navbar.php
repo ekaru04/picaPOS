@@ -142,62 +142,62 @@ $data = mysql_fetch_array($query);
         <a href='../restock' class='nav-link'>Restock</a>
       </li> -->
 <?php
-if(validMenuAccess('B001')==1||validMenuAccess('B002')==1||validMenuAccess('B003')==1){
+if(validMenuAccess('B001')==1||validMenuAccess('B002')==1||validMenuAccess('B003')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         	<b>Transaction</b>
         </a>
         <div class='dropdown-menu'>";
 		  
-	if(validMenuAccess('B001')==1){
+	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../restockIngredient'><b>Restock Ingredient</b></a>";
 	}
 		
-	if(validMenuAccess('B002')==1){
+	if(validMenuAccess('B002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../reqIn'><b>Production Input</b></a>";
 	}
 		
-	if(validMenuAccess('B003')==1){
+	if(validMenuAccess('B003')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../restockProduct'><b>In/Out Product</b></a>";
 echo"     <a class='dropdown-item' href='../itemTrans'><b>In/Out Item</b></a>";
 	}
 
-	if(validMenuAccess('B004')==1){
+	if(validMenuAccess('B004')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../pengeluaran'><b>Pengeluaran</b></a>";
 	}
 echo"   </div>
       </li>";
 }
 
-if(validMenuAccess('C005')==1||validMenuAccess('C006')==1){
+if(validMenuAccess('C005')==1||validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         	<b>Store</b>
         </a>
         <div class='dropdown-menu'>";
-	if(validMenuAccess('C005')==1){
+	if(validMenuAccess('C005')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../promo'><b>Promo</b></a>";
 	}
-	if(validMenuAccess('C006')==1){
+	if(validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../activeVouchers'><b>Vouchers</b></a>";
 echo"     <a class='dropdown-item' href='../sentToStore'><b>Restock Product</b></a>";
 	}
 echo"   </div>
       </li>";
 }
-if(validMenuAccess('D001')==1||validMenuAccess('D002')==1||validMenuAccess('D003')==1){
+if(validMenuAccess('D001')==1||validMenuAccess('D002')==1||validMenuAccess('D003')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         <b>Stock</b>
         </a>
         <div class='dropdown-menu'>";
-	if(validMenuAccess('D001')==1){
+	if(validMenuAccess('D001')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../ingredients'><b>Ingredients</b></a>";
 	}
-	if(validMenuAccess('D002')==1){
+	if(validMenuAccess('D002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../recipes'><b>Recipes</b></a>";
 	}
-	if(validMenuAccess('D003')==1){
+	if(validMenuAccess('D003')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../products'><b>Products</b></a>";
 echo"     <a class='dropdown-item' href='../itemStock'><b>Stock Item</b></a>";
 echo"     <a class='dropdown-item' href='../bundle'><b>Bundle Item</b></a>";
@@ -207,23 +207,23 @@ echo"   </div>
       </li>";
 }
 	
-if(validMenuAccess('B001')==1||validMenuAccess('B002')==1||validMenuAccess('B003')==1){
+if(validMenuAccess('B001')==1||validMenuAccess('B002')==1||validMenuAccess('B003')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         <b>Master Data</b>
         </a>
         <div class='dropdown-menu'>";
-	if(validMenuAccess('C001')==1){
+	if(validMenuAccess('C001')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../categories'><b>Products Categories</b></a>";
 echo"     <a class='dropdown-item' href='../categoriesStock'><b>Items Categories</b></a>";
 	}
-	if(validMenuAccess('C002')==1){
+	if(validMenuAccess('C002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../measurements'><b>Measurements</b></a>";
 	}
-	if(validMenuAccess('C003')==1){
+	if(validMenuAccess('C003')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../payment'><b>Payment Method</b></a>";
 	}
-	if(validMenuAccess('C004')==1){
+	if(validMenuAccess('C004')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../suppliers'><b>Suppliers</b></a>";
 echo"     <a class='dropdown-item' href='../mCustomers'><b>Customers</b></a>";
 echo"     <a class='dropdown-item' href='../mPrices'><b>Master Price</b></a>";
@@ -232,24 +232,24 @@ echo"     <a class='dropdown-item' href='../priceList'><b>Price List</b></a>";
 echo"   </div>
       </li>";
 }
-if(validMenuAccess('E001')==1||validMenuAccess('E002')==1){
+if(validMenuAccess('E001')==1||validMenuAccess('E002')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         <b>Reports</b>
         </a>
 		<ul class='dropdown-menu' >";
-	if(validMenuAccess('E001')==1){
+	if(validMenuAccess('E001')==1||validMenuAccess('GST1')==1){
 echo"		<li>
 				<a class='dropdown-item' href='#'><b>Sales</b></a>
 
 			</li>";
 	}
-	if(validMenuAccess('E002')==1){
+	if(validMenuAccess('E002')==1||validMenuAccess('GST1')==1){
 echo"		<li>
 				<a class='dropdown-item' href='#'><b>Production</b></a>
 			</li>";  
 	}
-	if(validMenuAccess('E003')==1){
+	if(validMenuAccess('E003')==1||validMenuAccess('GST1')==1){
 echo"		<li>
 				<a class='dropdown-item' href='../transactionReport'><b>Transactions Reports</b></a>
 			</li
@@ -270,22 +270,22 @@ echo"   </ul>
     </li>
 <?php
 		
-if(validMenuAccess('F001')==1||validMenuAccess('F002')==1||validMenuAccess('F003')==1||validMenuAccess('F004')==1){
+if(validMenuAccess('F001')==1||validMenuAccess('F002')==1||validMenuAccess('F003')==1||validMenuAccess('F004')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         <b>Management</b>
         </a>
         <div class='dropdown-menu'>";
-	if(validMenuAccess('F001')==1){
+	if(validMenuAccess('F001')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../outlets'><b>Outlets</b></a>";
 	}
-	if(validMenuAccess('F002')==1){
+	if(validMenuAccess('F002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../mUser'><b>Users</b></a>";
 	}
-	if(validMenuAccess('F003')==1){
+	if(validMenuAccess('F003')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../mDepartment'><b>Departments</b></a>";
 	}
-	if(validMenuAccess('F004')==1){
+	if(validMenuAccess('F004')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../mPosition'><b>Positions</b></a>";
 echo"     <a class='dropdown-item' href='../mLoyalty'><b>Set Loyalty</b></a>";
 	}
@@ -295,6 +295,7 @@ echo"   </div>
 ?>
     </ul>
     <ul class='navbar-nav ml-auto mr-3 dropdown-menu-right' style='right:auto; left: auto;'>
+    <?php if(validMenuAccess('GST1')!=1):?>
       <li class='nav-item navbar-left'>
         <a href='../../app/pos' class='nav-link'><b>POS</b></a>
       </li>
@@ -306,6 +307,16 @@ echo"   </div>
           <a class='dropdown-item' href='../destroy_process.php'><b>Logout</b></a>
         </div>
       </li>
+    <?php else: ?>
+      <li class='nav-item dropdown navbar-left'>
+        <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
+        <b><?php echo $data['fullname']; ?></b>
+        </a>
+        <div class='dropdown-menu'>
+          <a class='dropdown-item' href='../destroy_process.php'><b>Logout</b></a>
+        </div>
+      </li>
+    <?php endif; ?>
     </ul>
 </div>	
     <!-- Right navbar links -->    

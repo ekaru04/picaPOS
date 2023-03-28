@@ -83,6 +83,15 @@ if (isset($_POST['userID']))
 	$res = mysql_query($query);
 	
 	#Pain.
+    if ($_POST['gst1']==1){
+        $resItem = mysql_query("SELECT COUNT(userID) as countID FROM tabUserMenu WHERE userID ='$userID' and menuID = 'GST1'");
+        $rowItem = mysql_fetch_array($resItem);
+        if($rowItem['countID']==0){
+                $inputItem = mysql_query("INSERT INTO tabUserMenu(menuID,userID) VALUES('GST1','$userID')");
+        }
+    } else{
+        $inputItem = mysql_query("DELETE FROM tabUserMenu WHERE userID ='$userID' and menuID = 'GST1'");
+    }
     if ($_POST['ops1']==1){
         $resItem = mysql_query("SELECT COUNT(userID) as countID FROM tabUserMenu WHERE userID ='$userID' and menuID = 'A001'");
         $rowItem = mysql_fetch_array($resItem);
