@@ -18,6 +18,8 @@ INNER JOIN mpaymentmethod m ON p.paymentMethod = m.methodID
 WHERE h.orderID = '$orderID'");
 $row = mysql_fetch_array($res);
 
+
+
 $totalPrice = "Rp. ".number_format($row["total"]).",-";
 	
 ?>
