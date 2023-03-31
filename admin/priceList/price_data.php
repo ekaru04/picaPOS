@@ -19,6 +19,9 @@ $query = "SELECT d.id, h.priceID, h.priceName, p.productName, d.price, h.descrip
                 WHERE d.status != 0";
 $res = mysql_query($query);
 
+$guest = mysql_query("SELECT * FROM tabusermenu WHERE userID = '$_SESSION[userID]'");
+$rowGuest = mysql_fetch_array($guest);
+
 $x=0;
 $data = array();
 while ($row=mysql_fetch_array($res)){
@@ -28,7 +31,11 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[no] = $x;
     $nestedData[priceName] = $row["priceName"];
     $nestedData[productName] = $row["productName"];
+if($rowGuest['menuID']=='GST1'):
+    $nestedData[price] = $row["price"]/2;
+else:
     $nestedData[price] = $row["price"];
+endif;
     $nestedData[description] = $row["description"];
     $nestedData[lastChanged] = $row["lastChanged"];
     $nestedData[action] = "<a href='price_input.php?id=$row[id]'>EDIT</a>";

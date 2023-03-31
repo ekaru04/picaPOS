@@ -14,6 +14,9 @@ $query = "SELECT h.bundleID, h.bundleName, c.categoryName, o.outletName, h.bundl
             INNER JOIN moutlet o ON h.outletID = o.outletID WHERE h.status != 0 ORDER BY h.lastChanged";
 $res = mysql_query($query);
 
+$guest = mysql_query("SELECT * FROM tabusermenu WHERE userID = '$_SESSION[userID]'");
+$rowGuest = mysql_fetch_array($guest);
+
 $x=0;
 $data = array();
 while ($row=mysql_fetch_array($res)){
@@ -25,7 +28,11 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[categoryName] = $row["categoryName"];
     $nestedData[outletName] = $row["outletName"];
     $nestedData[bundlePeriode] = $row["bundlePeriode"];
+if($rowGuest['menuID']=='GST1'):
+    $nestedData[bundlePrice] = $row["bundlePrice"]/2;
+else:
     $nestedData[bundlePrice] = $row["bundlePrice"];
+endif;
     
 	
 	switch($row["status"]){

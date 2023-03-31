@@ -21,13 +21,18 @@ INNER JOIN moutlet o ON p.outletID = o.outletID
 WHERE p.status != 0 AND p.outletID = '$outlet'";
 $res = mysql_query($query);
 
+$guest = mysql_query("SELECT * FROM tabusermenu WHERE userID = '$_SESSION[userID]'");
+$rowGuest = mysql_fetch_array($guest);
+
 $x=0;
 $data = array();
 while ($row=mysql_fetch_array($res)){
     $x+=1;
     $nestedData = array();
 
-    $productPrice = "Rp. ".number_format($row["productPrice"]).",-";
+    $priceGuest = $row["productPrice"]/2;
+
+    $productPrice = "Rp. ".number_format($priceGuest).",-";
 
     
     $nestedData[no] = $x;
@@ -36,7 +41,11 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[curStock] = $row["curStock"];
     $nestedData[outletName] = $row["outletName"];
     $nestedData[measurementName] = $row["measurementName"];
-    $nestedData[productPrice] = $productPrice;
+if($rowGuest['menuID']=='GST1'):
+    $nestedData[productPrice] = $priceGuest/2;
+else:
+    $nestedData[productPrice] = $priceGuest;
+endif;
     $nestedData[remarks] = $row["remarks"];
     
     
