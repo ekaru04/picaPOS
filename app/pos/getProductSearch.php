@@ -15,6 +15,8 @@ else{
 	$query = "SELECT * FROM mProduct WHERE productName LIKE '%$_GET[productName]%' AND status = 1 AND outletID = '$_SESSION[outletID]'";
 }
 
+$bundle = mysql_query("SELECT * FROM tabbundleheader WHERE status = 1");
+
 $res = mysql_query($query);
 
 $data = array();

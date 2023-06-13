@@ -20,7 +20,7 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='entry-box-basic'>
-      <h4 align='center'>RECIPES</h4>
+      <h4 align='center'>BUNDLE</h4>
       <div class="row mb-2">
           <div class="col">
             <h1 class="m-0 text-dark text-center"></h1>

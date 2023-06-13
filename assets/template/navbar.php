@@ -180,7 +180,7 @@ echo"     <a class='dropdown-item' href='../promo'><b>Promo</b></a>";
 	}
 	if(validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../activeVouchers'><b>Vouchers</b></a>";
-echo"     <a class='dropdown-item' href='../sentToStore'><b>Restock Product</b></a>";
+// echo"     <a class='dropdown-item' href='../sentToStore'><b>Restock Product</b></a>";
 	}
 echo"   </div>
       </li>";

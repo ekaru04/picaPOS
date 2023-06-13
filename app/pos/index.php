@@ -315,6 +315,11 @@ date_default_timezone_set('Asia/Jakarta');
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
+									<input type='text'class="form-control" id ='payment1' name ='payment1' style='width:100%;' placeholder='Insert Payment If Using Voucher Amount' />
+								</div>
+							</div>
+							<div class='row mb-2'>
+								<div class='col'>
 									<textarea width='100' placeholder='Insert notes here' class="form-control" name='remarks'></textarea>
 								</div>	
 							</div>
@@ -382,6 +387,31 @@ date_default_timezone_set('Asia/Jakarta');
 									</div>
 								</div>
 									";
+
+								$resBundle = mysql_query("SELECT * FROM tabbundleheader WHERE outletID = '$outletID' AND status = 1");
+								while ($rowBunlde = mysql_fetch_array($resBundle)) 
+									{
+										$bundleID = $rowBunlde['bundleName'];
+										echo "
+										<div class='row'>
+											<div class='col d-flex ml-1 productEntry'>
+												<div class='pt-2'>
+													<div class='col-12'>
+													    <div class='card' id='bundles'>
+											        		<button type='button' class='menu d-flex' id='$rowBunlde[bundleID]'>
+											            <div class=''>
+											                
+											            </div>
+											            <div class='col-6'>
+											        	    <span>$rowBunlde[bundleName]</span><input type='hidden' id = 'curProd_$rowBunlde[bundleID]'/> 
+											            </div>
+											        		</button>
+											   			</div>
+													</div>
+												</div>
+											</div>
+										</div>";
+									}
 								}
 							
 							?>
@@ -987,51 +1017,53 @@ date_default_timezone_set('Asia/Jakarta');
 				var promoStatus = "";
 				var dpp = $('#dpp').val();
 
+				console.log(now);
+
 				switch(day){
 					case 0:
-						if(isSunday==1){
+						if(isSunday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 1:
-						if(isMonday==1){
+						if(isMonday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 2:
-						if(isTuesday==1){
+						if(isTuesday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 3:
-						if(isWednesday==1){
+						if(isWednesday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 4:
-						if(isThursday==1){
+						if(isThursday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 5:
-						if(isFriday==1){
+						if(isFriday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 6:
-						if(isSaturday==1){
+						if(isSaturday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
