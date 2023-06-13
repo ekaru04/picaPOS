@@ -123,7 +123,8 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                         </div>
                     </div>
 
-                    <div class='row'>
+                    <!-- VALUE UNTUK INPUT PROMO -->
+                    <!-- <div class='row'>
                         <div class='col-2 label'>
                             <input type='text' class='form-control-plaintext' disabled value='PROMO' />
                         </div>
@@ -147,6 +148,8 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             <label for="sunday">SUNDAY</label>
                            </div>
                         </div>
+                    </div> -->
+
 
                     <div class='row  mt-3 '>
                         <div class='col-2'>
