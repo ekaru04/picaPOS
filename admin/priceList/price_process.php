@@ -35,7 +35,9 @@ if (isset($_POST['priceType']))
 
 	}else{
 
-		$queryDetail = mysql_query("UPDATE tabpricedetail SET price='$price', lastChanged='$lastChanged' WHERE priceID = '$priceType' AND productID = '$productID'");
+		// $queryDetail = mysql_query("UPDATE tabpricedetail SET price='$price', lastChanged='$lastChanged' WHERE priceID = '$priceType' AND productID = '$productID'");
+
+		$queryDetail = mysql_query("UPDATE tabpricedetail SET priceID='$priceType', price='$price', lastChanged='$lastChanged' WHERE id='$id'");
 
 		$journalID = date("YmdHis");
 		$actUpd = "UPDATE_PRICE_LIST_".$priceName;

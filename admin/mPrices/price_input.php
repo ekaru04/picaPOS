@@ -19,9 +19,8 @@ if($_GET['priceID']==""){
     $priceID = $row['priceID'];
 }else{
     $priceID = $_GET['priceID'];
-    $query = "SELECT h.priceID, h.priceName, d.productID, p.productName, d.price, h.description, h.lastChanged FROM tabpriceheader h
+    $query = "SELECT h.priceID, h.priceName, h.description, h.lastChanged FROM tabpriceheader h
             INNER JOIN tabpricedetail d ON h.priceID = d.priceID
-            INNER JOIN mproduct p ON d.productID = p.productID
             WHERE h.priceID ='$priceID'";
     $res = mysql_query($query);
     $row = mysql_fetch_array($res);
