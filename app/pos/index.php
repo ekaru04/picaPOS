@@ -387,7 +387,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</div>
 								</div>
 									";
-
+								}
 								$resBundle = mysql_query("SELECT * FROM tabbundleheader WHERE outletID = '$outletID' AND status = 1");
 								while ($rowBunlde = mysql_fetch_array($resBundle)) 
 									{
@@ -412,7 +412,6 @@ date_default_timezone_set('Asia/Jakarta');
 											</div>
 										</div>";
 									}
-								}
 							
 							?>
 							

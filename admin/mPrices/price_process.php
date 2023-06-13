@@ -23,7 +23,7 @@ if (isset($_POST['priceID']))
 	if(mysql_num_rows($checkID)==0){
 		$query = mysql_query("INSERT INTO tabpriceheader(priceID,priceName,outletID,description,status,dateCreated,lastChanged) VALUES('$priceID', '$priceName', '$outletID', '$description', 1, '$dateCreated', '$lastChanged')");
 
-		$queryDetail = mysql_query("INSERT INTO tabpricedetail(id, priceID, productID, price, status, dateCreated, lastChanged) VALUES('$detail', '$priceID', '$productID', '$price', 1, '$dateCreated', '$lastChanged')");
+		// $queryDetail = mysql_query("INSERT INTO tabpricedetail(id, priceID, productID, price, status, dateCreated, lastChanged) VALUES('$detail', '$priceID', '$productID', '$price', 1, '$dateCreated', '$lastChanged')");
 
 		$journalID = date("YmdHis");
 		$act = "INSERT_MASTER_PRICE_".$priceName;
@@ -35,7 +35,7 @@ if (isset($_POST['priceID']))
 	}else{
 
 		$query = mysql_query("UPDATE tabpriceheader SET	priceID='$priceID', priceName='$priceName',	outletID='$outletID', description='$description', lastChanged='$lastChanged' WHERE priceID='$priceID'");
-		$queryDetail = mysql_query("UPDATE tabpricedetail SET priceID='$priceID', lastChanged='$lastChanged' WHERE priceID = '$priceID' AND productID = '$productID'");
+		// $queryDetail = mysql_query("UPDATE tabpricedetail SET priceID='$priceID', lastChanged='$lastChanged' WHERE priceID = '$priceID' AND productID = '$productID'");
 
 		$journalID = date("YmdHis");
 		$actUpd = "UPDATE_MASTER_PRICE_".$priceName;
