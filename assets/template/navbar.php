@@ -149,10 +149,13 @@ echo" <li class='nav-item dropdown'>
         </a>
         <div class='dropdown-menu'>";
 		  
+		
 	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../restockIngredient'><b>Restock Ingredient</b></a>";
 	}
-		
+	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
+echo"     <a class='dropdown-item' href='../outStock'><b>In/Out Ingredient</b></a>";
+	}
 	if(validMenuAccess('B002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../reqIn'><b>Production Input</b></a>";
 	}

@@ -101,9 +101,7 @@ if(isset($_POST['requestID'])){
 		}
 
 		$getRequestDetail = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $statusApprove-1");
-		
-		//cek ada bahan yang kurang/engga 
-		$checkFlag = 0;
+
 		while($fetchRequestDetail = mysql_fetch_array($getRequestDetail)){
 			
 			//update current stock
@@ -116,14 +114,11 @@ if(isset($_POST['requestID'])){
 			$ingredientNewStock = $ingredientCurStock-$requestAmount;
 			
 			if($ingredientNewStock < $ingredientMinStock || $ingredientNewStock < 0){
-				$checkFlag = 1;
-			}
-			
-		}
-		
-		
-		if($checkFlag==1){
-				//ga lolos bea cukai
+				echo "<script type='text/javascript'>alert('Jumlah stok kurang! Transaksi tidak dapat diproses!')</script>";
+				$URL="/picaPOS/admin/reqIn"; 
+				echo "<script type='text/javascript'>location.replace('$URL');</script>";
+				
+
 				$journalID = date("YmdHis");
 
 				$actStock = "LOW_STOCK_FAILED_TO_UPDATE";
@@ -131,22 +126,9 @@ if(isset($_POST['requestID'])){
 				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','AMOUNT_STOCK','$user','$dateCreated','$lastChanged', 'FAILED')";
 				// $resJournal = mysql_query($queryJournal);
 				
-				echo "<script type='text/javascript'>alert('Jumlah stok kurang! Transaksi tidak dapat diproses!')</script>";
-				$URL="/picaPOS/admin/reqIn"; 
-				echo "<script type='text/javascript'>location.replace('$URL');</script>";
-		}else{
-			//lanjut
-			while($fetchRequestDetail = mysql_fetch_array($getRequestDetail)){
-			
-				//update current stock
-				$masterIngredient = mysql_query("SELECT * FROM mingredient WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' AND status = 1");
-				$fetchIngredient = mysql_fetch_array($masterIngredient);
-				$ingredientCurStock = $fetchIngredient[curStock];
-				$ingredientMinStock = $fetchIngredient[minStock];
-				
-				$requestAmount = $fetchRequestDetail[amount];
-				$ingredientNewStock = $ingredientCurStock-$requestAmount;
 
+
+			}else{
 				$lastChanged = date("Y-m-d H:i:s");
 				$res = mysql_query("UPDATE mingredient SET curStock = '$ingredientNewStock', lastChanged = '$lastChanged' WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
 
@@ -158,7 +140,7 @@ if(isset($_POST['requestID'])){
 				$resJournal = mysql_query($queryJournal);
 				
 				//update saldo sisa (ingin berkata kasar)
-				$resSaldo = mysql_query("SELECT * FROM tabItemSaldo s WHERE s.ingredientID = '$fetchRequestDetail[ingredientID]' AND s.outletID = '$rowRequest[outletID]' AND s.status = 1 ORDER BY s.dateCreated ASC LIMIT 1");
+				$resSaldo = mysql_query("SELECT * FROM tabItemSaldo s WHERE s.ingredientID = '$fetchRequestDetail[ingredientID]' AND s.outletID = '$rowRequest[outletID]' AND s.status = 1 ORDER BY s.dateCreated ASC");
 				
 				$amountLeft = $requestAmount; // isinya jumlah produk yg ingin dibuat tadi
 				$duitTotal = 0;
@@ -234,31 +216,26 @@ if(isset($_POST['requestID'])){
 				$actStock = "INSERT_HISTORY_FROM_REQUEST".$requestID;
 				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','HISTORY','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 				// $resJournal = mysql_query($queryJournal);
-				
 			}
 			
-			
-			$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
-			$res = mysql_query($query);
-
-			$journalID = date("YmdHis");
-			$actStock = "UPDATE_REQ_HEADER_".$requestID;
-			$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','APPROVAL_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
-			// $resJournal = mysql_query($queryJournal);
-			
-			$query = "UPDATE tabrequestdetail SET status = '$statusApprove' WHERE requestID = '$requestID'";
-			$res = mysql_query($query);
-
-			$journalID = date("YmdHis");
-			$actStock = "UPDATE_REQ_DETAIL_".$requestID;
-			$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','STATUS_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
-			// $resJournal = mysql_query($queryJournal);
-			
-			
-			echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
-			$URL="/picaPOS/admin/reqIn"; 
-			echo "<script type='text/javascript'>location.replace('$URL');</script>";
 		}
+		
+		
+		$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
+		$res = mysql_query($query);
+
+		$journalID = date("YmdHis");
+		$actStock = "UPDATE_REQ_HEADER_".$requestID;
+		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','APPROVAL_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
+		// $resJournal = mysql_query($queryJournal);
+		
+		$query = "UPDATE tabrequestdetail SET status = '$statusApprove' WHERE requestID = '$requestID'";
+		$res = mysql_query($query);
+
+		$journalID = date("YmdHis");
+		$actStock = "UPDATE_REQ_DETAIL_".$requestID;
+		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','STATUS_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
+		// $resJournal = mysql_query($queryJournal);
 		
 	}else{
 		$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
@@ -276,16 +253,12 @@ if(isset($_POST['requestID'])){
 		$actStock = "UPDATE_REQ_DETAIL_".$requestID;
 		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','STATUS_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 		// $resJournal = mysql_query($queryJournal);
-		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
-		$URL="/picaPOS/admin/reqIn"; 
-		echo "<script type='text/javascript'>location.replace('$URL');</script>";
 	}
 
-}else{
-	echo "<script type='text/javascript'>alert('Data tidak tersimpan!')</script>";
-	$URL="/picaPOS/admin/reqIn"; 
-	echo "<script type='text/javascript'>location.replace('$URL');</script>";
+	echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
+
 }
 
-
+	$URL="/picaPOS/admin/reqIn"; 
+    echo "<script type='text/javascript'>location.replace('$URL');</script>";
 ?>

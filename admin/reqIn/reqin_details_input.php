@@ -157,7 +157,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                                     INNER JOIN mrecipe r ON r.recipeID = d.recipeID 
                                     INNER JOIN mproduct p ON p.recipeID = r.recipeID
                                     INNER JOIN mmeasurement m ON m.measurementID = i.measurementID
-                                    WHERE p.productID = '$row[productID]' ";
+                                    WHERE p.productID = '$row[productID]'";
                                 $detail = mysql_query($subQ);
                                 while($rows = mysql_fetch_array($detail)){
                                     $amount = $rows[amount]*$row[amount];

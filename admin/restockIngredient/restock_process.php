@@ -27,7 +27,7 @@ if (isset($_POST['transID']))
 	// $user = 1;
 	$user = $_SESSION['userID'];
 	$remarks = $_POST['remarks'];
-	$dateCreated = date("Y-m-d");
+	$dateCreated = date("Y-m-d H:i:s");
     $lastChanged = date("Y-m-d H:i:s");
 
     $in = "IN";
@@ -42,12 +42,12 @@ if (isset($_POST['transID']))
 	$curStock = $rowCheck['curStock'];
 	$itemAmount = $amount+$curStock;
 
-	$checkSaldoID = mysql_query("SELECT count(id) as id FROM tabitemsaldo");
-	$rowCheck = mysql_fetch_array($checkSaldoID);
-	$id = $rowCheck['id'];
+	// $checkSaldoID = mysql_query("SELECT count(id) as id FROM tabitemsaldo");
+	// $rowCheck = mysql_fetch_array($checkSaldoID);
+	// $id = $rowCheck['id'];
 
 	$checkTransID = mysql_query("SELECT * FROM tabitemtransaction WHERE transID='$transID'");
-	$rowCheck = mysql_fetch_array($checkTransID);
+	// $rowCheck = mysql_fetch_array($checkTransID);
 
 	if(mysql_num_rows($checkTransID)==0){
 		$transCode = "TRX-".$date;
