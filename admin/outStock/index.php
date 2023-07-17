@@ -18,15 +18,16 @@ include('../../assets/template/navbar.php');
           <div class="container-fluid">
            <div class="row">
             <div class="col-8">
-                <form id='formAdd' method='POST' action='restock_product_process.php' enctype="multipart/form-data">
+                <form id='formAdd' method='POST' action='outstock_process.php' enctype="multipart/form-data">
 
                     <div class='row  mt-3 '>
                         <div class='col-3 label'>
                            <input type='text' class='form-control-plaintext' disabled value='TYPE' />
                         </div>
                         <div class='col-3'>
-                            <select class='select-cust form-control' name='type' style='width:300px;' readonly required>
+                            <select class='select-cust form-control' name='type' style='width:300px;' required>
                                 <option value='1'>OUT</option>
+                                <option value='2'>ADJUSTMENT</option>
                             </select>
                         </div>
                     </div>
@@ -52,46 +53,26 @@ include('../../assets/template/navbar.php');
                                 ?>
                             </select>
                         </div>
-                    </div>
+                    </div> 
 
                     <div class='row mt-3'>
                         <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='CATEGORY' />
+                           <input type='text' class='form-control-plaintext' disabled value='INGREDIENT' />
                         </div>
-                        <select class='select-cust ml-3 form-control' name='categoryID' id='categoryID' style='width:300px;' required>
-                                <option value=''>-CHOOSE ONE-</option>
+                        <select class='select-cust ml-3 form-control' name='ingredientID' id='ingredientID' style='width:300px;' selected>
+                            <option value=''>-CHOOSE ONE-</option>
                                 <?php
-                                    $queryCategory="select * from mcategory where status != 0";
-                                    $resCategory=mysql_query($queryCategory);
-                                    while($rowCategory=mysql_fetch_array($resCategory)){
-                                        if($rowCategory[categoryID] == $row[categoryID]){
-                                            echo "<option selected value='$rowCategory[categoryID]'>$rowCategory[categoryName]</option>";
+                                    $queryIngredient="select * from mingredient where status != 0";
+                                    $resIngredient=mysql_query($queryIngredient);
+                                    while($rowIngredient=mysql_fetch_array($resIngredient)){
+                                        if($rowIngredient[ingredientID] == $row[ingredientID]){
+                                            echo "<option selected value='$rowIngredient[ingredientID]'>$rowIngredient[ingredient]</option>";
                                         }else{
-                                            echo "<option value='$rowCategory[categoryID]'>$rowCategory[categoryName]</option>";
+                                            echo "<option value='$rowIngredient[ingredientID]'>$rowIngredient[ingredient]</option>";
                                         }
 
                                     }
                                 ?>
-                            </select>
-                    </div>   
-
-                    <div class='row mt-3'>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='PRODUCT' />
-                        </div>
-                        <select class='select-cust ml-3 form-control' name='productID' id='productID' style='width:300px;' selected>
-                            <option value=''>-CHOOSE ONE-</option>
-                            <?php
-                              $queryProduct="select * from mproduct where status != 0";
-                              $resProduct=mysql_query($queryProduct);
-                               while($rowProduct=mysql_fetch_array($resProduct)){
-                                if($rowProduct[productID] == $row[productID]){
-                                 echo "<option selected value='$rowProduct[productID]'>$rowProduct[productName]</option>";
-                                }else{
-                                 echo "<option value='$rowProduct[productID]'>$rowProduct[productName]</option>";
-                                }
-                              }
-                            ?>
                         </select>
                     </div>                  
 
@@ -100,7 +81,7 @@ include('../../assets/template/navbar.php');
                            <input type='text' class='form-control-plaintext' disabled value='AMOUNT' />
                         </div>
                         <div class='col-2'>
-                            <input type='text' class='type-input form-control' name='curStock' placeholder='Amount' style='width:300px' required />
+                            <input type='text' class='type-input form-control' name='amount' placeholder='Amount' style='width:300px' required />
                         </div>
                     </div>
 
@@ -144,17 +125,16 @@ include('../../assets/template/navbar.php');
         }
     });
 
-    $(document).on('change','#categoryID',function(){
-        var val = $('#categoryID').val();
-        var val2 = $('#outletID').val();
+    $(document).on('change','#outletID',function(){
+        var val = $('#outletID').val();
         $.ajax({
-            url: 'restock_list.php',
-            data: {categoryID:val,outletID:val2},
+            url: 'outstock_list.php',
+            data: {outletID:val},
             type: 'GET',
             dataType: 'html',
             success: function(result){
-                $('#productID').html(); 
-                $('#productID').html(result); 
+                $('#ingredientID').html(); 
+                $('#ingredientID').html(result); 
             }
         });  
     });
