@@ -40,7 +40,7 @@ if (isset($_POST['outletID'])) {
 
 	if ($checkFlag == 1) {
 		// echo "Stok saat ini :". $newStock;
-		// $updateStock = mysql_query("UPDATE mingredient set curStock = '$newStock', lastChanged = '$lastUpdateDate' WHERE ingredientID = '$ingredientID' AND outletID = '$outletID'");
+		$updateStock = mysql_query("UPDATE mingredient set curStock = '$newStock', lastChanged = '$lastUpdateDate' WHERE ingredientID = '$ingredientID' AND outletID = '$outletID'");
 
 		$getFirstSaldo = mysql_query("SELECT * FROM tabItemSaldo s WHERE s.ingredientID = '$ingredientID' AND s.outletID = '$outletID' AND s.status = 1 ORDER BY s.dateCreated ASC");
 		$fetchSaldo = mysql_fetch_array($getFirstSaldo);
@@ -91,8 +91,8 @@ if (isset($_POST['outletID'])) {
 			$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$saldo);
 		
 		}
-						// echo $saldoPrice;
-						// exit;
+						echo $saldoPrice;
+						exit;
 		$res = mysql_query("UPDATE tabItemSaldo SET amountUsed = '$amountUsed', saldo='$saldoPrice' WHERE id ='$id' AND ingredientID = '$ingredientID' AND outletID = '$outletID' and status = 1");
 
 		$journalID = date("YmdHis");
