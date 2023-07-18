@@ -158,7 +158,7 @@ if(isset($_POST['requestID'])){
 				$resJournal = mysql_query($queryJournal);
 				
 				//update saldo sisa (ingin berkata kasar)
-				$resSaldo = mysql_query("SELECT * FROM tabItemSaldo s WHERE s.ingredientID = '$fetchRequestDetail[ingredientID]' AND s.outletID = '$rowRequest[outletID]' AND s.status = 1 ORDER BY s.dateCreated ASC LIMIT 1");
+				$resSaldo = mysql_query("SELECT * FROM tabItemSaldo s WHERE s.ingredientID = '$fetchRequestDetail[ingredientID]' AND s.outletID = '$rowRequest[outletID]' AND s.status = 1 ORDER BY s.dateCreated ASC");
 				
 				$amountLeft = $requestAmount; // isinya jumlah produk yg ingin dibuat tadi
 				$duitTotal = 0;
