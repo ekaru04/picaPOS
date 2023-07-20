@@ -40,66 +40,69 @@ if (isset($_POST['outletID'])) {
 
 	if ($checkFlag == 1) {
 		// echo "Stok saat ini :". $newStock;
-		$updateStock = mysql_query("UPDATE mingredient set curStock = '$newStock', lastChanged = '$lastUpdateDate' WHERE ingredientID = '$ingredientID' AND outletID = '$outletID'");
+		// $updateStock = mysql_query("UPDATE mingredient set curStock = '$newStock', lastChanged = '$lastUpdateDate' WHERE ingredientID = '$ingredientID' AND outletID = '$outletID'");
 
 		$getFirstSaldo = mysql_query("SELECT * FROM tabItemSaldo s WHERE s.ingredientID = '$ingredientID' AND s.outletID = '$outletID' AND s.status = 1 ORDER BY s.dateCreated ASC");
-		$fetchSaldo = mysql_fetch_array($getFirstSaldo);
+		
 				
-		$amountLeft = $throwAmount; // isinya jumlah produk yg ingin dibuat tadi
+		$amountLeft = $throwAmount; // isinya jumlah produk yg dibuang/dikeluarkan
 		$duitTotal = 0;
 		$totalCost = 0;
 		
-		$id = $fetchSaldo[id];
-		$amountSaldo = $fetchSaldo[amount]; // bahan baku yang masuk dari form restock ingredient
-		$amountUsed = $fetchSaldo[amountUsed]; // bahan baku yg digunakan sebelumnya ada brp
-		$itemPrice = $fetchSaldo[itemPrice]; // harga bahan baku awal yg sebelumnya apabila belum habis saldonya
-		$totalPrice = $fetchSaldo[totalPrice]; // total harga bahan baku berdasarkan amount yg masuk dijumlahkan
-		$saldoPrice = $fetchSaldo[saldo]; // saldo yang tersisa
-		// echo $amountUsed;
-		// exit;
+		while ($fetchSaldo = mysql_fetch_array($getFirstSaldo)) {
 
-		$itemPriceAfterDiscount = $totalPrice / $amountSaldo; 
-						// echo $itemPriceAfterDiscount; /* isinya 10000 */
-						// exit;
-						
-		$saldo = $amountSaldo-$amountUsed;  
-						// echo $saldo; /* Isinya sisa stok bahan baku */
-						// echo $saldoPrice;
-						// exit;
+			$id = $fetchSaldo[id];
+			$amountSaldo = $fetchSaldo[amount]; // bahan baku yang masuk dari form restock ingredient
+			$amountUsed = $fetchSaldo[amountUsed]; // bahan baku yg digunakan sebelumnya ada brp
+			$itemPrice = $fetchSaldo[itemPrice]; // harga bahan baku awal yg sebelumnya apabila belum habis saldonya
+			$totalPrice = $fetchSaldo[totalPrice]; // total harga bahan baku berdasarkan amount yg masuk dijumlahkan
+			$saldoPrice = $fetchSaldo[saldo]; // saldo yang tersisa
+			// echo $amountUsed;
+			// exit;
 
-		if ($amountLeft < $saldo) { 
-							// echo "habis <br/>";
-			$amountUsed = $amountUsed + $amountLeft; 
-			$saldoPrice = $saldoPrice - ($itemPriceAfterDiscount*$amountLeft); 
-			$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$amountLeft);
-			$amountLeft = 0; 
-							// echo $saldoPrice."<br/>";
+			$itemPriceAfterDiscount = $totalPrice / $amountSaldo; 
+							// echo $itemPriceAfterDiscount; /* isinya 10000 */
 							// exit;
 							
-		} elseif ($amountLeft == $saldo) { 
-							// echo "kebetulan borong";
-			$amountLeft = $saldo; 
-			$amountUsed = $amountUsed + $amountSaldo; 
-			$saldoPrice = $saldoPrice - ($itemPriceAfterDiscount*$amountSaldo);
-			$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$amountSaldo);
-		
-		} else { 
-							// echo "sisa";
-			$amountLeft = $amountLeft - $saldo; 
-			$amountUsed = $amountUsed + $saldo; 
-			$saldoPrice = $saldoPrice - ($itemPriceAfterDiscount*$saldo);
-			$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$saldo);
+			$saldo = $amountSaldo-$amountUsed;  
+							// echo $saldo; /* Isinya sisa stok bahan baku */
+							// echo $saldoPrice;
+							// exit;
+
+			if ($amountLeft < $saldo) { 
+								// echo "habis <br/>";
+				$amountUsed = $amountUsed + $amountLeft; 
+				$saldoPrice = $saldoPrice - ($itemPriceAfterDiscount*$amountLeft); 
+				$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$amountLeft);
+				$amountLeft = 0; 
+								// echo $saldoPrice."<br/>";
+								// exit;
+								
+			} elseif ($amountLeft == $saldo) { 
+								// echo "kebetulan borong";
+				$amountLeft = $saldo; 
+				$amountUsed = $amountUsed + $amountSaldo; 
+				$saldoPrice = $saldoPrice - ($itemPriceAfterDiscount*$amountSaldo);
+				$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$amountSaldo);
+			
+			} else { 
+								// echo "sisa";
+				$amountLeft = $amountLeft - $saldo; 
+				$amountUsed = $amountUsed + $saldo; 
+				$saldoPrice = $saldoPrice - ($itemPriceAfterDiscount*$saldo);
+				$duitTotal = $duitTotal + ($itemPriceAfterDiscount*$saldo);
+			
+			}
+				
+			$res = mysql_query("UPDATE tabItemSaldo SET amountUsed = '$amountUsed', saldo='$saldoPrice' WHERE id ='$id' AND ingredientID = '$ingredientID' AND outletID = '$outletID' and status = 1");
+
+			$journalID = date("YmdHis");
+			$actStock = "UPDATE_SALDO_FROM_REQUEST".$requestID;
+			$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','AMOUNT_USED_AND_SALDO','$user','$dateCreated','$lastChanged', 'SUCCESS')";
+			$resJournal = mysql_query($queryJournal);
 		
 		}
-						echo $saldoPrice;
-						exit;
-		$res = mysql_query("UPDATE tabItemSaldo SET amountUsed = '$amountUsed', saldo='$saldoPrice' WHERE id ='$id' AND ingredientID = '$ingredientID' AND outletID = '$outletID' and status = 1");
 
-		$journalID = date("YmdHis");
-		$actStock = "UPDATE_SALDO_FROM_REQUEST".$requestID;
-		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','AMOUNT_USED_AND_SALDO','$user','$dateCreated','$lastChanged', 'SUCCESS')";
-		$resJournal = mysql_query($queryJournal);
-				
 				// echo $duitTotal;
 				//insert ke history
 		$journalID = date("YmdHis");
