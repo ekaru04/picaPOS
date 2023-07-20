@@ -388,30 +388,31 @@ date_default_timezone_set('Asia/Jakarta');
 								</div>
 									";
 								}
-								$resBundle = mysql_query("SELECT * FROM tabbundleheader WHERE outletID = '$outletID' AND status = 1");
-								while ($rowBunlde = mysql_fetch_array($resBundle)) 
-									{
-										$bundleID = $rowBunlde['bundleName'];
-										echo "
-										<div class='row'>
-											<div class='col d-flex ml-1 productEntry'>
-												<div class='pt-2'>
-													<div class='col-12'>
-													    <div class='card' id='bundles'>
-											        		<button type='button' class='menu d-flex' id='$rowBunlde[bundleID]'>
-											            <div class=''>
+								/* Tab Bundle Progress */
+								// $resBundle = mysql_query("SELECT * FROM tabbundleheader WHERE outletID = '$outletID' AND status = 1");
+								// while ($rowBunlde = mysql_fetch_array($resBundle)) 
+								// 	{
+								// 		$bundleID = $rowBunlde['bundleName'];
+								// 		echo "
+								// 		<div class='row'>
+								// 			<div class='col d-flex ml-1 productEntry'>
+								// 				<div class='pt-2'>
+								// 					<div class='col-12'>
+								// 					    <div class='card' id='bundles'>
+								// 			        		<button type='button' class='menu d-flex' id='$rowBunlde[bundleID]'>
+								// 			            <div class=''>
 											                
-											            </div>
-											            <div class='col-6'>
-											        	    <span>$rowBunlde[bundleName]</span><input type='hidden' id = 'curProd_$rowBunlde[bundleID]'/> 
-											            </div>
-											        		</button>
-											   			</div>
-													</div>
-												</div>
-											</div>
-										</div>";
-									}
+								// 			            </div>
+								// 			            <div class='col-6'>
+								// 			        	    <span>$rowBunlde[bundleName]</span><input type='hidden' id = 'curProd_$rowBunlde[bundleID]'/> 
+								// 			            </div>
+								// 			        		</button>
+								// 			   			</div>
+								// 					</div>
+								// 				</div>
+								// 			</div>
+								// 		</div>";
+								// 	}
 							
 							?>
 							

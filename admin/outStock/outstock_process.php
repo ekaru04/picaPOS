@@ -125,3 +125,6 @@ if (isset($_POST['outletID'])) {
 	// echo "<br>";
 	// echo "Sisa :". $totalAmount;
 }
+	echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
+	$URL="/picaPOS/admin/outStock"; 
+    echo "<script type='text/javascript'>location.replace('$URL');</script>";
