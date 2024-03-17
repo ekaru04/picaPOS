@@ -145,7 +145,31 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 	                            <input type='text' class='form-control-plaintext' disabled value='PRICE' />
 	                        </div>
 	                        <div class='col-3'>
-	                            <input type='text' class='type-input form-control' name='price' placeholder='Price Product' style='width:300px' value='<?php echo round($row[price]); ?>' required />
+	                            <input type='text' class='type-input form-control' id='priceItem' name='price' placeholder='Price Product' style='width:300px' value='<?php echo round($row[price]); ?>' required />
+	                        </div>
+	                    </div>
+						<div class='row mt-3'>
+	                        <div class='col-2 label'>
+	                            <input type='text' class='form-control-plaintext' disabled value='TAX 5%' />
+	                        </div>
+	                        <div class='col-3'>
+	                            <input type='text' class='type-input form-control servCharge' name='servCharge' placeholder='Tax' style='width:300px' value='<?php echo round($row[tax]); ?>' required />
+	                        </div>
+	                    </div>
+						<div class='row mt-3'>
+	                        <div class='col-2 label'>
+	                            <input type='text' class='form-control-plaintext' disabled value='TAX 10%' />
+	                        </div>
+	                        <div class='col-3'>
+	                            <input type='text' class='type-input form-control pb1' name='pb1' placeholder='Tax' style='width:300px' value='<?php echo round($row[tax]); ?>' required />
+	                        </div>
+	                    </div>
+						<div class='row mt-3'>
+	                        <div class='col-2 label'>
+	                            <input type='text' class='form-control-plaintext' disabled value='After Tax' />
+	                        </div>
+	                        <div class='col-3'>
+	                            <input type='text' class='type-input form-control afterTax' name='afterTax' placeholder='Price after Tax' style='width:300px' value='<?php echo round($row[afterTax]); ?>' required />
 	                        </div>
 	                    </div>
 
@@ -174,6 +198,19 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 </html>
 <script type="text/javascript">
 
+
+	$(document).on('keyup', '#priceItem', function(){
+		var price = parseFloat($(this).val());
+		var sc = parseFloat(price*5/100);
+		var pb1 = parseFloat(price*10/100);
+		var at = (price+sc+pb1);
+
+		$('.servCharge').val(sc);
+		$('.pb1').val(pb1);
+		$('.afterTax').val(at);
+		// console.log(price);
+
+	});
 
 	$("#cancel").click(function(){
         alert("Data tidak tersimpan");

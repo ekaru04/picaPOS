@@ -12,7 +12,7 @@ include('../../assets/template/navbar.php');
        <div class='clear height-20 mt-3'></div>
         <div class="container-fluid">
          <div class='entry-box-basic'>
-           <h1 class="text-center">
+           <h1 class="">
                OUT STOCK
            </h1>
           <div class="container-fluid">

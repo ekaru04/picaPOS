@@ -18,19 +18,22 @@ if (isset($_POST['categoryID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mcategory(categoryID,categoryName,categoryCode,remarks,status,dateCreated,lastChanged) VALUES('$categoryID', '$categoryName', '$categoryCode', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(categoryID)+1 as count FROM mcategory");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$categoryUniqID = "CF".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mcategory(categoryID,categoryName,categoryCode,remarks,status,dateCreated,lastChanged) VALUES('$categoryUniqID', '$categoryName', '$categoryCode', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
-
+		
 		$act = "INSERT_CATEGORY_".$categoryName;
-
+		
 		$journalID = date("YmdHis");
 		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','MASTER_CATEGORY','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 		$resJournal = mysql_query($queryJournal);
-
+		
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mcategory SET
-				categoryID='$categoryID',
 				categoryName='$categoryName',
 				categoryCode='$categoryCode',
 				remarks='$remarks',

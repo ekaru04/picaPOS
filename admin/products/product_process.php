@@ -40,8 +40,12 @@ if (isset($_POST['productID']))
 			if (in_array($ext, $allowed)===true) {
 			    if($size < 3044070){			
 					move_uploaded_file($file_tmp, '../../productImages/'.$filename);
+					$getNewID = mysql_query("SELECT COUNT(productID)+1 as count FROM mproduct");
+					$rowNewID = mysql_fetch_array($getNewID);
+					$newID = $rowNewID['count'];
+					$prodUniqID = "PRD".str_pad($newID, 4, "0", STR_PAD_LEFT);
 					$query = "INSERT INTO mproduct(productID,productName,categoryID,recipeID,curStock,minStock,outletID,measurementID,productPrice,productImage,remarks,status,dateCreated,lastChanged) 
-						VALUES('$productID', '$productName', '$categoryID', '$recipeID', '$curStock', '$minStock', '$outletID', '$measurementID', '$productPrice', '$filename', '$remarks',  1, '$dateCreated', '$lastChanged')";
+						VALUES('$prodUniqID', '$productName', '$categoryID', '$recipeID', '$curStock', '$minStock', '$outletID', '$measurementID', '$productPrice', '$filename', '$remarks',  1, '$dateCreated', '$lastChanged')";
 					$res = mysql_query($query);
 
 

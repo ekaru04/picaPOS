@@ -21,7 +21,11 @@ if (isset($_POST['priceID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = mysql_query("INSERT INTO tabpriceheader(priceID,priceName,outletID,description,status,dateCreated,lastChanged) VALUES('$priceID', '$priceName', '$outletID', '$description', 1, '$dateCreated', '$lastChanged')");
+		$getNewID = mysql_query("SELECT COUNT(priceID)+1 as count FROM tabpriceheader");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$priceUniqID = "PRC".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = mysql_query("INSERT INTO tabpriceheader(priceID,priceName,outletID,description,status,dateCreated,lastChanged) VALUES('$priceUniqID', '$priceName', '$outletID', '$description', 1, '$dateCreated', '$lastChanged')");
 
 		// $queryDetail = mysql_query("INSERT INTO tabpricedetail(id, priceID, productID, price, status, dateCreated, lastChanged) VALUES('$detail', '$priceID', '$productID', '$price', 1, '$dateCreated', '$lastChanged')");
 

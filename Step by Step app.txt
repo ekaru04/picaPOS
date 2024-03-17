@@ -1,0 +1,28 @@
+alur ingredient
+1. tambah master data terlebih dahulu di menu admin > Stock > Ingredient > Add New Ingredients
+2. Isi inputan yang ada, kemudian simpan
+3. untuk mengisi stoknya, ke menu admin > Transaction > Restock Ingredient > Add New Transaction > Pilih ingredient yang stoknya ingin dimasukan dan isi sesuai inputan yang ada
+4. pastikan satuan dasar ingredient sesuai, apabila tidak maka akan muncul notif eror. Jika sudah sesuai, klik simpan
+
+Category -> Recipe -> Product
+
+
+Alur tambah produk
+1. tambah terlebih dahulu untuk resep produk di menu admin > stock > recipes > add new recipes
+2. isi inputan yang ada kemudian save
+3. setelah disave, akan diarahkan kembali ke halaman yang sama. Pada halaman tersebut pilih ingredient yang dibutuhkan dan berapa ingredient yang dibutuhkan
+4. Apabila sudah, klik tombol Add berwarna biru
+5. apabila ingredient lebih dari 1 ingredient yang dibutuhkan, maka lakukan kembali step 3-4
+6. apabila salah memasukan ingredient, cukup klik tombol delete disebelah ingredient
+7. Jika sudah menambahkan resep untuk produk, pergi ke menu admin > stock > product > add new products
+8. Pilih resep yang sesuai dengan produk yang dibuat, jika sudah klik simpan
+9. untuk menaruh harga dan tax produk, pergi ke menu admin > master data > price list > add new price list
+10. kemudian isi sesuai dengan inputan yang ada, jika sudah maka klik add products
+
+Alur melakukan pembuatan produk
+1. Ke menu Admin > Transaction > Production Input > Add New Productions
+2. pilih produk yang akan dibuat
+3. isi inputan yang ada, pastikan satuan produk sesuai dengan satuan yang dicantumkan sebelumnya. apabila berbeda akan muncul notif eror
+4. klik submit dan save
+5. selanjutnya menunggu approval, apabila sesuai lakukan klik approval.
+6. apabila ingredient yang dibutuhkan kurang, akan muncul eror dan pengajuan pembuatan produk tidak dapat diproses kecuali ingredient cukup/melebihi requirement yang dibutuhkan

@@ -4,7 +4,7 @@ include("../../assets/config/db.php");
 
 $requestData = $_REQUEST;
 
-$query = "SELECT * FROM mcategory where status != 0";
+$query = "SELECT * FROM mcategory where status != 0 ORDER BY categoryID ASC";
 $res = mysql_query($query);
 
 $x=0;

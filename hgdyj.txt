@@ -1,0 +1,6 @@
+Pengeluaran = uang yang keluar
+
+
+Contoh uang yang keluar
+- Restok bahan baku
+- Restok item

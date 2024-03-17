@@ -24,7 +24,11 @@ if (isset($_POST['outletID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==null){
-		$query = "INSERT INTO moutlet(outletID,outletName,outletArea,address,remarks,status,dateCreated,lastChanged) VALUES('$outletID', '$outletName', '$outletArea', '$address', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(outletID)+1 as count FROM moutlet");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$outletUniqID = "OTL".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO moutlet(outletID,outletName,outletArea,address,remarks,status,dateCreated,lastChanged) VALUES('$outletUniqID', '$outletName', '$outletArea', '$address', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$act = "INSERT_OUTLET_".$outletName;
@@ -36,7 +40,6 @@ if (isset($_POST['outletID']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE moutlet SET
-				outletID='$outletID',
 				outletName='$outletName',
 				outletArea='$outletArea',
 				address='$address',

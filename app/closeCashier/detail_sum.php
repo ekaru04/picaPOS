@@ -7,16 +7,23 @@ $closeDate = $_GET[closeDate];
 $outletID = $_GET[outletID];
 $closeShift = $_GET[closeShift];
 
-$query = "SELECT h.orderID, sum(p.total) AS total, sum(p.paymentAmount) AS paymentAmount FROM taborderheader h 
+$query = "SELECT h.orderID, sum(p.total) AS total, sum(p.dpp) AS dpp, sum(p.VAT) AS VAT, sum(p.paymentAmount) AS paymentAmount FROM taborderheader h 
 INNER JOIN tabpaymentorder p ON h.orderID = p.orderID
 INNER JOIN mpaymentmethod m ON p.paymentMethod = m.methodID 
-INNER JOIN muser u ON h.userID = u.userID WHERE h.status = 1 AND h.userID = '$_SESSION[userID]' AND h.outletID = '$outletID' AND h.orderDate = '$closeDate' ORDER BY h.orderNo";
+INNER JOIN muser u ON h.userID = u.userID WHERE h.status = 1 AND h.outletID = '$outletID' AND h.orderDate = '$closeDate' ORDER BY h.orderNo";
 $res = mysql_query($query);
 
 $x=0;
 $data = array();
 $row=mysql_fetch_array($res);
 
+// $dpp = number_format($row['dpp']);
+// $VAT = number_format($row['VAT']);
+// $total = number_format($row['total']);
+// $paymentAmount = number_format($row['paymentAmount']);
+
+$data[dpp] = $row['dpp'];
+$data[VAT] = $row['VAT'];
 $data[total] = $row['total'];
 $data[paymentAmount] = $row['paymentAmount'];
 

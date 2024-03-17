@@ -48,7 +48,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 					<div class='container-fluid'>
 						<div class='row mt-2'>
 							<div class='col'>
-								<input type='hidden' class='type-input' name='recipeID' value='<?php echo $recipeID; ?>'/>
+								<input type='text' class='type-input' name='recipeID' value='<?php echo $recipeID; ?>'/>
 								<input type='hidden' name='itemCount' id='itemCount' value='0' />
 							</div>
 						</div>

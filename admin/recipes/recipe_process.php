@@ -11,13 +11,6 @@ if (isset($_POST['recipeID']))
 	$categoryID = $_POST['categoryID'];
 	$remarks = $_POST['remarks'];
 	$amount = $_POST['amount'];
-	
-//	$item = $_POST['itemName'];
-//	$amount = $_POST['amount'];
-	
-//	$detailsID = $_POST['detailsID'];
-//	$ingredients = implode(',',$_POST['ingredients']);
-	// $ingredients = $_POST['ingredients'];
 	$dateCreated = date("Y-m-d");
     $lastChanged = date("Y-m-d H:i:s");
 
@@ -26,37 +19,37 @@ if (isset($_POST['recipeID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mrecipe(recipeID,recipeName,categoryID,remarks,status,dateCreated,lastChanged) VALUES('$recipeID', '$recipeName', '$categoryID', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(recipeID)+1 as count FROM mrecipe");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$recUniqID = "REC".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mrecipe(recipeID,recipeName,categoryID,remarks,status,dateCreated,lastChanged) VALUES('$recUniqID', '$recipeName', '$categoryID', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 		$act = "INSERT_RECIPE_".$recipeName;
 
 		$journalID = date("YmdHis");
 		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','MASTER_RECIPE','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 		$resJournal = mysql_query($queryJournal);
-		// foreach($ingredients as $ingredient){}
-//
-//		$queryDetails = "INSERT INTO mrecipedetails VALUES('$detailsID', '$recipeID', '$ingredients', '$amount', 1, '$dateCreated', '$lastChanged')";
-//		$resDetails = mysql_query($queryDetails);
 
 
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
+		$URL="/picaPOS/admin/recipes/recipe_input.php?recipeID=$recUniqID"; 
+		echo "<script type='text/javascript'>location.replace('$URL');</script>";
 	}else{
-//		$query = "UPDATE mingredient SET
-//				recipeID='$recipeID',
-//				ingredient='$ingredient',
-//				minStock='$minStock',
-//				measurementID='$measurementID',
-//				remarks='$remarks',
-//				lastChanged='$lastChanged'
-//				WHERE recipeID='$recipeID'
-//				";
-//				$res = mysql_query($query);
-
-		echo "<script type='text/javascript'>alert('Data Berhasil dirubah!')</script>";
+		$query = "UPDATE mrecipe SET
+				recipeName='$recipeName',
+				categoryID='$categoryID',
+				remarks='$remarks',
+				lastChanged='$lastChanged' 
+				WHERE recipeID='$recipeID'
+				";
+				$res = mysql_query($query);
+				
+				echo "<script type='text/javascript'>alert('Data Berhasil dirubah!')</script>";
+				$URL="/picaPOS/admin/recipes/recipe_input.php?recipeID=$recipeID"; 
+				echo "<script type='text/javascript'>location.replace('$URL');</script>";
 	}
-	$res = mysql_query($query);
+	// $res = mysql_query($query);
 	
 }
-	 $URL="/picaPOS/admin/recipes/recipe_input.php?recipeID=$recipeID"; 
-     echo "<script type='text/javascript'>location.replace('$URL');</script>";
 ?>

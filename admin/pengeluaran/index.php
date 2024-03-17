@@ -17,7 +17,7 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='entry-box-basic'>
-      <h4 align='center'>OUTLAY</h4>
+      <h4 align='center'>PENGELUARAN</h4>
       <div class="row mb-2">
           <div class="col">
             <h1 class="m-0 text-dark text-center"></h1>
@@ -34,16 +34,55 @@ if (!isset($_SESSION["username"]))
             <hr>
           </div>
       </div>
+      <table id='searchDateBox'>
+        <tr>
+          <input type='date' id='date1'/> - <input type='date' id='date2'/>
+            <!-- <select class="ml-1 col-3" name="status" id="status">
+              <option value="">STATUS</option>
+              <option value="0">ALL</option>
+              <option value="1">SUCCESS</option>
+              <option value="9">FAILED</option>
+            </select> -->
+          <button type='button' id='searchDate' class='btn btn-primary ml-1' style='font-size:10px;'>Search</button>
+        </tr>
+      </table>
       <div class='height-10'></div>
-        <table class='table' id='itemTable' style='font-size:13px;'>
+        <table class='table' id='itemTableIngredient' style='font-size:13px;'>
           <thead>
             <tr>
               <th style='vertical-align:middle;'>NO</th>
-              <th style='vertical-align:middle;'>STOCK NAME</th>
-              <th style='vertical-align:middle;'>AMOUNT</th>
-              <th style='vertical-align:middle;'>PRICE</th>
+              <th style='vertical-align:middle;'>TRANS DATE</th>
+              <th style='vertical-align:middle;'>INGREDIENT</th>
+              <th style='vertical-align:middle;'>MEASUREMENT</th>
+              <th style='vertical-align:middle;'>AMOUNT BUY</th>
+              <th style='vertical-align:middle;'>CURRENT STOCK</th>
+              <th style='vertical-align:middle;'>TOTAL PRICE</th>
+              <th style='vertical-align:middle;'>DISCOUNT</th>
+              <th style='vertical-align:middle;'>AFTER DISCOUNT</th>
               <th style='vertical-align:middle;'>PIC</th>
-              <th style='vertical-align:middle;'>OUTLET</th>
+              <th style='vertical-align:middle;'>LAST UPDATED</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>  
+      <hr>
+      <div class='height-10'></div>
+        <table class='table' id='itemTableStock' style='font-size:13px;'>
+          <thead>
+            <tr>
+              <th style='vertical-align:middle;'>NO</th>
+              <th style='vertical-align:middle;'>TRANS DATE</th>
+              <th style='vertical-align:middle;'>ITEM</th>
+              <th style='vertical-align:middle;'>MEASUREMENT</th>
+              <th style='vertical-align:middle;'>AMOUNT BUY</th>
+              <th style='vertical-align:middle;'>CURRENT STOCK</th>
+              <th style='vertical-align:middle;'>TOTAL PRICE</th>
+              <th style='vertical-align:middle;'>DISC. PRICE</th>
+              <th style='vertical-align:middle;'>AFTER DISC.</th>
+              <th style='vertical-align:middle;'>PIC</th>
               <th style='vertical-align:middle;'>LAST UPDATED</th>
             </tr>
           </thead>
@@ -53,12 +92,32 @@ if (!isset($_SESSION["username"]))
         </table>
       </div>  
     </div>
+    
+    <div class="container">
+      <?php 
+      
+          // $queryTotalIngredient = mysql_query("SELECT ")
+      
+      ?>
+      <div class="row">
+        <div class="form-group col-sm-4">
+          <h6><b>Total Ingredient (Rp.)</b></h6>
+          <input type="text" class="form-control" readonly>
+        </div>
+        <div class="form-group col-sm-4">
+          <h6><b>Total Stock Item (Rp.)</b></h6>
+          <input type="text" class="form-control" readonly>
+        </div>
+        <div class="form-group col-sm-4">
+          <h6><b>Total Keseluruhan (Rp.)</b></h6>
+          <input type="text" class="form-control" readonly>
+        </div>
+      </div>
+    </div>
+    
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-  </footer>
-
+  
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
@@ -76,24 +135,99 @@ if (!isset($_SESSION["username"]))
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script type="text/javascript">
+
+
+$(document).ready(function(){
+  var date1 = $("#date1").val('<?php echo date("Y-m-d");?>');
+  var date2 = $("#date2").val('<?php echo date("Y-m-d");?>');
+  var status = $("#status").val('');
+  $("#searchDate").click(function(){searchDateJournal();}); 
+  
+  console.log(date1);
+  console.log(date2);
+
+});
+
+function searchDateJournal()
+{
+    var startDate = new Date($('#date1').val());
+    var endDate = new Date($('#date2').val());
+    var stat = $('#status').val();
+      if (startDate <= endDate){
+          var urlS = "ingredient_data.php?date1="+$("#date1").val()+"&date2="+$("#date2").val();
+          var urlS2 = "stock_data.php?date1="+$("#date1").val()+"&date2="+$("#date2").val();
+          itemTableIng.ajax.url(urlS).load();
+          itemTableStk.ajax.url(urlS2).load();
+      }else{
+          alert("Invalid Date Range!");
+      }
+};
     
-var itemTable = $('#itemTable').DataTable(
+var itemTableIng = $('#itemTableIngredient').DataTable(
     {
        
         processing : false,
         responsive : true,
         ajax: {
-            url: "outlay_data.php",
+            url: "ingredient_data.php?date1="+"<?php echo date('Y-m-d');?>"+"&date2="+"<?php echo date('Y-m-d');?>",
             data: 'data'
         },
         columns: [
             { data: 'no' },
-            { data: 'stockName' },
+            { data: 'transDate' },
+            { data: 'ingredient' },
+            { data: 'measurementName' },
             { data: 'amount' },
-            { data: 'price' },
-            { data: 'pic' },
-            { data: 'outletName' },
-            { data: 'lastChanged' }
+            { data: 'itemAmount' },
+            { data: 'totalPrice' },
+            { data: 'discountPrice' },
+            { data: 'afterDiscount' },
+            { data: 'fullname' },
+            { data: 'dateCreated' }
+        ],
+    "columnDefs": [
+        {"className": "dt-center", "targets": "_all"}
+      ],
+      dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                }
+            }
+        ]
+        
+    }
+        
+);
+var itemTableStk = $('#itemTableStock').DataTable(
+    {
+       
+        processing : false,
+        responsive : true,
+        ajax: {
+            url: "stock_data.php?date1="+"<?php echo date('Y-m-d');?>"+"&date2="+"<?php echo date('Y-m-d');?>",
+            data: 'data'
+        },
+        columns: [
+            { data: 'no' },
+            { data: 'transItemDate' },
+            { data: 'stockName' },
+            { data: 'measurementName' },
+            { data: 'amountBuy' },
+            { data: 'stockAmount' },
+            { data: 'totalPrice' },
+            { data: 'discountPrice' },
+            { data: 'afterDiscount' },
+            { data: 'fullname' },
+            { data: 'dateCreated' }
         ],
     "columnDefs": [
         {"className": "dt-center", "targets": "_all"}

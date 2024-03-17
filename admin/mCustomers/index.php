@@ -39,6 +39,7 @@ if (!isset($_SESSION["username"]))
           </div>
       </div>
       <div class='height-10'></div>
+      <div class="table-responsive">
         <table class='table' id='itemTable' style='font-size:13px;'>
           <thead>
             <tr>
@@ -56,6 +57,7 @@ if (!isset($_SESSION["username"]))
 
           </tbody>
         </table>
+      </div>
       </div>  
     </div>
     <!-- /.content -->

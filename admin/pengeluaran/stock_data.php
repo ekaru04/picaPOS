@@ -12,11 +12,13 @@ $requestData = $_REQUEST;
 $query = mysql_query("SELECT * FROM muser WHERE userID = '$_SESSION[userID]'");
 $data = mysql_fetch_array($query);
 
-$query = "SELECT t.id, s.stockName, t.amount, t.price, t.pic, o.outletName, t.lastChanged, t.photoName 
-            FROM tabstocktransaction t 
-            INNER JOIN mstock s ON t.stockID = s.stockID 
-            INNER JOIN moutlet o ON t.outletID = o.outletID
-            WHERE t.type = 'IN' ORDER BY t.dateCreated ASC";
+$query = "SELECT st.transItemDate, s.stockName, m.measurementName, st.amountBuy, st.stockAmount, 
+                    st.totalPrice,st.discountPrice, st.afterDiscount, u.fullname, st.dateCreated 
+            FROM tabstocktransaction st 
+            INNER JOIN mstock s ON s.stockID = st.stockID
+            INNER JOIN mmeasurement m ON m.measurementID = st.measurementID
+            INNER JOIN muser u ON u.userID = st.userID
+            WHERE st.dateCreated BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]'";
 $res = mysql_query($query);
 
 $x=0;
@@ -24,14 +26,21 @@ $data = array();
 while ($row=mysql_fetch_array($res)){
     $x+=1;
     $nestedData = array();
+    $totalPrice = number_format($row['totalPrice']);
+    $discountPrice = number_format($row['discountPrice']);
+    $afterDiscount = number_format($row['afterDiscount']);
     
     $nestedData[no] = $x;
-    $nestedData[stockName] = "<a href='../itemTrans/index.php?id=$row[id]'>$row[stockName]</a>";
-    $nestedData[amount] = $row["amount"];
-    $nestedData[price] = $row["price"];
-    $nestedData[pic] = $row["pic"];
-    $nestedData[outletName] = $row["outletName"];
-    $nestedData[lastChanged] = $row["lastChanged"];
+    $nestedData[transItemDate] = $row["transItemDate"];
+    $nestedData[stockName] = $row["stockName"];
+    $nestedData[measurementName] = $row["measurementName"];
+    $nestedData[amountBuy] = $row["amountBuy"];
+    $nestedData[stockAmount] = $row["stockAmount"];
+    $nestedData[totalPrice] = "Rp. ".$totalPrice;
+    $nestedData[discountPrice] = "Rp. ".$discountPrice;
+    $nestedData[afterDiscount] = "Rp. ".$afterDiscount;
+    $nestedData[fullname] = $row["fullname"];
+    $nestedData[dateCreated] = $row["dateCreated"];
     // $nestedData[action] = "<a href='promo_input.php?promoID=$row[promoID]'>EDIT</a>";
     
     $data[] = $nestedData;

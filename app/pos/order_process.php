@@ -21,13 +21,15 @@ $res = mysql_query($query);
 $row = mysql_fetch_array($res);
 $count = $row['count'];
 	
+$priceID = $_POST['priceID'];
+
 $orderID = "PCA/RCP/$per/".str_pad($count,4,"0",STR_PAD_LEFT);
 	
 $orderNo = $_POST['orderNo'];
 $orderDate = $_POST['orderDate'];
 $orderAmount = $_POST['totalProduct'];
 $dpp = $_POST['dpp'];
-$VAT = 0;
+// $VAT = 0;
 $discountPrice = $_POST['discount'];
 $total = $_POST['totalPrice'];
 $orderMethod = $_POST['orderMethod'];
@@ -40,6 +42,7 @@ if($voucherCode){
 }
 	
 $paymentAmount = $_POST['payment'];
+// $orderType = $_POST['orderType'];
 $paymentMethod = $_POST['paymentMethod'];
 $changeAmount = $_POST['changeAmount'];
 $payerID = $_POST['customerID'];
@@ -55,6 +58,9 @@ $productID = $_POST['productID'];
 $productAmount = $_POST['productQty'];
 $productPrice = $_POST['productPrice'];
 $productSubtotal = $_POST['productSubtotal'];
+$servCharge5 = $_POST['servCharge5'];
+$pb1 = $_POST['pb10'];
+
 	
 $data = array();
 $datas = array();
@@ -82,8 +88,10 @@ $data[remarks] = $remarks;
 // print_r($productAmount);
 // print_r($productPrice);
 
-$paymentOrderID = date('Ymd');
+$totalServCharge5 = 0;
+$totalPb1 = 0;
 
+$paymentOrderID = date('Ymd');
 
 $countArr = count($productID);
 
@@ -95,19 +103,16 @@ $countArr = count($productID);
 		if(mysql_num_rows($checkID)==0){
 
 		/* Input ke OrderHeader status 0 */
-		$query = mysql_query("INSERT INTO taborderheader(orderID,orderNo,orderDate,orderPeriode,orderAmount,orderMethod,outletID,payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated,lastChanged) VALUES('$orderID', '$orderNo', '$orderDate', '$orderPeriode', '$orderAmount', '$orderMethod', '$outletID', '$payerName', '$payerPhone', '$payerEmail', '$remarks', 0, '$user', '$dateCreated', '$lastChanged')");
+		$query = mysql_query("INSERT INTO taborderheader(orderID,priceID,orderNo,orderDate,orderPeriode,orderAmount,orderMethod,outletID,payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated,lastChanged) VALUES('$orderID', '$priceID', '$orderNo', '$orderDate', '$orderPeriode', '$orderAmount', '$orderMethod', '$outletID', '$payerName', '$payerPhone', '$payerEmail', '$remarks', 0, '$user', '$dateCreated', '$lastChanged')");
 
 		/* Input ke PaymerOrder */
 
-		$queryPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$orderID','DIRECT-ORDER','DIRECT-PAYMENT','$paymentMethod','$paymentAmount','$orderDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',0,'$dateCreated','$lastChanged')");
+		$queryPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderMethod,paymentType,paymentMethod,paymentAmount,paymentDate,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$orderID','$orderMethod','null','$paymentMethod','$paymentAmount','$orderDate','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',0,'$dateCreated','$lastChanged')");
 
 		/* END */
 		
 		}
-		/* END */	
-		
-		// $query = mysql_query("INSERT INTO taborderheader(orderID,orderNo,orderDate,orderPeriode,orderAmount,outletID,dpp,VAT,discountPrice, total, promoID, isVoucher, voucherID, paymentAmount, paymentMethod, payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated,lastChanged) VALUES('$orderID', '$orderNo', '$orderDate', '$orderPeriode','$orderAmount', '$outletID', '$dpp','$VAT','$discountPrice','$total', '$promoID', '$isVoucher', '$voucherCode', '$paymentAmount', '$paymentMethod', '$payerName', '$payerPhone', '$payerEmail', '$remarks', 0, '$user', '$dateCreated', '$lastChanged')");
-		// }
+		/* END */
 
 		
 
@@ -120,24 +125,26 @@ $countArr = count($productID);
 				$amount = $productAmount[$x];
 				$price = $productPrice[$x];
 				$subtotal = $productSubtotal[$x];
+				$totalServCharge5 += $servCharge5[$x];
+				$totalPb1 += $pb1[$x];
 
 				/* Insert product ke DB OrderDetail */
 				$id = $x+1;
-				$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 0, '$dateCreated', '$lastChanged')");
+				$queryD = mysql_query("INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,servCharge5,pb1,productSubtotal,status,dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price', '$totalServCharge5', '$totalPb1', '$subtotal', 0, '$dateCreated', '$lastChanged')");
 			}
 			
 			/* Insert SystemJournal */
 			$journalID = date("YmdHis");
 			$act = "ORDER_".$orderNo."_".$orderID."_DRAFT";
 
-			$queryJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','ORDER_DRAFT','$user','$dateCreated','$lastChanged', 'SUCCESS')");
+			// $queryJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','ORDER_DRAFT','$user','$dateCreated','$lastChanged', 'SUCCESS')");
 			
 			echo "<script type='text/javascript'>alert('DRAFT TERSIMPAN!')</script>";
 			$URL="/picaPOS/app/pos"; 
 			echo "<script type='text/javascript'>location.replace('$URL');</script>";
 		}
    
-   }else{
+   } else {
    		//ORDER
 
    		/* Get Customer */
@@ -153,27 +160,46 @@ $countArr = count($productID);
 	   	/* ---------- ADD CUSTOMER ------------ */
 	   	if(mysql_num_rows($checkIDCust)==0)
 	   	{
-	   		if($payerName != null && $payerPhone != null):
+	   		if($payerName != null && $payerPhone != null) {
 	   		
-		   		$q = mysql_query("INSERT INTO mcustomer(customerID, customerName, customerPhone, customerEmail, status, dateCreated, lastChanged) VALUES('$payerID', '$payerName', '$payerPhone', '$payerEmail', 1, '$dateCreated', '$lastChanged')");
+				$getNewID = mysql_query("SELECT COUNT(customerID)+1 as count FROM mcustomer");
+				$rowNewID = mysql_fetch_array($getNewID);
+				$newID = $rowNewID['count'];
+				$cusUniqID = "CUS".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		   		$q = mysql_query("INSERT INTO mcustomer(customerID, customerName, customerPhone, customerEmail, status, dateCreated, lastChanged) VALUES('$cusUniqID', '$payerName', '$payerPhone', '$payerEmail', 1, '$dateCreated', '$lastChanged')");
+				
+				$queryNewCust = mysql_query("SELECT * FROM mcustomer WHERE customerName = '$payerName'");
+				$fetchNewCustomer = mysql_fetch_array($queryNewCust);
+				$newCustID = $fetchNewCustomer['customerID'];
 
+				/** mendapatkan loyalty sekian atau tidak kedalam tabel tabloyalty setelah menambahkan data customer baruu */
+				if($total > $require) {
+					echo "dapat loyalty";
+					// exit;
+					$ql = mysql_query("INSERT INTO tabloyalty(loyaltyID, customerID, outletID, loyaltyPoint, status, dateCreated, lastChanged)VALUES('$fetchinLoyal[loyalID]', '$newCustID', '$outletID', '$point', 1, '$dateCreated', '$lastChanged')");
+				} else {
+					echo "tidak dapat loyalty";
+					// exit;
+					$ql = mysql_query("INSERT INTO tabloyalty(loyaltyID, customerID, outletID, loyaltyPoint, status, dateCreated, lastChanged)VALUES('$fetchinLoyal[loyalID]', '$newCustID', '$outletID', '0', 1, '$dateCreated', '$lastChanged')");
+				}
 		   		$actC = "NEW_CUSTOMER_".$payerName;
 
 				$journalIDC = date("YmdHis");
 				$queryJournalC = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalIDC','$actC','ADD_CUST_FROM_POS','$user','$dateCreated','$lastChanged', 'SUCCESS')");
-			endif;
+			
+			}
 	   	}
 	   	/* ---------- END ------------ */
 	   	
 	   	/* Cek Loyalty jika tidak ada */
 	   	if(mysql_num_rows($checkLoyalty)==0)
 	   	{
-	   		/* Jika pembelian lebih dari 50k, insert tabloyalty dengan point 10 */
-	   		if($total > $require):
-	   		
-	   			$ql = mysql_query("INSERT INTO tabloyalty(loyaltyID, customerID, outletID, loyaltyPoint, status, dateCreated, lastChanged)VALUES('$fetchinLoyal[loyaltyID]', '$payerID', '$outletID', '$point', 1, '$dateCreated', '$lastChanged')");
-	   		
-	   		endif;
+	   		/* Jika pembelian lebih dari requirement, insert tabloyalty dengan point tertera */
+	   		if($total > $require) {
+
+				   $ql = mysql_query("INSERT INTO tabloyalty(loyaltyID, customerID, outletID, loyaltyPoint, status, dateCreated, lastChanged)VALUES('$fetchinLoyal[loyaltyID]', '$payerID', '$outletID', '$point', 1, '$dateCreated', '$lastChanged')");
+			
+			}
 	   		
 	   	}
 	   	/* Jika Loyalty ada */
@@ -181,13 +207,14 @@ $countArr = count($productID);
 	   	
 	   	{
 	   		/* Jika pembelian lebih dari 50k, update loyalty point */
-	   		if($total > $require):
+	   		if($total > $require) {
 
-	   			$finalPoint = $loyaltyP + $point;
-	   			$ql = mysql_query("UPDATE tabloyalty SET loyaltyPoint = '$finalPoint', lastChanged = '$lastChanged' WHERE customerID = '$fetching[customerID]'");
-	   			echo "Ini id customernya :". $fetching['customerID'];
+				   $finalPoint = $loyaltyP + $point;
+				   $ql = mysql_query("UPDATE tabloyalty SET loyaltyPoint = '$finalPoint', lastChanged = '$lastChanged' WHERE customerID = '$fetching[customerID]'");
+				   echo "Ini id customernya :". $fetching['customerID'];
+			
+			}
 
-	   		endif;
 	   	}	   	
 		/* ---------- END ------------ */
 
@@ -199,11 +226,10 @@ $countArr = count($productID);
 		if(mysql_num_rows($checkID)==0){
 
 
-		$query = mysql_query("INSERT INTO taborderheader(orderID,orderNo,orderDate,orderPeriode,orderAmount,orderMethod,outletID,payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated,lastChanged) VALUES('$orderID', '$orderNo', '$orderDate', '$orderPeriode','$orderAmount', '$orderMethod', '$outletID', '$payerName', '$payerPhone', '$payerEmail', '$remarks', 1, '$user', '$dateCreated', '$lastChanged')");
+		$query = mysql_query("INSERT INTO taborderheader(orderID,priceID,orderNo,orderDate,orderPeriode,orderAmount,orderMethod,outletID,payerName, payerPhone, payerEmail, remarks, status, userID, dateCreated,lastChanged) VALUES('$orderID', '$priceID', '$orderNo', '$orderDate', '$orderPeriode','$orderAmount', '$orderMethod', '$outletID', '$payerName', '$payerPhone', '$payerEmail', '$remarks', 1, '$user', '$dateCreated', '$lastChanged')");
 
 		/* Input ke PaymerOrder */
 
-		$queryPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderType,paymentType,paymentMethod,paymentAmount,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$orderID','DIRECT-ORDER','DIRECT-PAYMENT','$paymentMethod','$paymentAmount','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',1,'$dateCreated','$lastChanged')");
 
 		/* END */
 
@@ -226,10 +252,8 @@ $countArr = count($productID);
 				$price = $productPrice[$x];
 				$subtotal = $productSubtotal[$x];
 
-				// echo "id ".$product;
-				// echo "jumlah ".$amount;
-				// echo "harga ".$price;
-				// echo "total ".$subtotal;
+				$totalServCharge5 += $servCharge5[$x];
+				$totalPb1 += $pb1[$x];
 				
 				$subdatas[productID] = $product;
 				$subdatas[amount] = $amount;
@@ -239,7 +263,7 @@ $countArr = count($productID);
 
 				/* Insert product ke DB OrderDetail */
 				$id = $x+1;
-				$queryD = "INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price','$subtotal', 1, '$dateCreated', '$lastChanged')";
+				$queryD = "INSERT INTO taborderdetail(id,orderID,productID,productAmount,productPrice,servCharge5,pb1,productSubtotal,status, dateCreated,lastChanged)VALUES('$id','$orderID', '$product', '$amount', '$price', '$totalServCharge5', '$totalPb1', '$subtotal', 1, '$dateCreated', '$lastChanged')";
 				$resD = mysql_query($queryD);
 
 				/* Cek produk curStock dan Update curStock */
@@ -255,9 +279,11 @@ $countArr = count($productID);
 
 				/* Insert ProductHistory */
 				$journalID = date("YmdHis");
-				$queryProHistory = mysql_query("INSERT INTO tabproducthistory(id,transType,productID,amount,itemAmount,measurementID,userID,status,remarks,dateCreated,lastChanged)VALUES('$journalID','OUT','$product','$amount','$stock','$measurement','$user',1,'$orderID','$dateCreated','$lastChanged')");
+				$queryProHistory = mysql_query("INSERT INTO tabproducthistory(id,transType,productID,amount,amountLeft,measurementID,userID,status,remarks,dateCreated,lastChanged)VALUES('$journalID','OUT','$product','$amount','$stock','$measurement','$user',1,'$orderID','$dateCreated','$lastChanged')");
 
 			}
+			$VAT = $totalServCharge5+$totalPb1;
+			$queryPayment = mysql_query("INSERT INTO tabpaymentorder(id,orderID,orderMethod,paymentType,paymentMethod,paymentAmount,dpp,VAT,discountPrice,total,promoID,isVoucher,voucherID,remarks,status,dateCreated,lastChanged) VALUES ('$paymentOrderID','$orderID','$orderMethod','null','$paymentMethod','$paymentAmount','$dpp','$VAT','$discountPrice','$total','$promoID','$isVoucher','$voucherCode','$remarks',1,'$dateCreated','$lastChanged')");
 			
 					
 	   	}
@@ -266,9 +292,9 @@ $countArr = count($productID);
 
 		$queryJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$act','ORDER_COMPLETE','$user','$dateCreated','$lastChanged', 'SUCCESS')");
 		
-		//printOrder($data,$datas);
-		$data_enc = json_encode($data);
-		$datas_enc = json_encode($datas);
+		// printOrder($data,$datas);
+		$data_enc = json_encode(array_merge($data, array("totalServChar5" => $totalServCharge5, "totalPb1" => $totalPb1)));
+		$datas_enc = json_encode(array_merge($datas, array("totalServChar5" => $totalServCharge5, "totalPb1" => $totalPb1)));
 		
 		$URL="/picaPOS/app/pos"; 
 		$URL2="order_print.php?data=$data_enc&datas=$datas_enc"; 

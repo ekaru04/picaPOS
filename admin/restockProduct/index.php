@@ -1,172 +1,137 @@
-<?php
+<?php 
 session_start();
 if (!isset($_SESSION["username"])) 
 {
     $URL="/picapos/admin"; 
     echo "<script type='text/javascript'>location.replace('$URL');</script>";
-}
-include("../../assets/config/db.php");      
-include('../../assets/template/navbar.php');
+} 
+	include('../../assets/template/navbar.php');
+	include('../../assets/config/db.php');
+	
 ?>
 <div>
-       <div class='clear height-20 mt-3'></div>
-        <div class="container-fluid">
-         <div class='entry-box-basic'>
-           <h1 class="text-center">
-               IN/OUT PRODUCT
-           </h1>
-          <div class="container-fluid">
-           <div class="row">
-            <div class="col-8">
-                <form id='formAdd' method='POST' action='restock_product_process.php' enctype="multipart/form-data">
+    <!-- Content Header (Page header) -->
+    <!-- /.content-header -->
 
-                    <div class='row  mt-3 '>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='TYPE' />
-                        </div>
-                        <div class='col-3'>
-                            <select class='select-cust form-control' name='type' style='width:300px;' required>
-                                <option value='1'>IN</option>
-                                <option value='2'>OUT</option>
-                            </select>
-                        </div>
-                    </div>
+    <!-- Main content -->
+    <div class='clear height-20 mt-3'></div>
+    <div class="container-fluid">
+      <div class='entry-box-basic'>
+      <h4 align='center'>STOCK KITCHEN</h4>
+      <div class="row mb-2">
+          <div class="col">
+            <h1 class="m-0 text-dark text-center"></h1>
+            <hr>
+            
+          </div>
+          <div class="">
+            <!-- <button type='button' id='addStock' class='btn btn-primary mr-1' style='float: right;margin-top:13px; font-size:13px;'>ADD CURRENT STOCK</button> -->
+            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>Stock Manage</button>
+          </a>
+          </div>
+          <div class="col">
+            <h1 class="m-0 text-dark text-center"></h1>
+            <hr>
+          </div>
+      </div>
+      <div class='height-10'></div>
+      <div class="table-responsive">
+        <table class='table' id='itemTable' style='font-size:13px;'>
+          <thead>
+            <tr>
+              <th style='vertical-align:middle;'>NO</th>
+              <th style='vertical-align:middle;'>PRODUCT NAME</th>
+              <th style='vertical-align:middle;'>STOCK KITCHEN</th>
+              <th style='vertical-align:middle;'>LAST UPDATED</th>
+            </tr>
+          </thead>
+          <tbody>
 
-                    <div class='row  mt-3 '>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='OUTLET' />
-                        </div>
-                        <div class='col-3'>
-                            <select class='select-cust form-control' name='outletID' id='outletID' style='width:300px;' required>
-                                <option value=''>-CHOOSE ONE-</option>
-                                <?php
-                                    $queryOutlet="select * from moutlet where status != 0";
-                                    $resOutlet=mysql_query($queryOutlet);
-                                    while($rowOutlet=mysql_fetch_array($resOutlet)){
-                                        if($rowOutlet[outletID] == $_SESSION[outletID]){
-                                            echo "<option selected value='$rowOutlet[outletID]'>$rowOutlet[outletName]</option>";
-                                        }else{
-                                            echo "<option value='$rowOutlet[outletID]'>$rowOutlet[outletName]</option>";
-                                        }
+          </tbody>
+        </table>
+      </div>
+      </div>  
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+  </footer>
 
-                                    }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
 
-                    <div class='row mt-3'>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='CATEGORY' />
-                        </div>
-                        <select class='select-cust ml-3 form-control' name='categoryID' id='categoryID' style='width:300px;' required>
-                                <option value=''>-CHOOSE ONE-</option>
-                                <?php
-                                    $queryCategory="select * from mcategory where status != 0";
-                                    $resCategory=mysql_query($queryCategory);
-                                    while($rowCategory=mysql_fetch_array($resCategory)){
-                                        if($rowCategory[categoryID] == $row[categoryID]){
-                                            echo "<option selected value='$rowCategory[categoryID]'>$rowCategory[categoryName]</option>";
-                                        }else{
-                                            echo "<option value='$rowCategory[categoryID]'>$rowCategory[categoryName]</option>";
-                                        }
-
-                                    }
-                                ?>
-                            </select>
-                    </div>   
-
-                    <div class='row mt-3'>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='PRODUCT' />
-                        </div>
-                        <select class='select-cust ml-3 form-control' name='productID' id='productID' style='width:300px;' selected>
-                            <option value=''>-CHOOSE ONE-</option>
-                            <?php
-                              $queryProduct="select * from mproduct where status != 0";
-                              $resProduct=mysql_query($queryProduct);
-                               while($rowProduct=mysql_fetch_array($resProduct)){
-                                if($rowProduct[productID] == $row[productID]){
-                                 echo "<option selected value='$rowProduct[productID]'>$rowProduct[productName]</option>";
-                                }else{
-                                 echo "<option value='$rowProduct[productID]'>$rowProduct[productName]</option>";
-                                }
-                              }
-                            ?>
-                        </select>
-                    </div>                  
-
-                    <div class='row mt-3'>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='AMOUNT' />
-                        </div>
-                        <div class='col-2'>
-                            <input type='text' class='type-input form-control' name='curStock' placeholder='Amount' style='width:300px' required />
-                        </div>
-                    </div>
-
-                    <div class='row  mt-3'>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='REMARKS' />
-                        </div>
-                        <div class='col-3'>
-                            <textarea class='type-input form-control' name='remarks' placeholder='Insert notes here' rows='4' cols='50'></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class='row  mt-3'>
-                        <div class='col-3'>
-                            <input id='save' type='submit' value='SUBMIT' name='submit' class='btn btn-success' />
-                            <button type='button' id='cancel' class='btn btn-danger' >CANCEL</button>  
-                        </div>
-                    </div>
-                    
-                </form>
-                            
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </body>
-</html>
+<!-- jQuery -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
 <script type="text/javascript">
     
-    $("#cancel").click(function(){
-        alert("Data tidak tersimpan");
-        location.replace('/picaPOS/admin/products/');
-    });
-    
-    $("#del").click(function(){
-        var r = confirm("Apakah yakin ingin menghapus data ini?");
-        if(r){
-            <?php echo "location.replace('product_delete.php?productID=$productID');"?>
-        }
-    });
-
-    $(document).on('change','#categoryID',function(){
-        var val = $('#categoryID').val();
-        var val2 = $('#outletID').val();
-        $.ajax({
-            url: 'restock_list.php',
-            data: {categoryID:val,outletID:val2},
-            type: 'GET',
-            dataType: 'html',
-            success: function(result){
-                $('#productID').html(); 
-                $('#productID').html(result); 
+var itemTable = $('#itemTable').DataTable(
+    {
+       
+        processing : false,
+        responsive : true,
+        ajax: {
+            url: "product_stock_data.php",
+            data: 'data'
+        },
+        columns: [
+            { data: 'no' },
+            { data: 'productName' },
+            { data: 'tempStock' },
+            { data: 'lastChanged' }
+        ],
+    "columnDefs": [
+        {"className": "dt-center", "targets": "_all"}
+      ],
+      dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3 ]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3 ]
+                }
             }
-        });  
-    });
+        ]
+        
+    }
+        
+);
+    
+function excel(){
+    location.href='item_list_xls.php';
+}
+    
+$("#add").click(function(){
+    location.replace('restock_input.php');
+});
     
 </script>
 
 <script>
   $(window).load(function() { $(".se-pre-con").fadeOut("slow"); });  
 </script>
+<!-- AdminLTE App -->
 <script src="../../assets/dist/js/adminlte.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../../assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../assets/dist/js/demo.js"></script>
+</body>
+</html>

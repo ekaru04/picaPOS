@@ -42,6 +42,7 @@ if (!isset($_SESSION["username"]))
     <div class='height-15'></div>
     </div>
           <div class='height-10'></div>
+          <div class="table-responsive">            
             <table class='table' id='itemTable' style='font-size:13px;'>
               <thead>
                 <tr>
@@ -57,6 +58,7 @@ if (!isset($_SESSION["username"]))
 
               </tbody>
             </table>
+          </div>
           </div>          
         </div><!-- 
         <div class='col-lg-4'>
@@ -108,13 +110,17 @@ $(document).ready(function(){
   var date2 = $("#date2").val('<?php echo date("Y-m-d");?>');
   var status = $("#status").val('');
   $("#searchDate").click(function(){searchDateJournal();}); 
-  // alert('date1');
+  
+  console.log(date1);
+  console.log(date2);
+
 });
     
 var itemTable = $('#itemTable').DataTable(
     {
        
         processing : false,
+        fixedHeader: true,
         responsive : true,
         ajax: {
             url: "activity_data.php?date1="+"<?php echo date('Y-m-d');?>"+"&date2="+"<?php echo date('Y-m-d');?>"+"&status=0",

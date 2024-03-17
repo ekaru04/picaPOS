@@ -175,14 +175,14 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </select>
                     </div>
 
-                    <div class='row mt-3'>
+                    <!-- <div class='row mt-3'>
                         <div class='col-3 label'>
                             <input type='text' class='form-control-plaintext' disabled value='PRICE' />
                         </div>
                         <div class='col-3'>
-                            <input type='text' class='type-input form-control' name='productPrice' placeholder='Price Product' style='width:300px' value='<?php echo round($row[productPrice]); ?>' required />
+                            <input type='text' class='type-input form-control' name='productPrice' placeholder='Price Product' style='width:300px' value='<?php echo round($row[productPrice]); ?>' />
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class='row mt-3'>
                         <div class='col-3 label'>

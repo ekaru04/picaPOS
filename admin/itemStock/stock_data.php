@@ -9,7 +9,7 @@ $data = mysql_fetch_array($query);
 $outlet = $data['outletID'];
 
 
-$query = "SELECT s.stockID, s.stockName, c.categoryStockName, m.measurementName, s.curStock, s.minStock, o.outletName, s.remarks, s.lastChanged FROM mstock s INNER JOIN mstockcategory c ON s.categoryStockID = c.categoryStockID INNER JOIN mmeasurement m ON s.measurementID = m.measurementID INNER JOIN moutlet o ON s.outletID = o.outletID WHERE s.status != 0 ORDER BY s.lastChanged DESC";
+$query = "SELECT s.stockID, s.stockName, c.categoryStockName, m.measurementName, s.curStock, s.minStock, o.outletName, s.remarks, s.lastChanged FROM mstock s INNER JOIN mstockcategory c ON s.categoryStockID = c.categoryStockID INNER JOIN mmeasurement m ON s.measurementID = m.measurementID INNER JOIN moutlet o ON s.outletID = o.outletID WHERE s.status != 0 ORDER BY s.stockID ASC";
 $res = mysql_query($query);
 
 $x=0;
@@ -19,7 +19,7 @@ while ($row=mysql_fetch_array($res)){
     $nestedData = array();
     
     $nestedData[no] = $x;
-    $nestedData[stockName] = $row["stockName"];
+    $nestedData[stockName] = "<a href='stock_history.php?stockID=$row[stockID]'>$row[stockName]</a>";
     $nestedData[categoryStockName] = $row["categoryStockName"];
     $nestedData[measurementName] = $row["measurementName"];
     $nestedData[curStock] = $row["curStock"];

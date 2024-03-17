@@ -39,19 +39,19 @@ if (!isset($_SESSION["username"]))
           </div>
       </div>
       <div class='height-10'></div>
+      <div class="table-responsive">        
         <table class='table' id='itemTable' style='font-size:13px;'>
           <thead>
             <tr>
               <th style='vertical-align:middle;'>NO</th>
               <th style='vertical-align:middle;'>TRANSACTION DATE</th>
-              <th style='vertical-align:middle;'>SUPPLIER NAME</th>
-              <th style='vertical-align:middle;'>OUTLET</th>
+              <th style='vertical-align:middle;'>SUPPLIER</th>
               <th style='vertical-align:middle;'>INGREDIENT</th>
-              <th style='vertical-align:middle;'>CURRENT STOCK</th>
+              <th style='vertical-align:middle;'>ADDING STOCK</th>
+              <th style='vertical-align:middle;'>MEASUREMENT</th>
               <th style='vertical-align:middle;'>TOTAL PRICE</th>
               <th style='vertical-align:middle;'>DISCOUNT PRICE</th>
               <th style='vertical-align:middle;'>AFTER DISCOUNT</th>
-              <th style='vertical-align:middle;'>MEASUREMENT</th>
               <th style='vertical-align:middle;'>USER</th>
               
               <!-- <th style='vertical-align:middle;'>ACTION</th> -->
@@ -61,6 +61,7 @@ if (!isset($_SESSION["username"]))
 
           </tbody>
         </table>
+      </div>
       </div>  
     </div>
     <!-- /.content -->
@@ -93,13 +94,12 @@ var itemTable = $('#itemTable').DataTable(
             { data: 'no' },
             { data: 'transDate' },
             { data: 'supplierName' },
-            { data: 'outletName' },
             { data: 'ingredient' },
-            { data: 'curStock' },
+            { data: 'amount' },
+            { data: 'measurementName' },
             { data: 'totalPrice' },
             { data: 'discountPrice' },
             { data: 'afterDiscount' },
-            { data: 'measurementName' },
             { data: 'fullname' }
         ],
     "columnDefs": [

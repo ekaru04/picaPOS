@@ -18,7 +18,11 @@ if (isset($_POST['customerID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mcustomer(customerID, customerName, customerPhone, customerEmail, status, dateCreated, lastChanged) VALUES('$customerID', '$customerName', '$customerPhone', '$customerEmail', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(customerID)+1 as count FROM mcustomer");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$custUniqID = "CSR".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mcustomer(customerID, customerName, customerPhone, customerEmail, status, dateCreated, lastChanged) VALUES('$custUniqID', '$customerName', '$customerPhone', '$customerEmail', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$act = "NEW_CUSTOMER_".$customerName;

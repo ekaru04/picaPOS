@@ -50,55 +50,26 @@ if(isset($_POST['requestID'])){
 			break;
 	}
 	
+
+	// echo $statusApprove;
+	// echo "<br>";
+	// echo $isPending;
+	// echo "<br>";
+	// exit;
+
 	/* Apabila status approval 2 (Di approve) */
 	if($statusApprove==2){
 
-		/* Mengambil data master produk berdasarkan  */
-		$masterProduct = mysql_query("SELECT * FROM mproduct WHERE productID='$productRequest' AND outletID = '$outlet'");
-		$rowProduct = mysql_fetch_array($masterProduct); // <-- Cek data produk
-		$stockNow = $rowProduct['curStock']; // <-- Menyimpan stok saat ini dari master produk ke variabel
-
-		/* Menambahkan stok produk saat ini dengan stok yang akan diproduksi kedalam variabel */
-		// $curStock = $stockNow+$amountRequest;
-
-		/* Mengupdate stock produk sebelumnya dengan stock yang telah diapprove */
-		// $updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
-
-		$getDataTempStock = mysql_query("SELECT * FROM tabproductstocktemp WHERE productID = '$productRequest'");
-		$rowTempStock = mysql_fetch_array($getDataTempStock);
-		$productTemp = $rowTempStock['productID'];
-		$stockTemp = $rowTempStock['newStock'];
+		// $getDataTempStock = mysql_query("SELECT * FROM tabproductstocktemp WHERE productID = '$productRequest'");
+		// $rowTempStock = mysql_fetch_array($getDataTempStock);
+		// $productTemp = $rowTempStock['productID'];
+		// $stockTemp = $rowTempStock['newStock'];
 
 		$addNewStock = $stockTemp + $amountRequest;
 		// echo "Ini ID produk nya ".$rowTempStock['productID'];
 		// echo "<br>";
 		// echo "Ini stok di dapurnya ".$rowTempStock['newStock'];
 		// exit;
-
-		if($productTemp == null){
-
-			/* Tampung ke tabel temp stok product */
-			// $tempStock = mysql_query("INSERT INTO tabproductstocktemp(tempID, requestID, productID, newStock, outletID, dateCreated, lastChanged) VALUES('$tempID', '$requestID', '$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
-			// $tempStock = mysql_query("INSERT INTO tabproductstocktemp(productID, newStock, outletID, dateCreated, lastChanged) VALUES('$productRequest', '$amountRequest', '$outlet', '$dateCreated', '$lastChanged')");
-
-			$journalID = date("YmdHis");
-
-			$activityUpdateStock = "UPDATE_STOCK_PRODUCT_".$rowProduct['productID']."_FROM_REQUEST".$requestID;
-
-			$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'RESTOCK_PRODUCT_STOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
-			
-		}else{
-
-			/* Update Stock produk di tabel productstocktemp */
-			// $updateTempStock = mysql_query("UPDATE tabproductstocktemp SET newStock = '$addNewStock', lastChanged = '$rowTempStock[lastChanged]' WHERE productID = '$productRequest' AND outletID = '$rowTempStock[outletID]'");
-
-			$journalID = date("YmdHis");
-
-			$activityUpdateStock = "UPDATE_STOCK_PRODUCT_".$rowProduct['productID']."_FROM_REQUEST".$requestID;
-
-			$updateJournal = mysql_query("INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID', '$activityUpdateStock', 'RESTOCK_PRODUCT_STOCK', '$user', '$dateCreated', '$lastChanged', 'SUCCESS')");
-
-		}
 
 		$getRequestDetail = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $statusApprove-1");
 
@@ -118,6 +89,8 @@ if(isset($_POST['requestID'])){
 				$URL="/picaPOS/admin/reqIn"; 
 				echo "<script type='text/javascript'>location.replace('$URL');</script>";
 				
+				echo "Logic A";
+				exit;
 
 				$journalID = date("YmdHis");
 
@@ -126,9 +99,10 @@ if(isset($_POST['requestID'])){
 				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','AMOUNT_STOCK','$user','$dateCreated','$lastChanged', 'FAILED')";
 				// $resJournal = mysql_query($queryJournal);
 				
-
-
 			}else{
+
+				// echo "logic B";
+				// exit;
 				$lastChanged = date("Y-m-d H:i:s");
 				$res = mysql_query("UPDATE mingredient SET curStock = '$ingredientNewStock', lastChanged = '$lastChanged' WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
 
@@ -216,26 +190,61 @@ if(isset($_POST['requestID'])){
 				$actStock = "INSERT_HISTORY_FROM_REQUEST".$requestID;
 				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','HISTORY','$user','$dateCreated','$lastChanged', 'SUCCESS')";
 				// $resJournal = mysql_query($queryJournal);
+				
+				$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
+				$res = mysql_query($query);
+		
+				$journalID = date("YmdHis");
+				$actStock = "UPDATE_REQ_HEADER_".$requestID;
+				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','APPROVAL_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
+				// $resJournal = mysql_query($queryJournal);
+				
+				$query = "UPDATE tabrequestdetail SET status = '$statusApprove' WHERE requestID = '$requestID'";
+				$res = mysql_query($query);
+		
+				$journalID = date("YmdHis");
+				$actStock = "UPDATE_REQ_DETAIL_".$requestID;
+				$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','STATUS_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
+				// $resJournal = mysql_query($queryJournal);
 			}
 			
 		}
 		
-		
-		$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";
-		$res = mysql_query($query);
+		/* Mengambil data master produk berdasarkan  */
+		$masterProduct = mysql_query("SELECT * FROM mproduct WHERE productID='$productRequest' AND outletID = '$outlet'");
+		$rowProduct = mysql_fetch_array($masterProduct); // <-- Cek data produk
+		$stockNow = $rowProduct['curStock']; // <-- Menyimpan stok saat ini dari master produk ke variabel
 
-		$journalID = date("YmdHis");
-		$actStock = "UPDATE_REQ_HEADER_".$requestID;
-		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','APPROVAL_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
-		// $resJournal = mysql_query($queryJournal);
-		
-		$query = "UPDATE tabrequestdetail SET status = '$statusApprove' WHERE requestID = '$requestID'";
-		$res = mysql_query($query);
+		/* Menambahkan stok produk saat ini dengan stok yang akan diproduksi kedalam variabel */
+		$curStock = $stockNow+$amountRequest;
 
-		$journalID = date("YmdHis");
-		$actStock = "UPDATE_REQ_DETAIL_".$requestID;
-		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','STATUS_REQUEST','$user','$dateCreated','$lastChanged', 'SUCCESS')";
-		// $resJournal = mysql_query($queryJournal);
+		/* Mengupdate stock produk sebelumnya dengan stock yang telah diapprove */
+		// $updateStockProduct = mysql_query("UPDATE mproduct SET curStock = '$curStock' WHERE productID = '$rowProduct[productID]' AND outletID = '$rowProduct[outletID]'");
+
+		/** Taruh stok di tabel temporary */
+		$getTempStock = mysql_query("SELECT * FROM tabtempstock WHERE productID = '$productRequest'");
+		$rowTempStock = mysql_fetch_array($getTempStock);
+		$productTemp = $rowTempStock['productID'];
+		$newTempStock = $rowTempStock['tempStock']+$amountRequest;
+
+		if($productTemp == 0) {
+			// echo $productTemp;
+			// exit;
+			$insTempStock = mysql_query("INSERT INTO tabtempstock(productID, tempStock, dateCreated, lastChanged) VALUES('$productRequest', '$amountRequest', '$dateCreated', '$lastChanged')");
+			echo "<script type='text/javascript'>alert('Stok sudah masuk ke stok sementara(Dapur)')</script>";
+			
+		} else {
+			// echo $productTemp;
+			// exit;
+			$updTempStock = mysql_query("UPDATE tabtempstock SET tempStock = '$newTempStock', lastChanged = '$lastChanged' WHERE productID = '$productRequest'");
+			echo "<script type='text/javascript'>alert('Stok sudah diupdate ke stok sementara(Dapur)')</script>";
+
+		}
+
+		/** History IN produk */
+		$journalProductHst = date("YmdHis");
+		$actProdHst = mysql_query("INSERT INTO tabproducthistory (id, transType, productID, amount, amountLeft, measurementID, userID, status, remarks, dateCreated, lastChanged)
+									VALUE ('$journalProductHst', 'IN', '$rowProduct[productID]', '$stockNow', '$curStock', '$rowProduct[measurementID]', '$user', 'SUCCESS', '', '$dateCreated', '$lastChanged' )");
 		
 	}else{
 		$query = "UPDATE tabrequestheader SET status = '$statusApprove', isPending = '$isPending', approvedBy = '$user', approvedDate = '$today', approvedReason = '$reason' WHERE requestID = '$requestID'";

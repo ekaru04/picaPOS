@@ -13,7 +13,7 @@ $requestData = $_REQUEST;
 //             INNER JOIN tabpricedetail d ON h.priceID = d.priceID
 //             INNER JOIN mproduct p ON d.productID = p.productID
 //             WHERE h.status != 0";
-$query = "SELECT d.id, h.priceID, h.priceName, p.productName, d.price, h.description, h.lastChanged FROM tabpricedetail d 
+$query = "SELECT d.id, h.priceID, h.priceName, p.productName, d.afterTax, h.description, h.lastChanged FROM tabpricedetail d 
                 INNER JOIN tabpriceheader h ON d.priceID = h.priceID
                 INNER JOIN mproduct p ON d.productID = p.productID
                 WHERE d.status != 0";
@@ -32,9 +32,9 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[priceName] = $row["priceName"];
     $nestedData[productName] = $row["productName"];
 if($rowGuest['menuID']=='GST1'):
-    $nestedData[price] = $row["price"]/2;
+    $nestedData[afterTax] = $row["afterTax"]/2;
 else:
-    $nestedData[price] = $row["price"];
+    $nestedData[afterTax] = $row["afterTax"];
 endif;
     $nestedData[description] = $row["description"];
     $nestedData[lastChanged] = $row["lastChanged"];

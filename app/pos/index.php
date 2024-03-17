@@ -94,21 +94,25 @@ date_default_timezone_set('Asia/Jakarta');
 							<h3><b>ORDER CASHIER</b></h3>
 							<div class='row mb-2'>
 								<div class='col-3'>
-									<input type='text' readonly class="form-control-plaintext" style='width:100%;' value='Order No:'/>
+									<input type='text' readonly class="form-control-plaintext" value='Order No:'/>
+									<!-- <input type='text' readonly class="form-control-plaintext" style='width:100%;' value='Order No:'/> -->
 								</div>
-								<div class='col-3'>
-									<input type='text' readonly class="form-control-plaintext" id ='orderNo' name ='orderNo' style='margin-left:-30px;width:100%;font-weight:bold;' value='<?php echo $orderNo;?>'/>
+								<div class='col-2'>
+									<input type='text' readonly class="form-control-plaintext" id ='orderNo' name ='orderNo' style='font-weight:bold;' value='<?php echo $orderNo;?>'/>
+									<!-- <input type='text' readonly class="form-control-plaintext" id ='orderNo' name ='orderNo' style='margin-left:-30px;width:100%;font-weight:bold;' value='<?php echo $orderNo;?>'/> -->
 								</div>
-								<div class='col-3'>
-									<input type='text' readonly class="form-control-plaintext" style='margin-left:50px;width:50%;' value='Date:'/>
+								<div class='col-2'>
+									<input type='text' readonly class="form-control-plaintext" value='Date:'/>
+									<!-- <input type='text' readonly class="form-control-plaintext" style='margin-left:50px;width:50%;' value='Date:'/> -->
 								</div>
-								<div class='col-3'>
-									<input type='date' readonly class="form-control-plaintext" id ='orderDate' name ='orderDate' style='float:right;text-align:right;width:180%;font-weight:bold;margin-left:-60px;margin-right:-20px;' value='<?php echo date('Y-m-d');?>'/>
+								<div class='col-5'>
+									<input type='date' readonly class="form-control-plaintext" id ='orderDate' name ='orderDate' style='float:right;text-align:right;font-weight:bold;' value='<?php echo date('Y-m-d');?>'/>
+									<!-- <input type='date' readonly class="form-control-plaintext" id ='orderDate' name ='orderDate' style='float:right;text-align:right;width:180%;font-weight:bold;margin-left:-60px;margin-right:-20px;' value='<?php echo date('Y-m-d');?>'/> -->
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<select class="mb-2 form-control" id="methodList" required>
+									<select class="mb-2 form-control" id="methodList" name='priceID' required>
 										<option value="">-List Order Type-</option>
 										<?php
 										$queryPay = mysql_query("SELECT * FROM tabpriceheader ORDER BY priceID ASC");
@@ -121,7 +125,7 @@ date_default_timezone_set('Asia/Jakarta');
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<input type='text' id='customerID' name='customerID' value="<?php echo $customerID; ?>" />
+									<input type='hidden' id='customerID' name='customerID' value="<?php echo $customerID; ?>" />
 
 									<select class="mb-2 form-control" id="listCust" onchange="list()">
 										<option value="">-List Customer-</option>
@@ -217,22 +221,15 @@ date_default_timezone_set('Asia/Jakarta');
 										</div>
 									</div>
 									<div class='row'>
-										<div class='col-2'>
+										<!-- <div class='col-2'>
 											<b>Discount</b>
-										</div>
+										</div> -->
 										<div class='col-4'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='discount' style='float:right;text-align:right;width:100px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
+											<input type='hidden' readonly class="form-control-sm form-control-plaintext" id ='discount' style='float:right;text-align:right;width:100px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
 											<input type='hidden' id='disc' name='discount' value='0'/>
 											<input type='hidden' id='discPer' name='discountPerc' value='0'/>
 										</div>
-										<div class='col-2'>
-											<b>Grand Total</b>
-										</div>
-										<div class='col-4'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id='totPrice' name='totalPrice' />
-											
-										</div>
+										
 									</div>
 									<div class='row'>
 										<div class='col-4'>
@@ -245,7 +242,7 @@ date_default_timezone_set('Asia/Jakarta');
 										</div>
 										<div class='col-5'>
 											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='paymentAmount' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='text' id = 'payAmount' name='paymentAmount'/>
+											<input type='hidden' id = 'payAmount' name='paymentAmount'/>
 										</div>
 									</div>
 									<div class='row'>
@@ -257,6 +254,33 @@ date_default_timezone_set('Asia/Jakarta');
 											<input type='hidden' id = 'change' name='changeAmount'/>
 										</div>
 									</div>
+									<div class='row'>
+										<div class='col-7'>
+											<b>Service Charge (5%)</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='serviceCharge' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
+											<input type='hidden' id = 'charge' name='serviceCharge'/>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-7'>
+											<b>PB1 (10%)</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='pb1' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
+											<input type='hidden' id = 'pb' name='pb1'/>
+										</div>
+									</div>
+									<div class="row">
+									<div class='col-7'>
+											<b>Grand Total</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
+											<input type='hidden' id='totPrice' name='totalPrice' />
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class='row mb-2'>
@@ -266,11 +290,11 @@ date_default_timezone_set('Asia/Jakarta');
 									<input type='hidden' id = 'voucherReq' name='voucherReq'/>
 								</div>
 							</div>
-							<div class='row mb-2'>
+							<!-- <div class='row mb-2'>
 								<div class='col'>
 									<input class="form-control" type='text' id ='voucherCode' name ='voucherCode' style='width:100%;' placeholder='Insert Voucher Code'/>
 								</div>
-							</div>
+							</div> -->
 							<div class='row mb-2'>
 								<div class='col'>
 									<select class="form-control" id ='orderMethod' name ='orderMethod' style='width:100%;'>
@@ -294,7 +318,7 @@ date_default_timezone_set('Asia/Jakarta');
 									</select>
 								</div>
 							</div>
-							<div class='row mb-2'>
+							<!-- <div class='row mb-2'>
 								<div class='col'>
 									<select class="form-control" id ='promo' name ='promo' style='width:100%;'>
 										<option value=''>-CHOOSE PROMO-</option>
@@ -307,17 +331,22 @@ date_default_timezone_set('Asia/Jakarta');
 								?>
 									</select>
 								</div>
-							</div>
+							</div> -->
+							<!-- <div class='row mb-2'>
+								<div class='col'>
+									<input type='text'class="form-control" id ='discounto' name ='discounto' style='width:100%;' placeholder='Discount' />
+								</div>
+							</div> -->
 							<div class='row mb-2'>
 								<div class='col'>
 									<input type='text'class="form-control" id ='payment' name ='payment' style='width:100%;' placeholder='Insert Payment Amount' />
 								</div>
 							</div>
-							<div class='row mb-2'>
+							<!-- <div class='row mb-2'>
 								<div class='col'>
 									<input type='text'class="form-control" id ='payment1' name ='payment1' style='width:100%;' placeholder='Insert Payment If Using Voucher Amount' />
 								</div>
-							</div>
+							</div> -->
 							<div class='row mb-2'>
 								<div class='col'>
 									<textarea width='100' placeholder='Insert notes here' class="form-control" name='remarks'></textarea>
@@ -359,14 +388,14 @@ date_default_timezone_set('Asia/Jakarta');
 
 							</div>
 
-
+							
+							<div class='row'>
 							<?php
 								$resMenu = mysql_query("SELECT * FROM mProduct WHERE outletID = '$outletID' AND status = 1");
 								while($rowMenu = mysql_fetch_array($resMenu)){
 									$productID = $rowMenu['productID'];
 								echo"
-								<div class='row'>
-									<div class='col d-flex ml-1 productEntry'>
+									<div class='d-flex ml-1 productEntry'>
 										<div class='pt-2'>
 											<div class='col-12'>
 											    <div class='card' id='products'>
@@ -385,37 +414,10 @@ date_default_timezone_set('Asia/Jakarta');
 											</div>
 										</div>
 									</div>
-								</div>
 									";
 								}
-								/* Tab Bundle Progress */
-								// $resBundle = mysql_query("SELECT * FROM tabbundleheader WHERE outletID = '$outletID' AND status = 1");
-								// while ($rowBunlde = mysql_fetch_array($resBundle)) 
-								// 	{
-								// 		$bundleID = $rowBunlde['bundleName'];
-								// 		echo "
-								// 		<div class='row'>
-								// 			<div class='col d-flex ml-1 productEntry'>
-								// 				<div class='pt-2'>
-								// 					<div class='col-12'>
-								// 					    <div class='card' id='bundles'>
-								// 			        		<button type='button' class='menu d-flex' id='$rowBunlde[bundleID]'>
-								// 			            <div class=''>
-											                
-								// 			            </div>
-								// 			            <div class='col-6'>
-								// 			        	    <span>$rowBunlde[bundleName]</span><input type='hidden' id = 'curProd_$rowBunlde[bundleID]'/> 
-								// 			            </div>
-								// 			        		</button>
-								// 			   			</div>
-								// 					</div>
-								// 				</div>
-								// 			</div>
-								// 		</div>";
-								// 	}
-							
 							?>
-							
+							</div>							
 						</div>
 					</div>
 				</div>
@@ -426,9 +428,19 @@ date_default_timezone_set('Asia/Jakarta');
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){  
-        
-    });
+	
+	$(document).on('change', '#paymentMethod', function(){
+		var paymentMethod = $('#paymentMethod option:selected').text();
+		var totalPrice = $('#totPrice').val();
+
+		// console.log(payment);
+		
+		if(paymentMethod != 'CASH'){
+			$('#payment').val(totalPrice);
+		} else {
+			$('#payment').val(0);
+		}
+	});
 
     function searchProduct(){
    	const searchCategory = $("#categorySel").val();
@@ -511,9 +523,13 @@ date_default_timezone_set('Asia/Jakarta');
 			var price = "";
 			var productName = "";
 			var get = "getProduct.php?productID="+btn+"&priceID="+orderType;
+			var servCharge5 = "";
+			var pb1 = ""; 
 
 			$.get(get, function( data ) {
 				price = data.price;
+				servCharge5 = data.servCharge5;
+				pb1 = data.pb1;
 				productName = data.productName;
 
 				var numbering = price;
@@ -524,6 +540,10 @@ date_default_timezone_set('Asia/Jakarta');
 				html += "<td class = 'table-details' style='text-align:left;width:1%;'>&nbsp;&nbsp;Rp. </td>";
 				html += "<td class = 'table-details' style='text-align:right;width:29%;padding-right:5px;'>";
 				html += "<input type='hidden' name='productID[]' value='"+btn+"'/>";
+				html += "<input type='hidden' name='servCharge5[]' value='"+servCharge5+"'/>";
+				html += "<input type='hidden' name='pb10[]' value='"+pb1+"'/>";
+				html += "<input type='hidden' name='ori_servCharge5[]' value='"+servCharge5+"'/>";
+				html += "<input type='hidden' name='ori_pb1[]' value='"+pb1+"'/>";
 				html += "<input type='text' name='productPrice[]' class = 'inps' style='width:100px;' value='"+price+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:center;width:5%;'>";
 				html += "<input type='text' name='productQty[]' class='inps' style='width:40px;' value='1'/>";
@@ -542,6 +562,8 @@ date_default_timezone_set('Asia/Jakarta');
 				var discount = parseFloat($('#discPer').val());
 				var received = parseFloat($('#payAmount').val());
 				var change = parseFloat($('#change').val());
+				//var charge = parseFloat($('#charge').val());
+				//var pb = parseFloat($('#pb').val());
 				
 				if ( isNaN( received ) ){
 					received = 0;
@@ -573,10 +595,29 @@ date_default_timezone_set('Asia/Jakarta');
 
 				} );
 
+				var totalServCharge5 = 0;
+				$( 'input[name^=servCharge5]' ).each( function( i , e ) {
+					var v = parseInt( $( e ).val() );
+					if ( !isNaN( v ) ){
+						totalServCharge5 += v;
+					}
+				} );
+
+				var totalPb1 = 0;
+				$("#tableProduct").find( 'input[name^=pb10]' ).each( function( i , e ) {
+					var v = parseInt( $( e ).val() );
+					if ( !isNaN( v ) ){
+						totalPb1 += v;
+					}
+				} );
+				
+
 				totProd = sum;
 				dpp = sumVal;
+				charge = totalServCharge5;
+				pb = totalPb1;
 				disc = dpp*(discount/100);
-				grand = sumVal-disc;
+				grand = sumVal+charge+pb-disc;
 				change = received-grand;
 
 				var totalProduct = totProd;
@@ -584,30 +625,38 @@ date_default_timezone_set('Asia/Jakarta');
 				var totalPrice = grand;
 				var discounts = disc;
 				var changeVal = change;
+				var servCharge = charge;
+				var pebe = pb;
 
 				$('#totalProd').val(totProd);
 				$('#dpp').val(dpp);
 				$('#disc').val(disc);
 				$('#totPrice').val(grand);
 				$('#change').val(change);
+				$('#charge').val(charge);
+				$('#pb').val(pb);
 
 				totalProduct = totalProduct.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 				grossPrice = "Rp. "+grossPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+				servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+				pebe = "Rp. "+pebe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 				$('#totalProduct').val(totalProduct);
 				$('#grossPrice').val(grossPrice);
 				$('#discount').val(discounts);
 				$('#totalPrice').val(totalPrice);
 				$('#changeAmount').val(changeVal);
+				$('#serviceCharge').val(servCharge);
+				$('#pb1').val(pebe);
 
 			}, "json" );
 		}
     });
 	
-	$('body').on('keyup', '.inps', function(event){
+	$(document).on('input', '.inps', function(event){
 		var $row = $(this).closest("tr"); //this is the closest common root of the input elements
     	var amount = parseInt($row.find('input[name^=productQty]').val());
         var unitPrice = parseFloat($row.find('input[name^=productPrice]').val());
@@ -616,13 +665,28 @@ date_default_timezone_set('Asia/Jakarta');
 		var curStock=$('#curProd_'+productID).val();
 		
 		var curSell = 0;
+		var totalServCharge5 = 0;
+		var totalPb1 = 0;
 		$( 'input[name^=productQty]' ).each( function( i , e ) {
 			var v = parseInt( $( e ).val() );
 			if ( !isNaN( v ) ){
 				var $rows = $(this).closest("tr");
 				var prodID = $rows.find('input[name^=productID]').val();
+				var _servCharge5 = $rows.find('input[name^=ori_servCharge5]').val();
+				var _pb1 = $rows.find('input[name^=ori_pb1]').val();
+				
 				if(prodID==productID){
 					curSell += v;
+					if(v != 0){
+						$rows.find('input[name^=servCharge5]').val(parseInt(_servCharge5) * v );
+						$rows.find('input[name^=pb10]').val(parseInt(_pb1) * v );
+						totalServCharge5 += parseInt(_servCharge5) * v;
+						totalPb1 += parseInt(_pb1) * v;
+					}
+				}
+				else{
+					totalServCharge5 += parseInt(_servCharge5);
+					totalPb1 += parseInt(_pb1);
 				}
 			}
 		} );
@@ -660,6 +724,8 @@ date_default_timezone_set('Asia/Jakarta');
 			var disc = 0;
 			var received = parseFloat($('#payAmount').val());
 			var change = parseFloat($('#change').val());
+			var charge = totalServCharge5;
+			var pb = totalPb1;
 
 			if ( isNaN( received ) ){
 				received = 0;
@@ -690,7 +756,7 @@ date_default_timezone_set('Asia/Jakarta');
 			totProd = sum;
 			dpp = sumVal;
 			disc = dpp*(discount/100);
-			grand = sumVal-disc;
+			grand = sumVal+charge+pb-disc;
 			change = received-grand;
 
 			var totalProduct = totProd;
@@ -698,6 +764,8 @@ date_default_timezone_set('Asia/Jakarta');
 			var totalPrice = grand;
 			var discounts = disc;
 			var changeVal = change;
+			var servCharge = charge;
+			var pebe = pb;
 
 			$('#totalProd').val(totProd);
 			$('#dpp').val(dpp);
@@ -710,12 +778,18 @@ date_default_timezone_set('Asia/Jakarta');
 			discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			pebe = "Rp. "+pebe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#totalProduct').val(totalProduct);
 			$('#grossPrice').val(grossPrice);
 			$('#discount').val(discounts);
 			$('#totalPrice').val(totalPrice);
 			$('#changeAmount').val(changeVal);
+			$('#charge').val(servCharge);
+			$('#pb').val(pebe);
+			$('#serviceCharge').val(servCharge);
+			$('#pb1').val(pebe);
 		}
 	});		
 	
@@ -731,18 +805,31 @@ date_default_timezone_set('Asia/Jakarta');
 		$('tr.deft').remove();
 		
 		var curSell = 0;
+		var totalServCharge5 = 0;
+		var totalPb1 = 0;
 		$( 'input[name^=productQty]' ).each( function( i , e ) {
 			var v = parseInt( $( e ).val() );
 			if ( !isNaN( v ) ){
 				var $rows = $(this).closest("tr");
 				var prodID = $rows.find('input[name^=productID]').val();
+				var _servCharge5 = $rows.find('input[name^=ori_servCharge5]').val();
+				var _pb1 = $rows.find('input[name^=ori_pb1]').val();
+				
 				if(prodID==productID){
 					curSell += v;
+					$rows.find('input[name^=servCharge5]').val(parseInt(_servCharge5) * v );
+					$rows.find('input[name^=pb10]').val(parseInt(_pb1) * v );
+					totalServCharge5 += parseInt(_servCharge5) * v;
+					totalPb1 += parseInt(_pb1) * v;
+				}
+				else{
+					totalServCharge5 += parseInt(_servCharge5) * v;
+					totalPb1 += parseInt(_pb1) * v;
 				}
 			}
 		} );
 		var stockAfter=curStock-curSell;
-		
+		console.log([totalServCharge5, totalPb1]);
 		if(stockAfter<0){
 			alert("PRODUCT OUT OF STOCK");
 			$('#'+prodStockID).val(0);
@@ -762,6 +849,7 @@ date_default_timezone_set('Asia/Jakarta');
 			var disc = 0;
 			var received = parseFloat($('#payAmount').val());
 			var change = parseFloat($('#change').val());
+			//var charge = parseFloat($('#charge').val());
 
 			if ( isNaN( received ) ){
 				received = 0;
@@ -811,40 +899,53 @@ date_default_timezone_set('Asia/Jakarta');
 				grand = 0;
 				disc = 0;
 				change = 0;
+				charge = 0;
+
 			}else{
+				
 				totProd = sum;
 				dpp = sumVal;
 				disc = dpp*(discount/100);
 				grand = sumVal-disc;
 				change = received-grand;
+				//charge = dpp*(5/100);
 			}
 
 			
 			var totalProduct = totProd;
 			var grossPrice = dpp;
-			var totalPrice = grand;
+			var totalPrice = grand+totalServCharge5+totalPb1;
 			var discounts = disc;
 			var changeVal = change;
+			var servCharge = totalServCharge5;
+			var pb = totalPb1
 
 			$('#totalProd').val(totProd);
 			$('#dpp').val(dpp);
 			$('#disc').val(disc);
 			$('#totPrice').val(grand);
 			$('#change').val(change);
+			$('#charge').val(servCharge);
+			$('#pb').val(totalPb1);
 
 			totalProduct = totalProduct.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 			grossPrice = "Rp. "+grossPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			pb = "Rp. "+pb.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#totalProduct').val(totalProduct);
 			$('#grossPrice').val(grossPrice);
 			$('#discount').val(discounts);
 			$('#totalPrice').val(totalPrice);
 			$('#changeAmount').val(changeVal);
+			$('#serviceCharge').val(servCharge);
+			$('#pb1').val(pb);
 		}
     });	
+	
 	
 	$('body').on('keyup', '#payment', function(event){
 		var pay = $('#payment').val();

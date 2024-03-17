@@ -14,6 +14,9 @@ if (isset($_POST['priceType']))
 	$description = $_POST['description'];
 	$productID = $_POST['productID'];
 	$price = $_POST['price'];
+	$servCharge = $_POST['servCharge'];
+	$pb1 = $_POST['pb1'];
+	$afterTax = $_POST['afterTax'];
 	$dateCreated = date("Y-m-d");
     $lastChanged = date("Y-m-d H:i:s");
 
@@ -24,7 +27,7 @@ if (isset($_POST['priceType']))
 	if(mysql_num_rows($checkID)==0){
 		// $query = mysql_query("INSERT INTO tabpriceheader(priceID,priceName,outletID,description,status,dateCreated,lastChanged) VALUES('$priceID', '$priceName', '$outletID', '$description', 1, '$dateCreated', '$lastChanged')");
 
-		$queryDetail = mysql_query("INSERT INTO tabpricedetail(id, priceID, productID, price, status, dateCreated, lastChanged) VALUES('$detail', '$priceType', '$productID', '$price', 1, '$dateCreated', '$lastChanged')");
+		$queryDetail = mysql_query("INSERT INTO tabpricedetail(id, priceID, productID, price, servCharge5, pb1, afterTax, status, dateCreated, lastChanged) VALUES('$detail', '$priceType', '$productID', '$price', '$servCharge', '$pb1', '$afterTax', 1, '$dateCreated', '$lastChanged')");
 
 		$journalID = date("YmdHis");
 		$act = "INSERT_PRICE_LIST_".$priceName;
@@ -37,7 +40,7 @@ if (isset($_POST['priceType']))
 
 		// $queryDetail = mysql_query("UPDATE tabpricedetail SET price='$price', lastChanged='$lastChanged' WHERE priceID = '$priceType' AND productID = '$productID'");
 
-		$queryDetail = mysql_query("UPDATE tabpricedetail SET priceID='$priceType', price='$price', lastChanged='$lastChanged' WHERE id='$id'");
+		$queryDetail = mysql_query("UPDATE tabpricedetail SET priceID='$priceType', price='$price', servCharge5='$servCharge', pb1='$pb1', afterTax='$afterTax', lastChanged='$lastChanged' WHERE id='$id'");
 
 		$journalID = date("YmdHis");
 		$actUpd = "UPDATE_PRICE_LIST_".$priceName;

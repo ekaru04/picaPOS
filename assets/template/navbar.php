@@ -54,8 +54,8 @@ $data = mysql_fetch_array($query);
   <!-- Google Font: Source Sans Pro -->
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700' rel='stylesheet'>
 	<style>
-		@media only screen and (max-width: 760px),
-		(min-device-width: 768px) and (max-device-width: 1024px)  
+		@media only screen and (max-width: 1760px),
+		/* (min-device-width: 768px) and (max-device-width: 1024px)   */
 		{
 			#mytable td, #mytable tr 
 			{
@@ -85,7 +85,7 @@ $data = mysql_fetch_array($query);
 		}
 
 		/* Smartphones (portrait and landscape) ----------- */
-		@media only screen
+		/*@media only screen
 		and (min-device-width : 320px)
 		and (max-device-width : 480px) 
 		{
@@ -95,16 +95,16 @@ $data = mysql_fetch_array($query);
 				margin: 0;
 				width: 320px; 
 			}
-		}
+		}*/
 
 		/* iPads (portrait and landscape) ----------- */
-		@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) 
+		/*@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) 
 		{
 			body 
 			{
 				width: 495px;
 			}
-		}
+		}*/
 		
 		.dropdown-menu li {
 		position: relative;
@@ -127,7 +127,7 @@ $data = mysql_fetch_array($query);
 <body>
 
   <!-- Navbar -->
-<nav class='navbar navbar-expand-lg navbar-white navbar-light sticky-top' style='background-color:#70CBEA;'>
+<nav class='navbar navbar-expand-lg navbar-white navbar-light sticky-top' style='background-color:#70CBEA;width:100%;'>
   	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     	<span class="navbar-toggler-icon"></span>
   	</button>
@@ -152,10 +152,12 @@ echo" <li class='nav-item dropdown'>
 		
 	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../restockIngredient'><b>Restock Ingredient</b></a>";
+echo"     <a class='dropdown-item' href='../restockItem'><b>Restock Item</b></a>";
 	}
-	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../outStock'><b>In/Out Ingredient</b></a>";
-	}
+	/** IN/OUT INGREDIENT */
+// 	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
+// echo"     <a class='dropdown-item' href='../outStock'><b>In/Out Ingredient</b></a>";
+// 	}
 	if(validMenuAccess('B002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../reqIn'><b>Production Input</b></a>";
 	}
@@ -172,22 +174,23 @@ echo"   </div>
       </li>";
 }
 
-if(validMenuAccess('C005')==1||validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
-echo" <li class='nav-item dropdown'>
-        <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
-        	<b>Store</b>
-        </a>
-        <div class='dropdown-menu'>";
-	if(validMenuAccess('C005')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../promo'><b>Promo</b></a>";
-	}
-	if(validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../activeVouchers'><b>Vouchers</b></a>";
-// echo"     <a class='dropdown-item' href='../sentToStore'><b>Restock Product</b></a>";
-	}
-echo"   </div>
-      </li>";
-}
+/** store */
+// if(validMenuAccess('C005')==1||validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
+// echo" <li class='nav-item dropdown'>
+//         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
+//         	<b>Store</b>
+//         </a>
+//         <div class='dropdown-menu'>";
+// 	if(validMenuAccess('C005')==1||validMenuAccess('GST1')==1){
+// echo"     <a class='dropdown-item' href='../promo'><b>Promo</b></a>";
+// 	}
+// 	if(validMenuAccess('C006')==1||validMenuAccess('GST1')==1){
+// echo"     <a class='dropdown-item' href='../activeVouchers'><b>Vouchers</b></a>";
+// // echo"     <a class='dropdown-item' href='../sentToStore'><b>Restock Product</b></a>";
+// 	}
+// echo"   </div>
+//       </li>";
+// }
 if(validMenuAccess('D001')==1||validMenuAccess('D002')==1||validMenuAccess('D003')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>

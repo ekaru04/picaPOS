@@ -16,7 +16,11 @@ if (isset($_POST['departmentCode']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mdepartment(departmentCode,departmentName,status,dateCreated,lastChanged) VALUES('$departmentCode', '$departmentName',  1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(departmentCode)+1 as count FROM mdepartment");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$departUniqID = "DRT".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mdepartment(departmentCode,departmentName,status,dateCreated,lastChanged) VALUES('$departUniqID', '$departmentName',  1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -29,7 +33,6 @@ if (isset($_POST['departmentCode']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mdepartment SET
-				departmentCode='$departmentCode',
 				departmentName='$departmentName',
 				lastChanged='$lastChanged'
 				WHERE departmentCode='$departmentCode'

@@ -45,7 +45,7 @@ if($_GET['closeID']==""){
 	$periode = $row['closePeriode'];
 	$fullName = $row['fullname'];
 	$grandTotal = $row['grandTotal'];
-	$totalReceived = $row['fullname'];
+	$totalReceived = $row['totalReceived'];
 	$grandTot = "Rp. ".number_format($grandTotal,0,",",".").",-";
 	$received= "Rp. ".number_format($totalReceived,0,",",".").",-";
 }			
@@ -129,8 +129,26 @@ if($_GET['closeID']==""){
                             <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TOTAL' />
                         </div>
                         <div class='col-4'>
+                            <input type='text' class='form-control' id='dppTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
+							<input type='hidden' name='dppTotal' id = 'dppTot' value='<?php echo $grandTotal; ?>'>
+                        </div>
+					</div>
+					<div class='row  mt-1 '>
+                        <div class='col-2 label'>
+                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TAX' />
+                        </div>
+                        <div class='col-4'>
+                            <input type='text' class='form-control' id='taxTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
+							<input type='hidden' name='taxTotal' id = 'taxTot' value='<?php echo $grandTotal; ?>'>
+                        </div>
+					</div>
+					<div class='row  mt-1 '>
+                        <div class='col-2 label'>
+                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='GRANDTOTAL' />
+                        </div>
+                        <div class='col-4'>
                             <input type='text' class='form-control' id='grandTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
-							<input type='text' name='grandTotal' id = 'grandTot' value='<?php echo $grandTotal; ?>'>
+							<input type='hidden' name='grandTotal' id = 'grandTot' value='<?php echo $grandTotal; ?>'>
                         </div>
 					</div>
 <?php
@@ -164,7 +182,7 @@ echo			   "<div class='row mt-1 '>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' id='totalReceived' style='width:300px' value='<?php echo $received; ?>'readonly required />
-							<input type='hidden' name='totalReceived' id = 'received' value='<?php echo $totalReceived; ?>'>
+							<input type='text' name='totalReceived' id = 'received' value='<?php echo $totalReceived; ?>'>
                         </div>
 					</div>
 					
@@ -192,6 +210,8 @@ echo			   "<div class='row mt-1 '>
 									  <th style='vertical-align:middle;'>NO</th>
 									  <th style='vertical-align:middle;'>ORDER ID</th>
 									  <th style='vertical-align:middle;'>ORDER DATE</th>
+									  <th style='vertical-align:middle;'>TOTAL</th>
+									  <th style='vertical-align:middle;'>TAX</th>
 									  <th style='vertical-align:middle;'>GRAND TOTAL</th>
 									  <th style='vertical-align:middle;'>RECEIVED</th>
 									  <th style='vertical-align:middle;'>PAYMENT METHOD</th>
@@ -242,6 +262,8 @@ echo			   "<div class='row mt-1 '>
 				{ data: 'no' },
 				{ data: 'orderID' },
 				{ data: 'orderDate' },
+				{ data: 'dpp' },
+				{ data: 'vat' },
 				{ data: 'total'},
 				{ data: 'paymentAmount'},
 				{ data: 'methodName' },
@@ -256,24 +278,33 @@ echo			   "<div class='row mt-1 '>
 		
 		var get = "detail_sum.php?closeID="+closeID+"&closeDate="+closeDate+"&outletID="+outletID+"&closeShift="+closeShift;
 		$.get(get, function( data ) {
+			var dpp = data.dpp;
+			var VAT = data.VAT;
 			var total = data.total;
 			var paymentAmount = data.paymentAmount;
 
 			// var totalA = dataA.total;
 			// var paymentAmountA = dataA.paymentAmount;
+			$('#dppTot').val(dpp);
+			$('#taxTot').val(VAT);
 			$('#grandTot').val(total);
 			$('#received').val(paymentAmount);
 			
 			// $('#payID').val(paymentAmountA);
-			
+			var dppTotal = dpp;
+			var taxTotal = VAT;
 			var grandTotal = total;
 			var totalReceived = paymentAmount;
 			// var splitA = paymentAmountA;
 			// var totalReceived = paymentAmount;
+			dppTotal = "Rp. "+dppTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			taxTotal = "Rp. "+taxTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			grandTotal = "Rp. "+grandTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalReceived = "Rp. "+totalReceived.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			// splitA = "Rp. "+splitA.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
+			$('#dppTotal').val(dppTotal);
+			$('#taxTotal').val(taxTotal);
 			$('#grandTotal').val(grandTotal);
 			$('#totalReceived').val(totalReceived);
 			// $('#totalReceived').val(totalReceived);

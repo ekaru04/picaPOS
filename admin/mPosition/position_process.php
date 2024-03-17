@@ -20,7 +20,11 @@ if (isset($_POST['positionID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==null){
-		$query = "INSERT INTO mposition(positionID,positionName,status,dateCreated,lastChanged) VALUES('$positionID', '$positionName',  1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(positionID)+1 as count FROM mposition");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$positionUniqID = "PTS".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mposition(positionID,positionName,status,dateCreated,lastChanged) VALUES('$positionUniqID', '$positionName',  1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -32,7 +36,6 @@ if (isset($_POST['positionID']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mposition SET
-				positionID='$positionID',
 				positionName='$positionName',
 				lastChanged='$lastChanged'
 				WHERE positionID='$positionID'

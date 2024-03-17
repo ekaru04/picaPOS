@@ -1,0 +1,14 @@
+1. datatable responsive (ActivityLog, CloseCashier, OrderDraft, restockIngredient, productionInput, restockProduct, Ingredients, Recipes, Products, itemStock, productCategories, itemCategories, measuremments, payment, supplier, customer, mPrices, priceList, transactionReport
+2. Bug tax ketika hapus produk (SUDAH)
+3. Diskon di kasir belum jalan
+4. bug received money tiap metode pembayaran di close cashier view
+5. Setting Loyaltynya (SUDAH)
+6. Transaction Reportnya
+7. Dashboard (Opsional)
+8. order process update ke production 
+9. close cashier jika diclose di tanggal kurang dari hari ini, ada bugnya gak bisa insert datanya ke tabcloseheader dan detail (SUDAH, ADA SESSIONNYA DI QUERY)
+10. ID Primary kasih format (categoryID, customerID, departmentCode, ingredientID, measurementID, outletID, paymentMethodID, positionID, productID, recipeID, stockID, categoryStockID, userID, orderDetailID, priceID,
+11. Label di BOLD
+12. Bug itemStock
+13. Update ke Production
+14. dashboard bug

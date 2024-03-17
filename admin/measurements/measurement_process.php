@@ -18,7 +18,11 @@ if (isset($_POST['measurementID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==null){
-		$query = "INSERT INTO mmeasurement(measurementID,measurementName,measurementCode,remarks,status,dateCreated,lastChanged) VALUES('$measurementID', '$measurementName', '$measurementCode', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(measurementID)+1 as count FROM mmeasurement");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$measUniqID = "MSR".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mmeasurement(measurementID,measurementName,measurementCode,remarks,status,dateCreated,lastChanged) VALUES('$measUniqID', '$measurementName', '$measurementCode', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -30,7 +34,6 @@ if (isset($_POST['measurementID']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mmeasurement SET
-				measurementID='$measurementID',
 				measurementName='$measurementName',
 				measurementCode='$measurementCode',
 				remarks='$remarks',

@@ -8,17 +8,17 @@ if (!isset($_SESSION["username"]))
 include("../../assets/config/db.php");      
 include('../../assets/template/navbar.php');
 
-if($_GET['id']==""){
-    $queryItemID = "SELECT count(id)+1 as id FROM tabstocktransaction";
-    $resItemID = mysql_query($queryItemID);
-    $row = mysql_fetch_array($resItemID);
-    $id = $row['id'];
-}else{
-    $id = $_GET['id'];
-    $query = "SELECT * FROM tabstocktransaction WHERE id ='$id'";
-    $res = mysql_query($query);
-    $row = mysql_fetch_array($res);
-}
+// if($_GET['transItemId']==""){
+//     $queryItemID = "SELECT count(id)+1 as id FROM tabstocktransaction";
+//     $resItemID = mysql_query($queryItemID);
+//     $row = mysql_fetch_array($resItemID);
+//     $id = $row['id'];
+// }else{
+//     $id = $_GET['id'];
+//     $query = "SELECT * FROM tabstocktransaction WHERE id ='$id'";
+//     $res = mysql_query($query);
+//     $row = mysql_fetch_array($res);
+// }
 ?>
 
 <style type="text/css">
@@ -35,7 +35,7 @@ if($_GET['id']==""){
                <a href='/picaPOS/admin/pengeluaran' style='text-decoration:none;color:black;'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
     </svg>
-                        IN/OUT ITEMS
+                        OUT ITEMS
                     </a>
            </h1>
           <div class="container-fluid">
@@ -43,7 +43,7 @@ if($_GET['id']==""){
             <div class="col-8">
                 <form id='formAdd' method='POST' action='stock_process.php' enctype="multipart/form-data">
                         <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' name="id" value='<?php echo $row[id]; ?>' />
+                           <input type='text' class='form-control-plaintext' name="id" value='' />
                         </div>
                     <div class='row  mt-3 '>
                         
@@ -53,7 +53,7 @@ if($_GET['id']==""){
                         <div class='col-3'>
                             <select class='select-cust form-control' name='type' id="type" style='width:300px;' required>
                                 <!-- <option value="">--CHOOSE TYPE--</option> -->
-                                <option id="IN" value='IN'>IN</option>
+                                <!-- <option id="IN" value='IN'>IN</option> -->
                                 <option id="OUT" value='OUT'>OUT</option>
                             </select>
                         </div>
@@ -129,43 +129,6 @@ if($_GET['id']==""){
                         </div>
                         <div class='col-2'>
                             <input type='text' class='type-input form-control' name='amount' placeholder='Amount' value="<?php echo $row[amount] ?>" style='width:300px' required />
-                        </div>
-                    </div>
-
-                    <div class='row mt-3'>
-                        <div class='col-3 label'>
-                           <input type='text' class='form-control-plaintext' disabled value='PIC' />
-                        </div>
-                        <div class='col-2'>
-                            <input type='text' class='type-input form-control' name='pic' placeholder='Person In Charge' value="<?php echo $row[pic]; ?>" style='width:300px' required />
-                        </div>
-                    </div>
-
-                    <div id="showPrice">
-                        <div class='row mt-3' >
-                            <div class='col-3 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='PRICE' />
-                            </div>
-                            <div class='col-2'>
-                                <input type='text' class='type-input form-control' name='price' placeholder='Price Product' style='width:300px' value='<?php echo $row[price] ?>' />
-                            </div>
-                        </div>
-                    
-
-                        <div class='row mt-3'>
-                            <div class='col-3 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='UPLOAD PHOTO' />
-                            </div>
-                            <div class='col-3'>
-                                <?php 
-                                    if($row['photoName']!=null){
-                                      echo  "<input type='file' class='type-input' name='fileUpload' style='width:300px' />";
-                                      echo $row[photoName];
-                                    }else{
-                                        echo "<input type='file' class='type-input' name='fileUpload' style='width:300px'/>";
-                                    }
-                                ?>
-                            </div>
                         </div>
                     </div>
 

@@ -177,7 +177,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                                         if($rowMeasurement[measurementID] == $rows[measurementID]){
                                          echo "<input type='hidden' class='type-input' name='measurementID[]' placeholder='..' value='$rowMeasurement[measurementID]'/>
 
-                                            <input type='text' class='type-input mr-2 form-control' name='' placeholder='..' value='$rowMeasurement[measurementName]'/>
+                                            <input type='text' class='type-input mr-2 form-control' readonly name='' placeholder='..' value='$rowMeasurement[measurementName]'/>
                                          ";
                                         }
                                       } 

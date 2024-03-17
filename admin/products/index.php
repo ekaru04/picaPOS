@@ -38,6 +38,7 @@ include('../../assets/template/navbar.php');
           </div>
       </div>
       <div class='height-10'></div>
+      <div class="table-responsive">
         <table class='table' id='itemTable' style='font-size:13px;'>
           <thead>
             <tr>
@@ -58,6 +59,7 @@ include('../../assets/template/navbar.php');
 
           </tbody>
         </table>
+      </div>
       </div>  
     </div>
     <!-- /.content -->
@@ -113,12 +115,14 @@ var itemTable = $('#itemTable').DataTable(
         buttons: [
             {
                 extend: 'excelHtml5',
+                title: 'pic.a.roll | Data Product',
                 exportOptions: {
                     columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
                 }
             },
             {
                 extend: 'pdfHtml5',
+                title: 'pic.a.roll | Data Product',
                 exportOptions: {
                     columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
                 }

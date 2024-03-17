@@ -24,7 +24,11 @@ if (isset($_POST['ingredientID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mingredient(ingredientID,ingredient,curStock,minStock,outletID,measurementID,remarks, status,dateCreated,lastChanged) VALUES('$ingredientID', '$ingredient', '$curStock', '$minStock', '$outletID', '$measurementID', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(ingredientID)+1 as count FROM mingredient");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$ingreUniqID = "IGR".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mingredient(ingredientID,ingredient,curStock,minStock,outletID,measurementID,remarks, status,dateCreated,lastChanged) VALUES('$ingreUniqID', '$ingredient', '$curStock', '$minStock', '$outletID', '$measurementID', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -36,7 +40,6 @@ if (isset($_POST['ingredientID']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mingredient SET
-				ingredientID='$ingredientID',
 				ingredient='$ingredient',
 				curStock='$curStock',
 				minStock='$minStock',

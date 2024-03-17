@@ -114,6 +114,8 @@ if (isset($_POST['outletID'])) {
 					'$duitTotal','$user', 1, '$dateCreated', '$lastUpdateDate')";						
 		$resT = mysql_query($queryT);
 
+		$updateStock = mysql_query("UPDATE mingredient SET curStock = '$newStock', lastChanged = '$lastUpdateDate' WHERE ingredientID = '$ingredientID'");
+
 		$journalID = date("YmdHis");
 		$actStock = "INSERT_HISTORY_FROM_REQUEST".$requestID;
 		$queryJournal = "INSERT INTO systemJournal(journalID,activity,menu,userID,dateCreated,logCreated,status) VALUES('$journalID','$actStock','HISTORY','$user','$dateCreated','$lastUpdateDate', 'SUCCESS')";

@@ -36,7 +36,7 @@ while($rowDate=mysql_fetch_array($resDate)){
 */
 
 
-$query = "SELECT * FROM tabitemtransaction a 
+$query = "SELECT a.transDate, s.supplierName, i.ingredient, m.outletName, a.amount, e.measurementName, a.discountPrice, a.afterDiscount, u.fullname, a.totalPrice FROM tabitemtransaction a 
             INNER JOIN msupplier s ON a.supplierID = s.supplierID
             INNER JOIN moutlet m ON a.outletID = m.outletID
             INNER JOIN mingredient i ON a.ingredientID = i.ingredientID
@@ -55,7 +55,7 @@ while ($row=mysql_fetch_array($res)){
 
     $totalPrice = "Rp. ".number_format($row["totalPrice"]).",-";
     $discountPrice = "Rp. ".number_format($row["discountPrice"]).",-";
-    $afterDiscount = "Rp. ".number_format($row["totalPrice"]).",-";
+    $afterDiscount = "Rp. ".number_format($row["afterDiscount"]).",-";
 
     
     $nestedData[no] = $x;
@@ -63,11 +63,11 @@ while ($row=mysql_fetch_array($res)){
     $nestedData[supplierName] = $row["supplierName"];
     $nestedData[outletName] = $row["outletName"];
     $nestedData[ingredient] = $row["ingredient"];
-    $nestedData[curStock] = $row["curStock"];
+    $nestedData[amount] = $row["amount"];
+    $nestedData[measurementName] = $row["measurementName"];
     $nestedData[totalPrice] = $totalPrice;
     $nestedData[discountPrice] = $discountPrice;
     $nestedData[afterDiscount] = $afterDiscount;
-    $nestedData[measurementName] = $row["measurementName"];
     $nestedData[fullname] = $row["fullname"];
 	
     // $nestedData[lastChanged] = $row["lastChanged"];

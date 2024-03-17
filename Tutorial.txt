@@ -1,0 +1,24 @@
+membuat data produk
+
+1. bikin data satuan/measurement (mmeasurement => menu masterdata - measurements)
+2. bikin data ingredient/bahan baku (mingredient => menu stock - ingredient)
+3. bikin data kategori (mcategory => menu master data - product categories)
+4. bikin data resep produk (mrecipe, mrecipedetails => menu stock - recipes)
+5. bikin data produk (mproduct=> menu stock - produts)
+6. bikin data harga (tabpriceheader => menu master data - master price)
+7. masukan harga barang dikategori harga tersebut (tabpricedetail => menu master data - price list)
+8. produk akan muncul di POS
+
+membuat metode pembayaran
+
+1. menu master data -> payment method
+
+membuat data stok (selain produk)
+
+1. bikin data stok kategori (mstockcategory => menu item categories)
+2. bikin data stok item (mstock => menu stock - stock item)
+
+restok bahan baku
+
+1. menu transaction -> restock ingredient
+

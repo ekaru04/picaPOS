@@ -25,7 +25,11 @@ if (isset($_POST['stockID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mstock(stockID,stockName,categoryStockID,measurementID,curStock,minStock,outletID,remarks, status,dateCreated,lastChanged) VALUES('$stockID', '$stockName', '$categoryStockID', '$measurementID', '$curStock', '$minStock', '$outletID', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(stockID)+1 as count FROM mstock");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$stockUniqID = "ITM".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mstock(stockID,stockName,categoryStockID,measurementID,curStock,minStock,outletID,remarks, status,dateCreated,lastChanged) VALUES('$stockUniqID', '$stockName', '$categoryStockID', '$measurementID', '$curStock', '$minStock', '$outletID', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");

@@ -28,11 +28,12 @@ $data = mysql_fetch_array($query);
 <!DOCTYPE html>
 <html>
 <head>
+	
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>picaPOS | POS Bakery System</title>
   <!-- Tell the browser to be responsive to screen width -->
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' >
   <!-- Font Awesome -->
   <link rel='stylesheet' href='../../assets/plugins/fontawesome-free/css/all.min.css'>
   <!-- Ionicons -->
@@ -106,7 +107,7 @@ $data = mysql_fetch_array($query);
 		}
 
 		/* Smartphones (portrait and landscape) ----------- */
-		@media only screen
+		/*@media only screen
 		and (min-device-width : 320px)
 		and (max-device-width : 480px) 
 		{
@@ -119,13 +120,13 @@ $data = mysql_fetch_array($query);
 		}
 
 		/* iPads (portrait and landscape) ----------- */
-		@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) 
+		/*@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) 
 		{
 			body 
 			{
 				width: 495px;
 			}
-		}
+		}*/
 		
 		.dropdown-menu li {
 		position: relative;
@@ -169,20 +170,20 @@ echo" <li class='nav-item dropdown' style='background-color:#70CBEA;'>
       </li>";
 }		
 
-if(validMenuAccess('A002')==1){		
-echo" <li class='nav-item'>
-		<a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
-        	<b>Pre Order</b>
-        </a>
-        <div class='dropdown-menu'>
-        	<a href='../preOrder' class='dropdown-item'><b>Pre-Order</b></a>
-        	<a href='../draftPO' class='dropdown-item'><b>List Pre-Order<span id='notif' class='badge badge-pill badge-danger' style='background-color:#f9f3ed;color:black;float:right;margin-bottom:-10px;'></span></b></a>
-        </div>
-      </li>";
-}	
+// if(validMenuAccess('A002')==1){		
+// echo" <li class='nav-item'>
+// 		<a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
+//         	<b>Pre Order</b>
+//         </a>
+//         <div class='dropdown-menu'>
+//         	<a href='../preOrder' class='dropdown-item'><b>Pre-Order</b></a>
+//         	<a href='../draftPO' class='dropdown-item'><b>List Pre-Order<span id='notif' class='badge badge-pill badge-danger' style='background-color:#f9f3ed;color:black;float:right;margin-bottom:-10px;'></span></b></a>
+//         </div>
+//       </li>";
+// }	
 
 ?>	
-<ul class='navbar-nav mr-auto'>
+	<!-- <ul class='navbar-nav mr-auto'>
       <li class='nav-item dropdown navbar-left'>
     	<a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
         	<b>Other</b>
@@ -193,7 +194,7 @@ echo" <li class='nav-item'>
         	<a href='#' class='dropdown-item'><b>List Pre-Order<span id='notif' class='badge badge-pill badge-danger' style='background-color:#f9f3ed;color:black;float:right;margin-bottom:-10px;'></span></b></a>
         </div>
       </li>
-    </ul>
+    </ul> -->
 
 <?php 
 if(validMenuAccess('A003')==1){		

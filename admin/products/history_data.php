@@ -7,7 +7,7 @@ $requestData = $_REQUEST;
 $product = $_GET['productID'];
 // echo $ingredient;
 
-$query = "SELECT h.transType, p.productName, h.amount, h.itemAmount, m.measurementName, u.fullname, h.remarks, h.dateCreated FROM tabproducthistory h 
+$query = "SELECT h.transType, p.productName, h.amount, h.amountLeft, m.measurementName, u.fullname, h.remarks, h.dateCreated FROM tabproducthistory h 
 INNER JOIN mproduct p ON h.productID = p.productID
 INNER JOIN mmeasurement m ON h.measurementID = m.measurementID
 INNER JOIN muser u ON h.userID = u.userID WHERE h.productID='$product' ORDER BY h.lastChanged DESC
@@ -21,7 +21,7 @@ while ($row=mysql_fetch_array($res)){
     $nestedData = array();
     
     $amount = number_format($row["amount"]);
-    $itemAmount = number_format($row["itemAmount"]);
+    $itemAmount = number_format($row["amountLeft"]);
 
     $nestedData[no] = $x;
     $nestedData[transType] = $row['transType'];

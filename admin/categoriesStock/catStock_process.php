@@ -18,7 +18,11 @@ if (isset($_POST['categoryStockID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==0){
-		$query = "INSERT INTO mstockcategory(categoryStockID,categoryStockName,categoryStockCode,remarks,status,dateCreated,lastChanged) VALUES('$categoryStockID', '$categoryStockName', '$categoryStockCode', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(categoryStockID)+1 as count FROM mstockcategory");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$stockCatUniqID = "SCG".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mstockcategory(categoryStockID,categoryStockName,categoryStockCode,remarks,status,dateCreated,lastChanged) VALUES('$stockCatUniqID', '$categoryStockName', '$categoryStockCode', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$act = "INSERT_CATEGORY_".$categoryStockName;
@@ -30,7 +34,6 @@ if (isset($_POST['categoryStockID']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mstockcategory SET
-				categoryStockID='$categoryStockID',
 				categoryStockName='$categoryStockName',
 				categoryStockCode='$categoryStockCode',
 				remarks='$remarks',

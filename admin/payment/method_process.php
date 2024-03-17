@@ -18,7 +18,11 @@ if (isset($_POST['methodID']))
 	$rowCheck = mysql_fetch_array($checkID);
 
 	if(mysql_num_rows($checkID)==null){
-		$query = "INSERT INTO mpaymentmethod(methodID,methodName,methodType,remarks,status,dateCreated,lastChanged) VALUES('$methodID', '$methodName', '$methodType', '$remarks', 1, '$dateCreated', '$lastChanged')";
+		$getNewID = mysql_query("SELECT COUNT(methodID)+1 as count FROM mpaymentmethod");
+		$rowNewID = mysql_fetch_array($getNewID);
+		$newID = $rowNewID['count'];
+		$payUniqID = "PYM".str_pad($newID, 4, "0", STR_PAD_LEFT);
+		$query = "INSERT INTO mpaymentmethod(methodID,methodName,methodType,remarks,status,dateCreated,lastChanged) VALUES('$payUniqID', '$methodName', '$methodType', '$remarks', 1, '$dateCreated', '$lastChanged')";
 		$res = mysql_query($query);
 
 		$journalID = date("YmdHis");
@@ -30,7 +34,6 @@ if (isset($_POST['methodID']))
 		echo "<script type='text/javascript'>alert('Data tersimpan!')</script>";
 	}else{
 		$query = "UPDATE mpaymentmethod SET
-				methodID='$methodID',
 				methodName='$methodName',
 				methodType='$methodType',
 				remarks='$remarks',

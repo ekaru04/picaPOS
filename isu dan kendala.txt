@@ -1,0 +1,5 @@
+kasir
+1. Masih bug untuk taxnya
+
+draft
+1. masih belum ada tax dan semacamnya

@@ -81,17 +81,17 @@ $resN = mysql_fetch_array($queryNewc);
 
         <div class="row">
             <div class="col mt-5">
-                <div style="width: 500px;margin: 0px auto;">
-                  <h4><b><a href="../summaryProduct">Summary Penjualan Produk</a></b></h4>
-
-                   <canvas id="chartProduct"></canvas>
-                </div>                    
+                <div style="width: 450px;margin: 0px auto;">
+                    <h4><b><a href="../summaryProduct">Summary Penjualan Produk</a></b></h4>
+    
+                    <canvas id="chartProduct"></canvas>
+                </div> 
             </div>
-            <div class="col mt-5">
-                <div style="width: 500px;margin: 0px auto;">
-                  <h4><b><a href="../summaryCategory">Summary Penjualan Kategori Produk</a></b></h4>
-
-                   <canvas id="chartCategory"></canvas>
+                <div class="col mt-5">
+                    <div style="width: 450px;margin: 0px auto;">
+                      <h4><b><a href="../summaryCategory">Summary Penjualan Kategori Produk</a></b></h4>
+    
+                    <canvas id="chartCategory"></canvas>
                 </div>
             </div>
 
@@ -134,6 +134,7 @@ $resN = mysql_fetch_array($queryNewc);
 <script>
     var chartProducts, chartCategories;
     $.getJSON("http://localhost/picaPOS/admin/dashboard/product_list.php", function(data) {
+    // $.getJSON("http://eservice/askon.co.id/picaPOS/admin/dashboard/product_list.php", function(data) {
 
     var isi_labels = [];
     var isi_data = [];
@@ -191,6 +192,7 @@ $resN = mysql_fetch_array($queryNewc);
 });
 
 
+// $.getJSON("http://localhost/picaPOS/admin/dashboard/category_list.php", function(data) {
 $.getJSON("http://localhost/picaPOS/admin/dashboard/category_list.php", function(data) {
 
     var isi_labels = [];
