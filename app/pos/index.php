@@ -2,12 +2,14 @@
 session_start();
 if (!isset($_SESSION["username"])) 
 {
-    $URL="/picapos/app"; 
+	$URL="/picapos/app"; 
     echo "<script type='text/javascript'>location.replace('$URL');</script>";
 }
 include("../../assets/config/db.php");		
 include('../../assets/template/navbar_app.php');
 date_default_timezone_set('Asia/Jakarta');
+
+
 
 ?>
 <style>
@@ -83,6 +85,23 @@ date_default_timezone_set('Asia/Jakarta');
     // $supplierID = $row['supplierID'];
     // $suppUCode = "SPL-".$date.-$supplierID;
 }
+
+
+$today = date('Y-m-d');
+$getOpenCashier = mysql_query("SELECT * FROM tabopencashier WHERE openDate = '$today'");
+$fetchOpenCashier = mysql_fetch_array($getOpenCashier);
+$dateOpen = $fetchOpenCashier['openDate'];
+$nominal = $fetchOpenCashier['nominalOpen'];
+
+if($dateOpen == 0) {
+
+	echo "<script type='text/javascript'>alert('Open Cashier belum terisi!')</script>";
+	$urls="/picapos/app/openCashier";
+	echo "<script type='text/javascript'>location.replace('$urls');</script>";
+	// exit;
+
+}
+
 ?>
 <div>
 		<div class='clear height-20 mt-3'></div>

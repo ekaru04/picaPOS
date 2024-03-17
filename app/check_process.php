@@ -20,7 +20,7 @@ $rowUser = mysql_num_rows($query);
 			$_SESSION['outletID'] = $cek['outletID'];
 
 			echo "<script type='text/javascript'>alert('Berhasil Login')</script>";
-			$URL="/picaPOS/app/order"; 
+			$URL="/picaPOS/app/openCashier"; 
     		echo "<script type='text/javascript'>location.replace('$URL');</script>";
 		}
 	}
