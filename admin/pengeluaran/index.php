@@ -175,36 +175,76 @@ $("#generate").click(function(){
   var date1 = $('#date1').val();
   var date2 = $('#date2').val();
 
-  var grandTotal = $('#grandTotal').val();
+  var grandTotal = parseFloat($('#grandTotal').val()); // Konversi nilai grandTotal menjadi float
 
   var getData = "sum_total_stock.php?date1="+date1+"&date2="+date2;
+  var totalStock = 0; // Variabel untuk menyimpan total stock
   $.get(getData, function( data ) {
-			var total = data.total;
-      
-        var totalItem = total;
-        console.log(parseFloat(grandTotal+=totalItem));
-        
-        $('#totalItems').val(totalItem);
-        totalItem = "Rp. "+totalItem.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-        $('#totalItem').val(totalItem);
-        
-		}, "json" );
+    var total = parseFloat(data.total); // Konversi nilai total menjadi float
+    totalStock = total; // Simpan total stock
+    var totalItem = total;
+    console.log(grandTotal += totalItem); // Tambahkan total stock ke grandTotal
+    $('#totalItems').val(totalItem);
+    totalItem = "Rp. "+totalItem.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+    $('#totalItem').val(totalItem);
+  }, "json" );
 
   var getDataIngre = "sum_total_ingredient.php?date1="+date1+"&date2="+date2;
+  var totalIngredient = 0; // Variabel untuk menyimpan total ingredient
   $.get(getDataIngre, function( data ) {
-			var total = data.total;
+    var total = parseFloat(data.total); // Konversi nilai total menjadi float
+    totalIngredient = total; // Simpan total ingredient
+    console.log(grandTotal += totalIngredient); // Tambahkan total ingredient ke grandTotal
+    $('#totalIngres').val(total);
+    total = "Rp. "+total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+    $('#totalIngre').val(total);
+  }, "json" );
 
-        var totalIngre = total;
-        console.log(parseFloat(grandTotal+=totalIngre));
-        
-        $('#totalIngres').val(totalIngre);
-        totalIngre = "Rp. "+totalIngre.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-        $('#totalIngre').val(totalIngre);
-			
-		}, "json" );
-
-
+  // Setelah kedua permintaan selesai, lakukan total dari totalStock dan totalIngredient
+  // dan tampilkan total keseluruhan
+  $(document).ajaxStop(function() {
+    var totalAll = totalStock + totalIngredient;
+    console.log(totalAll); // Total keseluruhan
+    totalAll = "Rp. "+totalAll.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+    $('#grandTotal').val(totalAll); // Tampilkan total keseluruhan
+  });
 });
+
+// $("#generate").click(function(){
+
+//   var date1 = $('#date1').val();
+//   var date2 = $('#date2').val();
+
+//   var grandTotal = $('#grandTotal').val();
+
+//   var getData = "sum_total_stock.php?date1="+date1+"&date2="+date2;
+//   $.get(getData, function( data ) {
+// 			var total = data.total;
+      
+//         var totalItem = total;
+//         console.log(parseFloat(grandTotal+=totalItem));
+        
+//         $('#totalItems').val(totalItem);
+//         totalItem = "Rp. "+totalItem.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+//         $('#totalItem').val(totalItem);
+        
+// 		}, "json" );
+
+//   var getDataIngre = "sum_total_ingredient.php?date1="+date1+"&date2="+date2;
+//   $.get(getDataIngre, function( data ) {
+// 			var total = data.total;
+
+//         var totalIngre = total;
+//         console.log(parseFloat(grandTotal+=totalIngre));
+        
+//         $('#totalIngres').val(totalIngre);
+//         totalIngre = "Rp. "+totalIngre.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+//         $('#totalIngre').val(totalIngre);
+			
+// 		}, "json" );
+
+
+// });
     
 var itemTableIng = $('#itemTableIngredient').DataTable(
     {

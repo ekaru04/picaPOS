@@ -93,14 +93,11 @@ $fetchOpenCashier = mysql_fetch_array($getOpenCashier);
 $dateOpen = $fetchOpenCashier['openDate'];
 $nominal = $fetchOpenCashier['nominalOpen'];
 
-if($dateOpen == 0) {
-
-	echo "<script type='text/javascript'>alert('Open Cashier belum terisi!')</script>";
-	$urls="/picapos/app/openCashier";
-	echo "<script type='text/javascript'>location.replace('$urls');</script>";
-	// exit;
-
-}
+// if($dateOpen == 0) {
+// 	echo "<script type='text/javascript'>alert('Open Cashier belum terisi!')</script>";
+// 	$urls="/picapos/app/openCashier";
+// 	echo "<script type='text/javascript'>location.replace('$urls');</script>";
+// }
 
 ?>
 <div>

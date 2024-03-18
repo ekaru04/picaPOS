@@ -9,12 +9,12 @@ $query = "SELECT SUM(afterDiscount) AS total FROM tabitemtransaction WHERE trans
 $res = mysql_query($query);
 
 $x=0;
-$data = array();
+$dataIngre = array();
 $row=mysql_fetch_array($res);
 
 
-$data[total] = $row['total'];
+$dataIngre[total] = $row['total'];
 
 
-echo json_encode($data);
+echo json_encode($dataIngre);
 ?>
