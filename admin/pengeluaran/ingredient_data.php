@@ -15,11 +15,13 @@ $requestData = $_REQUEST;
 $query = mysql_query("SELECT * FROM muser WHERE userID = '$_SESSION[userID]'");
 $data = mysql_fetch_array($query);
 
-$query = "SELECT it.transDate, i.ingredient, m.measurementName, it.amount, it.itemAmount, it.totalPrice, it.discountPrice, it.afterDiscount, u.fullname, it.dateCreated FROM tabitemtransaction it 
+$query = "SELECT it.transDate, i.ingredient, m.measurementName, it.amount, it.itemAmount, 
+                it.totalPrice, it.discountPrice, it.afterDiscount, u.fullname, it.dateCreated 
+            FROM tabitemtransaction it 
             INNER JOIN mingredient i ON i.ingredientID = it.ingredientID
             INNER JOIN mmeasurement m ON m.measurementID = it.measurementID
             INNER JOIN muser u ON u.userID = it.userID
-            WHERE it.dateCreated BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]'";
+            WHERE it.transDate BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]'";
 $res = mysql_query($query);
 
 $x=0;

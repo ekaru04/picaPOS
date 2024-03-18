@@ -17,7 +17,7 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='entry-box-basic'>
-      <h4 align='center'>PENGELUARAN</h4>
+      <h4 class='text-center'>PENGELUARAN</h4>
       <div class="row mb-2">
           <div class="col">
             <h1 class="m-0 text-dark text-center"></h1>
@@ -102,15 +102,22 @@ if (!isset($_SESSION["username"]))
       <div class="row">
         <div class="form-group col-sm-4">
           <h6><b>Total Ingredient (Rp.)</b></h6>
-          <input type="text" class="form-control" readonly>
+          <input type="text" name="totalIngre" id="totalIngre" class="form-control" readonly>
+          <input type="hidden" name="totalIngre" id="totalIngres" class="form-control" readonly>
         </div>
         <div class="form-group col-sm-4">
           <h6><b>Total Stock Item (Rp.)</b></h6>
-          <input type="text" class="form-control" readonly>
+          <input type="text" name="totalItem" id="totalItem" class="form-control" readonly>
+          <input type="hidden" name="totalItem" id="totalItems" class="form-control" readonly>
         </div>
         <div class="form-group col-sm-4">
           <h6><b>Total Keseluruhan (Rp.)</b></h6>
-          <input type="text" class="form-control" readonly>
+          <input type="text" name="grandTotal" id="grandTotal" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="text-center">
+        <div class="">
+          <button type='button' id='generate' class='btn btn-info' >GENERATE</button>
         </div>
       </div>
     </div>
@@ -162,6 +169,42 @@ function searchDateJournal()
           alert("Invalid Date Range!");
       }
 };
+
+$("#generate").click(function(){
+
+  var date1 = $('#date1').val();
+  var date2 = $('#date2').val();
+
+  var grandTotal = $('#grandTotal').val();
+
+  var getData = "sum_total_stock.php?date1="+date1+"&date2="+date2;
+  $.get(getData, function( data ) {
+			var total = data.total;
+      
+        var totalItem = total;
+        console.log(parseFloat(grandTotal+=totalItem));
+        
+        $('#totalItems').val(totalItem);
+        totalItem = "Rp. "+totalItem.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+        $('#totalItem').val(totalItem);
+        
+		}, "json" );
+
+  var getDataIngre = "sum_total_ingredient.php?date1="+date1+"&date2="+date2;
+  $.get(getDataIngre, function( data ) {
+			var total = data.total;
+
+        var totalIngre = total;
+        console.log(parseFloat(grandTotal+=totalIngre));
+        
+        $('#totalIngres').val(totalIngre);
+        totalIngre = "Rp. "+totalIngre.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+        $('#totalIngre').val(totalIngre);
+			
+		}, "json" );
+
+
+});
     
 var itemTableIng = $('#itemTableIngredient').DataTable(
     {

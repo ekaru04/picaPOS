@@ -18,7 +18,7 @@ $query = "SELECT st.transItemDate, s.stockName, m.measurementName, st.amountBuy,
             INNER JOIN mstock s ON s.stockID = st.stockID
             INNER JOIN mmeasurement m ON m.measurementID = st.measurementID
             INNER JOIN muser u ON u.userID = st.userID
-            WHERE st.dateCreated BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]'";
+            WHERE st.transItemDate BETWEEN '$_REQUEST[date1]' AND '$_REQUEST[date2]'";
 $res = mysql_query($query);
 
 $x=0;
