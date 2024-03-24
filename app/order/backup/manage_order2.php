@@ -2,14 +2,12 @@
 session_start();
 if (!isset($_SESSION["username"])) 
 {
-	$URL="/picapos/app"; 
+    $URL="/picapos/app"; 
     echo "<script type='text/javascript'>location.replace('$URL');</script>";
 }
 include("../../assets/config/db.php");		
 include('../../assets/template/navbar_app.php');
 date_default_timezone_set('Asia/Jakarta');
-
-
 
 ?>
 <style>
@@ -64,108 +62,123 @@ date_default_timezone_set('Asia/Jakarta');
 	}
 </style>
 <?php
-	$outletID = $_SESSION[outletID]; //ambil outlet dari session sesuai yang login
+	$orderID = $_GET[orderID]; //ambil outlet dari session sesuai yang login
+	$outletID = $_SESSION[outletID];
 
 	$today = date('Y-m-d');
-	$res = mysql_query("SELECT count(orderID) orderCount FROM tabOrderHeader WHERE orderDate = '$today' AND orderID LIKE '%RCP%'");
+	$res = mysql_query("SELECT h.*, p.*, v.voucherName, v.voucherRequirement, v.voucherSaldo, v.description voucherDesc FROM tabOrderHeader h 
+		INNER JOIN tabpaymentorder p ON h.orderID = p.orderID
+		LEFT JOIN mVoucher v ON p.voucherID = v.voucherCode WHERE p.orderID = '$orderID'");
 	$row = mysql_fetch_array($res);
 
-	$orderNo = $row[orderCount]+1;
+	$orderNo = $row['orderNo'];
+	
+	if($row['isVoucher']==0){
+		$row[voucherSaldo] =0;
+		$row[voucherRequirement]=0;
+	}
 
-	if($_GET['customerID']==""){
-    $queryItemID = "SELECT count(customerID)+1 as customerID FROM mcustomer";
-    $resItemID = mysql_query($queryItemID);
-    $row = mysql_fetch_array($resItemID);
-    $customerID = $row['customerID'];
-}else{
-    $customerID = $_GET['customerID'];
-    $query = "SELECT * FROM mcustomer WHERE customerID ='$customerID'";
-    $res = mysql_query($query);
-    $row = mysql_fetch_array($res);
-    // $supplierID = $row['supplierID'];
-    // $suppUCode = "SPL-".$date.-$supplierID;
-}
+	if($row[discountPrice]==0){
+		$row[discountPrice] = 0;
+		$row[discountPerc] = 0;
+	}
 
+	$change = $row[paymentAmount]-$row[total];
 
-$today = date('Y-m-d');
-$getOpenCashier = mysql_query("SELECT * FROM tabopencashier WHERE openDate = '$today'");
-$fetchOpenCashier = mysql_fetch_array($getOpenCashier);
-$dateOpen = $fetchOpenCashier['openDate'];
-$nominal = $fetchOpenCashier['nominalOpen'];
+	$dpp = "Rp. ".number_format($row[dpp],0,",",".").",-";
+	$disc = "Rp. ".number_format($row[discountPrice],0,",",".").",-";
+	$grand = "Rp. ".number_format($row[total],0,",",".").",-";
+	$payment = "Rp. ".number_format($row[paymentAmount],0,",",".").",-";
+	$changes = "Rp. ".number_format($change,0,",",".").",-";
+	
 
-if($dateOpen == 0) {
-	echo "<script type='text/javascript'>alert('Open Cashier belum terisi!')</script>";
-	$urls="/picapos/app/openCashier";
-	echo "<script type='text/javascript'>location.replace('$urls');</script>";
-}
+	$resD = mysql_query("SELECT max(id) max FROM tabOrderDetail d WHERE d.orderID = '$orderID' AND d.status = 0");
+	$rowD = mysql_fetch_array($resD);
+	$itemCount = $rowD[max];
+
+	/* Ambil ID Customer dari DB */
+	$cust = mysql_query("SELECT * FROM taborderheader h 
+		INNER JOIN mcustomer c ON h.payerName = c.customerName 
+		INNER JOIN tabpriceheader p ON h.priceID = p.priceID
+		WHERE h.payerName = '$row[payerName]'")or die(mysql_error());
+	$fetch = mysql_fetch_array($cust);
+	$priceID = $fetch[payerName];
+
 
 ?>
 <div>
 		<div class='clear height-20 mt-3'></div>
 		<div class="container-fluid">
+			<h4>
+				<a href='/picaPOS/app/order' style='text-decoration:none;color:black;'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+</svg>
+					BACK
+				</a>
+			</h4>
 			<form id='formOrder' method='POST' action='order_process.php'>
 				<div class='row'>
 					<div class='col-lg-4'>
-						<div class='leftist'>							
-							<h3><b>ORDER CASHIER</b></h3>
+						<div class='leftist'>
 							<div class='row mb-2'>
 								<div class='col-3'>
-									<input type='text' readonly class="form-control-plaintext" value='Order No:'/>
-									<!-- <input type='text' readonly class="form-control-plaintext" style='width:100%;' value='Order No:'/> -->
+									<input type='text' readonly class="form-control-plaintext" style='width:100%;' value='Order No:'/>
+									<input type='hidden' name ='orderID' value='<?php echo $orderID;?>'/>
 								</div>
-								<div class='col-2'>
-									<input type='text' readonly class="form-control-plaintext" id ='orderNo' name ='orderNo' style='font-weight:bold;' value='<?php echo $orderNo;?>'/>
-									<!-- <input type='text' readonly class="form-control-plaintext" id ='orderNo' name ='orderNo' style='margin-left:-30px;width:100%;font-weight:bold;' value='<?php echo $orderNo;?>'/> -->
+								<div class='col-3'>
+									<input type='text' readonly class="form-control-plaintext" id ='orderNo' name ='orderNo' style='margin-left:-30px;width:100%;font-weight:bold;' value='<?php echo $orderNo;?>'/>
 								</div>
-								<div class='col-2'>
-									<input type='text' readonly class="form-control-plaintext" value='Tgl:'/>
-									<!-- <input type='text' readonly class="form-control-plaintext" style='margin-left:50px;width:50%;' value='Date:'/> -->
+								<div class='col-3'>
+									<input type='text' readonly class="form-control-plaintext" style='margin-left:50px;width:50%;' value='Date:'/>
 								</div>
-								<div class='col-5'>
-									<input type='date' readonly class="form-control-plaintext" id ='orderDate' name ='orderDate' style='float:right;text-align:right;font-weight:bold;' value='<?php echo date('Y-m-d');?>'/>
-									<!-- <input type='date' readonly class="form-control-plaintext" id ='orderDate' name ='orderDate' style='float:right;text-align:right;width:180%;font-weight:bold;margin-left:-60px;margin-right:-20px;' value='<?php echo date('Y-m-d');?>'/> -->
+								<div class='col-3'>
+									<input type='date' readonly class="form-control-plaintext" id ='orderDate' name ='orderDate' style='float:right;text-align:right;width:180%;font-weight:bold;margin-left:-60px;margin-right:-20px;' value='<?php echo $row[orderDate];?>'/>
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<select class="mb-2 form-control" id="methodList" name='priceID' required>
-										<option value="">-List Tipe Order-</option>
+									<select class="mb-2 form-control" id="methodList" disabled>
+										<option value="">-List Order Type-</option>
 										<?php
-										$queryPay = mysql_query("SELECT * FROM tabpriceheader ORDER BY priceID ASC");
+										$queryPay = mysql_query("SELECT * FROM tabpriceheader WHERE priceID = '$row[priceID]' ORDER BY priceID ASC");
+										$fetchPay = mysql_fetch_array($queryPay);
+										if(mysql_num_rows($queryPay)!=0):
+											echo "<option value='$fetchPay[priceID]' selected>$fetchPay[priceName]</option>";
+										else:
 											while($rowMeth = mysql_fetch_array($queryPay)){
 												echo "<option value='$rowMeth[priceID]'>$rowMeth[priceName]</option>";
 											}
+										endif;
 										?>
 									</select>
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<input type='hidden' id='customerID' name='customerID' value="<?php echo $customerID; ?>" />
+									<?php 
+										$query = mysql_query("SELECT COUNT(customerID)+1 AS customerID FROM mcustomer");
+										$fetchQ = mysql_fetch_array($query);
 
-									<select class="mb-2 form-control" id="listCust" onchange="list()">
-										<option value="">-List Pelanggan-</option>
-										<?php
-										$queryCust = mysql_query("SELECT * FROM mcustomer ORDER BY customerID ASC");
-											while($rowCust = mysql_fetch_array($queryCust)){
-												echo "<option value='$rowCust[customerID]'>$rowCust[customerName]</option>";
-											}
-										?>
-									</select>
+										if($fetch['customerID'] != 0):
+											echo "<input type='text' id='customerID' name='customerID' value=$fetch[customerID]>";
+										else:
+											echo "<input type='text' id='customerID' name='customerID' value=$fetchQ[customerID]>";
+										endif;
+									?>
 									
-									<input type='text' class="form-control" id ='customerName' name ='customerName' style='width:100%;' placeholder='Insert Nama Pelanggan'/>
-									<input type='hidden' id='itemCount' name='itemCount' value='0'/>
+									<input type='text' class="form-control" id ='customerName' name ='customerName' style='width:100%;' placeholder='Insert Customer Name' value='<?php echo $row[payerName];?>'/>
+									<input type='hidden' id='itemCount' name='itemCount' value='<?php echo $itemCount;?>'/>
 									<input type='hidden' id='status' name='status'/>
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<input type='text' class="form-control" id ='customerPhone' name ='customerPhone'  style='width:100%;' placeholder='Insert No. Telp Pelanggan'/>
+									<input type='text' class="form-control" id ='customerPhone'  name ='customerPhone'  style='width:100%;' placeholder='Insert Customer Phone No.'  value='<?php echo $row[payerPhone];?>'/>
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<input type='text' class="form-control" id ='customerEmail' name ='customerEmail'  style='width:100%;' placeholder='Insert Email Pelanggan'/>
+									<input type='text' class="form-control" id ='customerEmail' name ='customerEmail'  style='width:100%;' placeholder='Insert Customer Email'  value='<?php echo $row[payerEmail];?>'/>
 								</div>
 							</div>
 							<div class='row mb-2'>
@@ -173,9 +186,9 @@ if($dateOpen == 0) {
 									<table class='table-responsive' id='tableProduct' style='font-size:13px;' >
 										<thead>
 											<tr>
-												<th class = 'table-header' style='vertical-align:middle;text-align:center;'>Produk</th>
+												<th class = 'table-header' style='vertical-align:middle;text-align:center;'>Product</th>
 												<th class = 'table-header' style='vertical-align:middle;text-align:center;'></th>
-												<th class = 'table-header' style='vertical-align:middle;text-align:center;'>Harga</th>
+												<th class = 'table-header' style='vertical-align:middle;text-align:center;'>Price</th>
 												<th class = 'table-header' style='vertical-align:middle;text-align:center;'>Qty</th>
 												<th class = 'table-header' style='vertical-align:middle;text-align:center;'></th>
 												<th class = 'table-header' style='vertical-align:middle;text-align:center;'>Subtotal</th>
@@ -183,19 +196,26 @@ if($dateOpen == 0) {
 											</tr>
 										</thead>
 										<tbody>
-											<tr class='deft'>
-												<td class = 'table-details' style='text-align:left;width:35%;padding-left:5px;'>Nama Produk</td>
+							<?php
+								$resultD = mysql_query("SELECT d.*,p.productName FROM tabOrderDetail d INNER JOIN mProduct p ON p.productID = d.productID WHERE d.orderID = '$orderID' AND d.status = 0");
+								while($rows = mysql_fetch_array($resultD)){
+									$subtot = number_format($rows[productSubtotal],0,",",".");
+									echo"
+										<tr id='additem$rows[id]'>
+												<td class = 'table-details' style='text-align:left;width:35%;padding-left:5px;'>$rows[productName]</td>
 												<td class = 'table-details' style='text-align:left;width:1%;'>&nbsp;&nbsp;Rp. </td>
 												<td class = 'table-details' style='text-align:right;width:29%;padding-right:5px;'>
-													<input type="text" name="productPrice[]" class="inps" style="width:100px;" value="0">
+													<input type='hidden' name='id[]' value='$rows[id]'/>
+													<input type='hidden' name='productID[]' value='$rows[productID]'/>
+													<input type='text' name='productPrice[]' class='inps' style='width:100px;' value='$rows[productPrice]'>
 												</td>
 												<td class = 'table-details' style='text-align:center;width:5%;'>
-													<input type="text" name="productQty[]" class="inps" style="width:40px;" value="0">
-													<input type="hidden" name="productSubtotal[]" style="width:40px;" value="0">
+													<input type='text' name='productQty[]' class='inps' style='width:40px;' value='$rows[productAmount]'>
+													<input type='hidden' name='productSubtotal[]' value='$rows[productSubtotal]'>
 												</td>
 												<td class = 'table-details' style='text-align:left;width:1%;padding-left:5px;'>Rp. </td>
 												<td class = 'table-details' style='text-align:right;width:24%;padding-right:5px;'>
-													<input type="text" name="productSutot[]" readonly="" style="width:100px;" value="0">
+													<input type='text' name='productSutot[]' readonly style='width:100px;' value='$subtot'>
 												</td>
 												<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>
 													<button type='button' class='del' style='border:none;margin-left:-10px;background-color:rgba(255, 255, 255, 0);'>
@@ -205,11 +225,11 @@ if($dateOpen == 0) {
 														</svg>
 												   </button>
 												</td>
-											</tr>
+											</tr>	
+									";
+								}
+							?>
 										</tbody>
-										
-										
-										
 									</table>
 								</div>
 							</div>
@@ -217,18 +237,18 @@ if($dateOpen == 0) {
 								<div class='col'>
 									<div class='row'>
 										<div class='col-3'>
-											<b>Total Produk</b>
+											<b>Total Product</b>
 										</div>
 										<div class='col-3'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalProduct'  style='float:right;text-align:right;width:80px;font-weight:bold;vertical-align:top;' value='0'/>
-											<input type='hidden' name='totalProduct' id='totalProd' value='0'/>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalProduct'  style='float:right;text-align:right;width:80px;font-weight:bold;vertical-align:top;' value='<?php echo $row[orderAmount];?>'/>
+											<input type='hidden' name='totalProduct' id='totalProd' value='<?php echo $row[orderAmount];?>'/>
 										</div>
 										<div class='col-2'>
 											<b>Total</b>
 										</div>
 										<div class='col-4'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='grossPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id='dpp' name='dpp' value='0'/>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='grossPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='<?php echo $dpp;?>'/>
+											<input type='hidden' id='dpp' name='dpp' value='<?php echo $row[dpp];?>'/>
 										</div>
 									</div>
 									<div class='row'>
@@ -237,143 +257,115 @@ if($dateOpen == 0) {
 										</div>
 									</div>
 									<div class='row'>
-										<!-- <div class='col-2'>
+										<div class='col-2'>
 											<b>Discount</b>
-										</div> -->
+										</div>
 										<div class='col-4'>
-											<input type='hidden' readonly class="form-control-sm form-control-plaintext" id ='discount' style='float:right;text-align:right;width:100px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id='disc' name='discount' value='0'/>
-											<input type='hidden' id='discPer' name='discountPerc' value='0'/>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='discount' style='float:right;text-align:right;width:100px;font-weight:bold;vertical-align:top;' value='<?php echo $disc;?>'/>
+											<input type='hidden' id='disc' name='discount' value='<?php echo $row[discountPrice];?>'/>
+											<input type='hidden' id='discPer' name='discountPerc' value='<?php echo $row[discountPerc];?>'/>
 										</div>
-										
-									</div>
-									<div class='row'>
-										<div class='col-4'>
-											<b>&nbsp;</b>
-										</div>
-									</div>
-									<div class='row'>
-										<div class='col-7'>
-											<b>Diterima</b>
-										</div>
-										<div class='col-5'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='paymentAmount' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id = 'payAmount' name='paymentAmount'/>
-										</div>
-									</div>
-									<div class='row'>
-										<div class='col-7'>
-											<b>Kembalian</b>
-										</div>
-										<div class='col-5'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='changeAmount' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id = 'change' name='changeAmount'/>
-										</div>
-									</div>
-									<div class='row'>
-										<div class='col-7'>
-											<b>Serv. Charge (5%)</b>
-										</div>
-										<div class='col-5'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='serviceCharge' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id = 'charge' name='serviceCharge'/>
-										</div>
-									</div>
-									<div class='row'>
-										<div class='col-7'>
-											<b>PB1 (10%)</b>
-										</div>
-										<div class='col-5'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='pb1' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id = 'pb' name='pb1'/>
-										</div>
-									</div>
-									<div class="row">
-									<div class='col-7'>
+										<div class='col-2'>
 											<b>Grand Total</b>
 										</div>
+										<div class='col-4'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='<?php echo $grand;?>'/>
+											<input type='hidden' id='totPrice' name='totalPrice' value='<?php echo $row[total];?>' />
+											
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-4'>
+											<b>&nbsp;</b>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-7'>
+											<b>Received</b>
+										</div>
 										<div class='col-5'>
-											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='Rp. 0,-'/>
-											<input type='hidden' id='totPrice' name='totalPrice' />
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='paymentAmount' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='<?php echo $payment;?>'/>
+											<input type='hidden' id = 'payAmount' name='paymentAmount' value='<?php echo $row[paymentAmount];?>'/>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-7'>
+											<b>Change</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='changeAmount' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='<?php echo $changes;?>'/>
+											<input type='hidden' id = 'change' name='changeAmount' value='<?php echo $change;?>'/>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<input type='text' readonly class="form-control-plaintext" id ='voucherDesc' style='width:100%;'/>
-									<input type='hidden' id = 'voucherVal' name='voucherVal'/>
-									<input type='hidden' id = 'voucherReq' name='voucherReq'/>
+									<input type='text' readonly class="form-control-plaintext" id ='voucherDesc' style='width:100%;' value='<?php echo $row[voucherDesc];?>'/>
+									<input type='hidden' id = 'voucherVal' name='voucherVal' value='<?php echo $row[voucherSaldo];?>'/>
+									<input type='hidden' id = 'voucherReq' name='voucherReq' value='<?php echo $row[voucherRequirement];?>'/>
 								</div>
 							</div>
-							<!-- <div class='row mb-2'>
-								<div class='col'>
-									<input class="form-control" type='text' id ='voucherCode' name ='voucherCode' style='width:100%;' placeholder='Insert Voucher Code'/>
-								</div>
-							</div> -->
 							<div class='row mb-2'>
 								<div class='col'>
-									<select class="form-control" id ='orderMethod' name ='orderMethod' style='width:100%;'>
-										<option value=''>-PILIH METODE PEMESANAN-</option>
-										<option value='1'>DINE IN</option>
-										<option value='2'>TAKE AWAY</option>
-									</select>
+									<input class="form-control" type='text' id ='voucherCode' name ='voucherCode' style='width:100%;' placeholder='Insert Voucher Code' value='<?php echo $row[voucherID];?>'/>
 								</div>
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
 									<select class="form-control" id ='paymentMethod' name ='paymentMethod' style='width:100%;'>
-										<option value=''>-PILIH METODE PEMBAYARAN-</option>
+										<option value=''>-CHOOSE PAYMENT METHOD-</option>
 								<?php
-									$queryMethod="SELECT * FROM mPaymentMethod WHERE status != 0 ORDER BY methodID";
+									$queryMethod="select * from mPaymentMethod where status != 0 ORDER BY methodID";
 									$resMethod=mysql_query($queryMethod);
 									while($rowMethod=mysql_fetch_array($resMethod)){
-										echo "<option value='$rowMethod[methodID]'>$rowMethod[methodName]</option>";
+										if($rowMethod[methodID] == $row[paymentMethod]){
+											echo "<option value='$rowMethod[methodID]' selected>$rowMethod[methodName]</option>";
+										}else{
+											echo "<option value='$rowMethod[methodID]'>$rowMethod[methodName]</option>";
+										}
+										
 									}
 								?>
 									</select>
 								</div>
 							</div>
-							<!-- <div class='row mb-2'>
+							<div class='row mb-2'>
 								<div class='col'>
 									<select class="form-control" id ='promo' name ='promo' style='width:100%;'>
 										<option value=''>-CHOOSE PROMO-</option>
 								<?php
-									$queryPromo="SELECT * FROM mPromo WHERE status != 0 AND startDate <= '$today' AND endDate >= '$today' ORDER BY promoID";
+									$queryPromo="select * from mPromo where status != 0 AND startDate <= '$today' AND endDate >= '$today' ORDER BY promoID";
 									$resPromo=mysql_query($queryPromo);
 									while($rowPromo=mysql_fetch_array($resPromo)){
-										echo "<option value='$rowPromo[promoID]'>$rowPromo[promoName]</option>";
+										if($rowPromo[promoID] == $row[promoID]){
+											echo "<option selected value='$rowPromo[promoID]'>$rowPromo[promoName]</option>";
+										}else{
+											echo "<option value='$rowPromo[promoID]'>$rowPromo[promoName]</option>";
+										}
 									}
 								?>
 									</select>
 								</div>
-							</div> -->
-							<!-- <div class='row mb-2'>
-								<div class='col'>
-									<input type='text'class="form-control" id ='discounto' name ='discounto' style='width:100%;' placeholder='Discount' />
-								</div>
-							</div> -->
+							</div>
 							<div class='row mb-2'>
 								<div class='col'>
-									<input type='text'class="form-control" id ='payment' name ='payment' style='width:100%;' placeholder='Insert Nominal Pembayaran' />
+									<input type='text'class="form-control" id ='payment' name ='payment' style='width:100%;' placeholder='Insert Payment Amount' value='<?php echo $row[paymentAmount];?>'/>
 								</div>
 							</div>
-							<!-- <div class='row mb-2'>
-								<div class='col'>
-									<input type='text'class="form-control" id ='payment1' name ='payment1' style='width:100%;' placeholder='Insert Payment If Using Voucher Amount' />
-								</div>
-							</div> -->
 							<div class='row mb-2'>
 								<div class='col'>
-									<textarea width='100' placeholder='Insert notes here' class="form-control" name='remarks'></textarea>
+									<textarea width='100' placeholder='Insert notes here' class="form-control" ><?php echo $row[remarks];?></textarea>
 								</div>	
 							</div>
 							<div class='row mb-2'>
 								<div class='col'>
 									<div class='d-flex justify-content-center'>
-										<button type='button' id='draft' class='btn btn-warning submit' style='width:50%;'>DRAFT</button>
-                            			<button type='button' id='order' class='btn btn-success submit' style='width:50%;'>ORDER</button>
+										<button type='button' id='cancel' class='btn btn-danger submit' style='width:33%;'>CANCEL</button>
+										<button type='button' id='draft' class='btn btn-warning submit' style='width:34%;'>DRAFT</button>
+                            			<button type='button' id='order' class='btn btn-success submit' style='width:33%;'>ORDER</button>
 									</div>
+                                	
 								</div>
 							</div>
 						</div>
@@ -383,7 +375,7 @@ if($dateOpen == 0) {
 							<div class='row'>
 								<div class="dropdown ml-3">
 									<select class='btn btn-secondary' name='category' id='categorySel'>
-								  	<option class='form-control' value=''>SEMUA KATEGORI</option>
+								  	<option class='form-control' value=''>ALL CATEGORY</option>
 								<?php
 									$resCat = mysql_query("SELECT DISTINCT c.categoryID,c.categoryName FROM mCategory c INNER JOIN mProduct P ON p.categoryID = c.categoryID WHERE p.outletID = '$outletID' AND c.status = 1 ORDER BY categoryID DESC");
 									while($rowCat = mysql_fetch_array($resCat)){
@@ -394,7 +386,7 @@ if($dateOpen == 0) {
 								</div>
 
 								<div class='col input-group'>
-								    <input type="text" class="form-control" id='searchMenu' placeholder="Cari Menu">
+								    <input type="text" class="form-control" id='searchMenu' placeholder="Search Menu">
 								 <div class="input-group-append">
 								      <button class="btn btn-secondary" type="button" id="searchBtn">
 								        <i class="fa fa-search"></i>
@@ -404,8 +396,7 @@ if($dateOpen == 0) {
 
 							</div>
 
-							
-							<div class='row'>
+							<div class="row">
 							<?php
 								$resMenu = mysql_query("SELECT * FROM mProduct WHERE outletID = '$outletID' AND status = 1");
 								while($rowMenu = mysql_fetch_array($resMenu)){
@@ -432,8 +423,9 @@ if($dateOpen == 0) {
 									</div>
 									";
 								}
+							
 							?>
-							</div>							
+							</div>
 						</div>
 					</div>
 				</div>
@@ -442,21 +434,10 @@ if($dateOpen == 0) {
     </div>
 	</body>
 </html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript">
-	
-	$(document).on('change', '#paymentMethod', function(){
-		var paymentMethod = $('#paymentMethod option:selected').text();
-		var totalPrice = $('#totPrice').val();
-
-		// console.log(payment);
-		
-		if(paymentMethod != 'CASH'){
-			$('#payment').val(totalPrice);
-		} else {
-			$('#payment').val(0);
-		}
-	});
+	$(document).ready(function(){  
+        
+    });
 
     function searchProduct(){
    	const searchCategory = $("#categorySel").val();
@@ -500,27 +481,12 @@ if($dateOpen == 0) {
    $("#categorySel").change(function(){
    		searchProduct();
    });
-
-    function list(){
-    	var customerID = $("#listCust").val();
-    	$.ajax({
-    		url: 'getCustomer.php',
-    		data:"customerID="+customerID,
-    	}).success(function(data){
-    		var json = data,
-    		obj = JSON.parse(json);
-    		$('#customerName').val(obj.customerName);
-    		$('#customerPhone').val(obj.customerPhone);
-    		$('#customerEmail').val(obj.customerEmail);
-    	})
-    }
 	
     $(document).on("click", ".menu", function(){
 		var btn = $(this).attr("id");
 		var prodStockID = $('#stock_'+btn).attr("id");
 		var curStock=$('#'+prodStockID).val();
-		
-		//01-02-2023
+
 		var orderType = $('#methodList').val();
 		
 		var stockAfter=curStock-1;
@@ -538,14 +504,11 @@ if($dateOpen == 0) {
 			var html = '';
 			var price = "";
 			var productName = "";
+			// var get = "getProduct.php?productID="+btn;
 			var get = "getProduct.php?productID="+btn+"&priceID="+orderType;
-			var servCharge5 = "";
-			var pb1 = ""; 
 
 			$.get(get, function( data ) {
 				price = data.price;
-				servCharge5 = data.servCharge5;
-				pb1 = data.pb1;
 				productName = data.productName;
 
 				var numbering = price;
@@ -555,11 +518,8 @@ if($dateOpen == 0) {
 				html += "<tr id='additem"+new_chq_no+"'><td class = 'table-details' style='text-align:left;width:35%;padding-left:5px;'>"+productName+"</td>";
 				html += "<td class = 'table-details' style='text-align:left;width:1%;'>&nbsp;&nbsp;Rp. </td>";
 				html += "<td class = 'table-details' style='text-align:right;width:29%;padding-right:5px;'>";
+				html += "<input type='hidden' name='id[]' value='"+new_chq_no+"'/>";
 				html += "<input type='hidden' name='productID[]' value='"+btn+"'/>";
-				html += "<input type='hidden' name='servCharge5[]' value='"+servCharge5+"'/>";
-				html += "<input type='hidden' name='pb10[]' value='"+pb1+"'/>";
-				html += "<input type='hidden' name='ori_servCharge5[]' value='"+servCharge5+"'/>";
-				html += "<input type='hidden' name='ori_pb1[]' value='"+pb1+"'/>";
 				html += "<input type='text' name='productPrice[]' class = 'inps' style='width:100px;' value='"+price+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:center;width:5%;'>";
 				html += "<input type='text' name='productQty[]' class='inps' style='width:40px;' value='1'/>";
@@ -576,16 +536,13 @@ if($dateOpen == 0) {
 				var dpp = parseFloat($('#dpp').val());
 				var grand = parseFloat($('#totPrice').val());
 				var discount = parseFloat($('#discPer').val());
+				var disc = 0;
 				var received = parseFloat($('#payAmount').val());
 				var change = parseFloat($('#change').val());
-				//var charge = parseFloat($('#charge').val());
-				//var pb = parseFloat($('#pb').val());
 				
 				if ( isNaN( received ) ){
 					received = 0;
 				}
-				
-				var disc = 0;
 
 				price = parseFloat(price);
 
@@ -611,68 +568,42 @@ if($dateOpen == 0) {
 
 				} );
 
-				var totalServCharge5 = 0;
-				$( 'input[name^=servCharge5]' ).each( function( i , e ) {
-					var v = parseInt( $( e ).val() );
-					if ( !isNaN( v ) ){
-						totalServCharge5 += v;
-					}
-				} );
-
-				var totalPb1 = 0;
-				$("#tableProduct").find( 'input[name^=pb10]' ).each( function( i , e ) {
-					var v = parseInt( $( e ).val() );
-					if ( !isNaN( v ) ){
-						totalPb1 += v;
-					}
-				} );
-				
-
 				totProd = sum;
 				dpp = sumVal;
-				charge = totalServCharge5;
-				pb = totalPb1;
 				disc = dpp*(discount/100);
-				grand = sumVal+charge+pb-disc;
+				grand = sumVal-disc;
 				change = received-grand;
+
 
 				var totalProduct = totProd;
 				var grossPrice = dpp;
 				var totalPrice = grand;
 				var discounts = disc;
 				var changeVal = change;
-				var servCharge = charge;
-				var pebe = pb;
 
 				$('#totalProd').val(totProd);
 				$('#dpp').val(dpp);
 				$('#disc').val(disc);
 				$('#totPrice').val(grand);
 				$('#change').val(change);
-				$('#charge').val(charge);
-				$('#pb').val(pb);
 
 				totalProduct = totalProduct.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 				grossPrice = "Rp. "+grossPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-				servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-				pebe = "Rp. "+pebe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 				$('#totalProduct').val(totalProduct);
 				$('#grossPrice').val(grossPrice);
 				$('#discount').val(discounts);
 				$('#totalPrice').val(totalPrice);
 				$('#changeAmount').val(changeVal);
-				$('#serviceCharge').val(servCharge);
-				$('#pb1').val(pebe);
 
 			}, "json" );
 		}
     });
 	
-	$(document).on('input', '.inps', function(event){
+	$('body').on('keyup', '.inps', function(event){
 		var $row = $(this).closest("tr"); //this is the closest common root of the input elements
     	var amount = parseInt($row.find('input[name^=productQty]').val());
         var unitPrice = parseFloat($row.find('input[name^=productPrice]').val());
@@ -681,28 +612,13 @@ if($dateOpen == 0) {
 		var curStock=$('#curProd_'+productID).val();
 		
 		var curSell = 0;
-		var totalServCharge5 = 0;
-		var totalPb1 = 0;
 		$( 'input[name^=productQty]' ).each( function( i , e ) {
 			var v = parseInt( $( e ).val() );
 			if ( !isNaN( v ) ){
 				var $rows = $(this).closest("tr");
 				var prodID = $rows.find('input[name^=productID]').val();
-				var _servCharge5 = $rows.find('input[name^=ori_servCharge5]').val();
-				var _pb1 = $rows.find('input[name^=ori_pb1]').val();
-				
 				if(prodID==productID){
 					curSell += v;
-					if(v != 0){
-						$rows.find('input[name^=servCharge5]').val(parseInt(_servCharge5) * v );
-						$rows.find('input[name^=pb10]').val(parseInt(_pb1) * v );
-						totalServCharge5 += parseInt(_servCharge5) * v;
-						totalPb1 += parseInt(_pb1) * v;
-					}
-				}
-				else{
-					totalServCharge5 += parseInt(_servCharge5);
-					totalPb1 += parseInt(_pb1);
 				}
 			}
 		} );
@@ -740,12 +656,11 @@ if($dateOpen == 0) {
 			var disc = 0;
 			var received = parseFloat($('#payAmount').val());
 			var change = parseFloat($('#change').val());
-			var charge = totalServCharge5;
-			var pb = totalPb1;
 
 			if ( isNaN( received ) ){
 				received = 0;
 			}
+
 
 			var sum = 0;
 			var sumVal = 0;
@@ -767,12 +682,12 @@ if($dateOpen == 0) {
 					sum += 0;
 				}
 
-			});
+			} );
 
 			totProd = sum;
 			dpp = sumVal;
 			disc = dpp*(discount/100);
-			grand = sumVal+charge+pb-disc;
+			grand = sumVal-disc;
 			change = received-grand;
 
 			var totalProduct = totProd;
@@ -780,8 +695,6 @@ if($dateOpen == 0) {
 			var totalPrice = grand;
 			var discounts = disc;
 			var changeVal = change;
-			var servCharge = charge;
-			var pebe = pb;
 
 			$('#totalProd').val(totProd);
 			$('#dpp').val(dpp);
@@ -794,18 +707,12 @@ if($dateOpen == 0) {
 			discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-			servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-			pebe = "Rp. "+pebe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#totalProduct').val(totalProduct);
 			$('#grossPrice').val(grossPrice);
 			$('#discount').val(discounts);
 			$('#totalPrice').val(totalPrice);
 			$('#changeAmount').val(changeVal);
-			$('#charge').val(servCharge);
-			$('#pb').val(pebe);
-			$('#serviceCharge').val(servCharge);
-			$('#pb1').val(pebe);
 		}
 	});		
 	
@@ -817,35 +724,29 @@ if($dateOpen == 0) {
 		var prodStockID = $('#stock_'+productID).attr("id");
 		var curStock=$('#curProd_'+productID).val();
 		
+		//delete from db if any
+//		var get = "detail_delete.php?id="+btn;
+//		$.get(get, function( data ) {
+//			
+//			
+//		}, "json" );
+		
 		$('#'+id).remove();
 		$('tr.deft').remove();
 		
 		var curSell = 0;
-		var totalServCharge5 = 0;
-		var totalPb1 = 0;
 		$( 'input[name^=productQty]' ).each( function( i , e ) {
 			var v = parseInt( $( e ).val() );
 			if ( !isNaN( v ) ){
 				var $rows = $(this).closest("tr");
 				var prodID = $rows.find('input[name^=productID]').val();
-				var _servCharge5 = $rows.find('input[name^=ori_servCharge5]').val();
-				var _pb1 = $rows.find('input[name^=ori_pb1]').val();
-				
 				if(prodID==productID){
 					curSell += v;
-					$rows.find('input[name^=servCharge5]').val(parseInt(_servCharge5) * v );
-					$rows.find('input[name^=pb10]').val(parseInt(_pb1) * v );
-					totalServCharge5 += parseInt(_servCharge5) * v;
-					totalPb1 += parseInt(_pb1) * v;
-				}
-				else{
-					totalServCharge5 += parseInt(_servCharge5) * v;
-					totalPb1 += parseInt(_pb1) * v;
 				}
 			}
 		} );
 		var stockAfter=curStock-curSell;
-		console.log([totalServCharge5, totalPb1]);
+		
 		if(stockAfter<0){
 			alert("PRODUCT OUT OF STOCK");
 			$('#'+prodStockID).val(0);
@@ -865,7 +766,6 @@ if($dateOpen == 0) {
 			var disc = 0;
 			var received = parseFloat($('#payAmount').val());
 			var change = parseFloat($('#change').val());
-			//var charge = parseFloat($('#charge').val());
 
 			if ( isNaN( received ) ){
 				received = 0;
@@ -909,59 +809,44 @@ if($dateOpen == 0) {
 				html += "<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>";
 				html += "<button type='button' class='del' style='border:none;margin-left:-10px;background-color:rgba(255, 255, 255, 0);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-trash' viewBox='0 0 16 16'><path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/><path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/></svg></button></td></tr>";
 
-				$('#tableProduct tbody').append(html);   
+				$('#tableProduct tbody').append(html);     
 				totProd = 0;
 				dpp = 0;
 				grand = 0;
 				disc = 0;
 				change = 0;
-				charge = 0;
-
 			}else{
-				
 				totProd = sum;
 				dpp = sumVal;
 				disc = dpp*(discount/100);
 				grand = sumVal-disc;
 				change = received-grand;
-				//charge = dpp*(5/100);
 			}
-
-			
 			var totalProduct = totProd;
 			var grossPrice = dpp;
-			var totalPrice = grand+totalServCharge5+totalPb1;
+			var totalPrice = grand;
 			var discounts = disc;
 			var changeVal = change;
-			var servCharge = totalServCharge5;
-			var pb = totalPb1
 
 			$('#totalProd').val(totProd);
 			$('#dpp').val(dpp);
 			$('#disc').val(disc);
 			$('#totPrice').val(grand);
 			$('#change').val(change);
-			$('#charge').val(servCharge);
-			$('#pb').val(totalPb1);
 
 			totalProduct = totalProduct.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 			grossPrice = "Rp. "+grossPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-			servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-			pb = "Rp. "+pb.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#totalProduct').val(totalProduct);
 			$('#grossPrice').val(grossPrice);
 			$('#discount').val(discounts);
 			$('#totalPrice').val(totalPrice);
 			$('#changeAmount').val(changeVal);
-			$('#serviceCharge').val(servCharge);
-			$('#pb1').val(pb);
 		}
     });	
-	
 	
 	$('body').on('keyup', '#payment', function(event){
 		var pay = $('#payment').val();
@@ -971,12 +856,10 @@ if($dateOpen == 0) {
 		if (pay==""){
 			pay = 0;
 		}
-		
 		var pays = pay;
 		pays = "Rp. "+pays.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 		$('#paymentAmount').val(pays);
 		$('#payAmount').val(pay);
-		
 		
 		change = pay-grand;
 		var changeVal = change;
@@ -1026,26 +909,19 @@ if($dateOpen == 0) {
 					$('#payAmount').val(0);
 					var payAmo = "Rp. 0,-";
 					$('#paymentAmount').val(payAmo);
-					
-					change = 0-total;
-					var changeVal = change;
-					$('#change').val(change);
-					changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-					$('#changeAmount').val(changeVal);
-					
 				}else{
 					if(total >= voucherRequirement){
 						$('#voucherDesc').val(desc); 
 						$('#voucherDesc').css("color", "green");
 						$('#voucherDesc').css("font-weight", "bold");
 						$('#voucherVal').val(voucherSaldo); 
-						
+
 						change = voucherSaldo-total;
 						var changeVal = change;
 						$('#change').val(change);
 						changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 						$('#changeAmount').val(changeVal);
-
+						
 						var payAmount = $('#payAmount').val(); 
 
 						$('#payAmount').val(voucherSaldo);
@@ -1134,53 +1010,51 @@ if($dateOpen == 0) {
 				var promoStatus = "";
 				var dpp = $('#dpp').val();
 
-				console.log(now);
-
 				switch(day){
 					case 0:
-						if(isSunday!=1){
+						if(isSunday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 1:
-						if(isMonday!=1){
+						if(isMonday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 2:
-						if(isTuesday!=1){
+						if(isTuesday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 3:
-						if(isWednesday!=1){
+						if(isWednesday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 4:
-						if(isThursday!=1){
+						if(isThursday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 5:
-						if(isFriday!=1){
+						if(isFriday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 6:
-						if(isSaturday!=1){
+						if(isSaturday==1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
@@ -1293,11 +1167,6 @@ if($dateOpen == 0) {
 		var payment = parseFloat($('#payment').val());
 		var paymentMethod = $('#paymentMethod').val();
 		var grand = parseFloat($('#totPrice').val());
-		var voucherVal = parseFloat($('#voucherVal').val());
-		
-		if(voucherVal==0){
-			$('#voucherCode').val("");
-		}
 		
 		switch(btn){
 			case "order":
@@ -1324,6 +1193,12 @@ if($dateOpen == 0) {
 				
 				$('#status').val('0');
 				$('form#formOrder').submit();
+				break;
+			case "cancel":
+				var r = confirm("Are you sure to cancel this order?");
+				if(r){
+					<?php echo "location.replace('order_delete.php?orderID=$orderID&orderNo=$orderNo');"?>
+				}
 				break;
 		}
 		

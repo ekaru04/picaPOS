@@ -145,26 +145,26 @@ $data = mysql_fetch_array($query);
 if(validMenuAccess('B001')==1||validMenuAccess('B002')==1||validMenuAccess('B003')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
-        	<b>Transaction</b>
+        	<b>Transaksi</b>
         </a>
         <div class='dropdown-menu'>";
 		  
 		
 	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../restockIngredient'><b>Restock Ingredient</b></a>";
-echo"     <a class='dropdown-item' href='../restockItem'><b>Restock Item</b></a>";
+echo"     <a class='dropdown-item' href='../restockIngredient'><b>Restok Bahan Baku</b></a>";
+echo"     <a class='dropdown-item' href='../restockItem'><b>Restok Barang</b></a>";
 	}
 	/** IN/OUT INGREDIENT */
 // 	if(validMenuAccess('B001')==1||validMenuAccess('GST1')==1){
 // echo"     <a class='dropdown-item' href='../outStock'><b>In/Out Ingredient</b></a>";
 // 	}
 	if(validMenuAccess('B002')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../reqIn'><b>Production Input</b></a>";
+echo"     <a class='dropdown-item' href='../reqIn'><b>Membuat Produk</b></a>";
 	}
 		
 	if(validMenuAccess('B003')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../restockProduct'><b>In/Out Product</b></a>";
-echo"     <a class='dropdown-item' href='../itemTrans'><b>In/Out Item</b></a>";
+echo"     <a class='dropdown-item' href='../restockProduct'><b>In/Out Produk</b></a>";
+echo"     <a class='dropdown-item' href='../itemTrans'><b>In/Out Barang</b></a>";
 	}
 
 	if(validMenuAccess('B004')==1||validMenuAccess('GST1')==1){
@@ -194,19 +194,19 @@ echo"   </div>
 if(validMenuAccess('D001')==1||validMenuAccess('D002')==1||validMenuAccess('D003')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
-        <b>Stock</b>
+        <b>Stok</b>
         </a>
         <div class='dropdown-menu'>";
 	if(validMenuAccess('D001')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../ingredients'><b>Ingredients</b></a>";
+echo"     <a class='dropdown-item' href='../ingredients'><b>Bahan Baku</b></a>";
 	}
 	if(validMenuAccess('D002')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../recipes'><b>Recipes</b></a>";
+echo"     <a class='dropdown-item' href='../recipes'><b>Resep</b></a>";
 	}
 	if(validMenuAccess('D003')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../products'><b>Products</b></a>";
-echo"     <a class='dropdown-item' href='../itemStock'><b>Stock Item</b></a>";
-echo"     <a class='dropdown-item' href='../bundle'><b>Bundle Item</b></a>";
+echo"     <a class='dropdown-item' href='../products'><b>Produk</b></a>";
+echo"     <a class='dropdown-item' href='../itemStock'><b>Stok Barang</b></a>";
+// echo"     <a class='dropdown-item' href='../bundle'><b>Bundle Item</b></a>";
 // echo"     <a class='dropdown-item' href='../kitchen'><b>Stock Kitchen</b></a>";
 	}
 echo"   </div>
@@ -220,20 +220,20 @@ echo" <li class='nav-item dropdown'>
         </a>
         <div class='dropdown-menu'>";
 	if(validMenuAccess('C001')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../categories'><b>Products Categories</b></a>";
-echo"     <a class='dropdown-item' href='../categoriesStock'><b>Items Categories</b></a>";
+echo"     <a class='dropdown-item' href='../categories'><b>Master Kategori Produk</b></a>";
+echo"     <a class='dropdown-item' href='../categoriesStock'><b>Master Kategori Barang</b></a>";
 	}
 	if(validMenuAccess('C002')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../measurements'><b>Measurements</b></a>";
+echo"     <a class='dropdown-item' href='../measurements'><b>Satuan</b></a>";
 	}
 	if(validMenuAccess('C003')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../payment'><b>Payment Method</b></a>";
+echo"     <a class='dropdown-item' href='../payment'><b>Metode Pembayaran</b></a>";
 	}
 	if(validMenuAccess('C004')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../suppliers'><b>Suppliers</b></a>";
-echo"     <a class='dropdown-item' href='../mCustomers'><b>Customers</b></a>";
-echo"     <a class='dropdown-item' href='../mPrices'><b>Master Price</b></a>";
-echo"     <a class='dropdown-item' href='../priceList'><b>Price List</b></a>";
+echo"     <a class='dropdown-item' href='../suppliers'><b>Supplier</b></a>";
+echo"     <a class='dropdown-item' href='../mCustomers'><b>Pelanggan</b></a>";
+echo"     <a class='dropdown-item' href='../mPrices'><b>Master Harga</b></a>";
+echo"     <a class='dropdown-item' href='../priceList'><b>List Harga</b></a>";
 	}
 echo"   </div>
       </li>";
@@ -241,7 +241,7 @@ echo"   </div>
 if(validMenuAccess('E001')==1||validMenuAccess('E002')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
-        <b>Reports</b>
+        <b>Laporan</b>
         </a>
 		<ul class='dropdown-menu' >";
 	if(validMenuAccess('E001')==1||validMenuAccess('GST1')==1){
@@ -269,27 +269,27 @@ echo"   </ul>
 
 ?>
 	<li class="nav-item">
-        <a class="nav-link" href='../activityLog'><b>Activity Log</b></a>
+        <a class="nav-link" href='../activityLog'><b>Log Aktifitas</b></a>
     </li>
 <?php
 		
 if(validMenuAccess('F001')==1||validMenuAccess('F002')==1||validMenuAccess('F003')==1||validMenuAccess('F004')==1||validMenuAccess('GST1')==1){
 echo" <li class='nav-item dropdown'>
         <a class='nav-link dropdown-toggle' href='#' id='navbardrop' data-toggle='dropdown'>
-        <b>Management</b>
+        <b>Manajemen</b>
         </a>
         <div class='dropdown-menu'>";
 	if(validMenuAccess('F001')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../outlets'><b>Outlets</b></a>";
+echo"     <a class='dropdown-item' href='../outlets'><b>Outlet</b></a>";
 	}
 	if(validMenuAccess('F002')==1||validMenuAccess('GST1')==1){
 echo"     <a class='dropdown-item' href='../mUser'><b>Users</b></a>";
 	}
 	if(validMenuAccess('F003')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../mDepartment'><b>Departments</b></a>";
+echo"     <a class='dropdown-item' href='../mDepartment'><b>Departemen</b></a>";
 	}
 	if(validMenuAccess('F004')==1||validMenuAccess('GST1')==1){
-echo"     <a class='dropdown-item' href='../mPosition'><b>Positions</b></a>";
+echo"     <a class='dropdown-item' href='../mPosition'><b>Posisi</b></a>";
 echo"     <a class='dropdown-item' href='../mLoyalty'><b>Set Loyalty</b></a>";
 	}
 echo"   </div>

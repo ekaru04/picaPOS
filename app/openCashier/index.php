@@ -67,7 +67,7 @@ if($_GET['openID']==""){
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='OPEN DATE' />
+                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TANGGAL OPEN' />
                         </div>
                         <div class='col-4'>
                             <input type='date' class='form-control' name='openDate' id='openDate' style='width:300px' value='<?php echo $openDate; ?>' readonly required />
@@ -89,13 +89,13 @@ if($_GET['openID']==""){
                             <input type='text' class='form-control-plaintext' style='width:150px' disabled value='PERIODE' />
                         </div>
                         <div class='col-4'>
-                            <input type='text' class='form-control' name='closePeriode' id='closePeriode' style='width:300px' value='<?php echo $periode; ?>' readonly required />
+                            <input type='text' class='form-control' name='periode' id='periode' style='width:300px' value='<?php echo $periode; ?>' readonly required />
                         </div>
 					</div>
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='CASHIER' />
+                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='KASIR' />
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' name='fullName' id='fullName' style='width:300px' value='<?php echo $fullName; ?>'readonly required />
@@ -105,118 +105,19 @@ if($_GET['openID']==""){
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='SESSION' />
+                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='MODAL' />
                         </div>
                         <div class='col-4'>
-                            <select class='form-control' name='closeShift' id='closeShift' style='width:300px;' required>
-                                <option value=''>-CHOOSE ONE-</option>
-                                <option value='1' $session1 >1</option>
-                                <option value='2' $session2 >2</option>
-							</select>
-                        </div>
-					</div>
-					
-					<div class='row  mt-1 '>
-                        <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TOTAL' />
-                        </div>
-                        <div class='col-4'>
-                            <input type='text' class='form-control' id='dppTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
-							<input type='hidden' name='dppTotal' id = 'dppTot' value='<?php echo $grandTotal; ?>'>
-                        </div>
-					</div>
-					<div class='row  mt-1 '>
-                        <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TAX' />
-                        </div>
-                        <div class='col-4'>
-                            <input type='text' class='form-control' id='taxTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
-							<input type='hidden' name='taxTotal' id = 'taxTot' value='<?php echo $grandTotal; ?>'>
-                        </div>
-					</div>
-					<div class='row  mt-1 '>
-                        <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='GRANDTOTAL' />
-                        </div>
-                        <div class='col-4'>
-                            <input type='text' class='form-control' id='grandTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
-							<input type='hidden' name='grandTotal' id = 'grandTot' value='<?php echo $grandTotal; ?>'>
-                        </div>
-					</div>
-<?php
-					
-					$resPayMethod = mysql_query("SELECT * FROM mpaymentmethod WHERE status = 1");
-					$closeDate = date('Y-m-d');
-					while($rowP = mysql_fetch_array($resPayMethod)){
-						$payName = $rowP[methodName];
-						$payID = "Method_$rowP[methodID]";
-						$payMetID = "Meth_$rowP[methodID]";
-					$querySplit = mysql_query("SELECT SUM(p.total) AS splitTotal FROM tabpaymentorder p
-									INNER JOIN taborderheader o ON p.orderID = o.orderID
-									WHERE paymentMethod = '$rowP[methodID]' AND orderDate = '$closeDate'");
-						
-						
-echo			   "<div class='row mt-1 '>
-                        <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='$payName' />
-                        </div>
-                        <div class='col-4'>
-                            <input type='text' class='form-control' id='payID_".$payID."' style='width:300px' readonly required />
-							<input type='hidden' name='grandTotals' id = 'Meth_".$payID."'>
-                        </div>
-					</div>";
-					}
-					
-?>
-					<div class='row  mt-1 '>
-                        <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='RECEIVED' />
-                        </div>
-                        <div class='col-4'>
-                            <input type='text' class='form-control' id='totalReceived' style='width:300px' value='<?php echo $received; ?>'readonly required />
-							<input type='text' name='totalReceived' id = 'received' value='<?php echo $totalReceived; ?>'>
-                        </div>
-					</div>
-					
-					<div class='row  mt-1 '>
-                        <div class='col-2 label'>
-                            REMARKS
-                        </div>
-                        <div class='col-4'>
-                            <textarea class='form-control' name='remarks' placeholder='Insert notes here' style='width:300px' rows='4' cols='25'><?php echo $row[remarks]; ?></textarea>
+                            <input type='text' class='form-control' id='modal' style='width:300px' name='modal' value='<?php echo $grandTot; ?>' required />
+							<input type='hidden' name='modalTot' id = 'modalTot' value='<?php echo $grandTotal; ?>'>
                         </div>
 					</div>
 					
 					<div class='row  mt-3 '>
                         <div class='col-5' style='text-align:center;margin-left:-50px;'>
-							<button type='button' id='generate' class='btn btn-info' >GENERATE</button>  
-							<button type='button' id='save' class='btn btn-success' >SAVE</button>  
+							<!-- <button type='button' id='generate' class='btn btn-info' >GENERATE</button>   -->
+							<button type='submit' value='submit' id='save' class='btn btn-success' >SIMPAN</button>  
                         </div>
-					</div>
-                    
-					<div class='row  mt-3 '>
-                        <div class='col-20'>
-							<table class='table' id='detailData' style='font-size:13px;'>
-								  <thead>
-									<tr>
-									  <th style='vertical-align:middle;'>NO</th>
-									  <th style='vertical-align:middle;'>ORDER ID</th>
-									  <th style='vertical-align:middle;'>ORDER DATE</th>
-									  <th style='vertical-align:middle;'>TOTAL</th>
-									  <th style='vertical-align:middle;'>TAX</th>
-									  <th style='vertical-align:middle;'>GRAND TOTAL</th>
-									  <th style='vertical-align:middle;'>RECEIVED</th>
-									  <th style='vertical-align:middle;'>PAYMENT METHOD</th>
-									  <th style='vertical-align:middle;'>PAYER</th>
-									  <th style='vertical-align:middle;'>REMARKS</th>
-									  <th style='vertical-align:middle;'>USER</th>
-									</tr>
-								  </thead>
-								  <tbody>
-
-								  </tbody>
-							</table>
-						</div>
 					</div>
                 </form>
             </div>
@@ -228,7 +129,7 @@ echo			   "<div class='row mt-1 '>
     
 	$(document).ready(function(){  
         $('#detailData').hide();
-        $('#save').hide();
+        // $('#save').hide();
     });
 	
 	$("#generate").click(function(){
@@ -275,31 +176,25 @@ echo			   "<div class='row mt-1 '>
 			var total = data.total;
 			var paymentAmount = data.paymentAmount;
 
-			// var totalA = dataA.total;
-			// var paymentAmountA = dataA.paymentAmount;
 			$('#dppTot').val(dpp);
 			$('#taxTot').val(VAT);
 			$('#grandTot').val(total);
 			$('#received').val(paymentAmount);
 			
-			// $('#payID').val(paymentAmountA);
 			var dppTotal = dpp;
 			var taxTotal = VAT;
 			var grandTotal = total;
 			var totalReceived = paymentAmount;
-			// var splitA = paymentAmountA;
-			// var totalReceived = paymentAmount;
+
 			dppTotal = "Rp. "+dppTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			taxTotal = "Rp. "+taxTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			grandTotal = "Rp. "+grandTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalReceived = "Rp. "+totalReceived.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
-			// splitA = "Rp. "+splitA.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#dppTotal').val(dppTotal);
 			$('#taxTotal').val(taxTotal);
 			$('#grandTotal').val(grandTotal);
 			$('#totalReceived').val(totalReceived);
-			// $('#totalReceived').val(totalReceived);
 			
 			console.log(data.arrayNew);
 			for(var payment of data.arrayNew){
@@ -313,26 +208,7 @@ echo			   "<div class='row mt-1 '>
         $('#save').show();
 		
     });
-	
-	$("#closeDate").change(function(){
-		var closeDate = $('#closeDate').val();
-		var d = new Date(closeDate);
-	
-		var mo = parseInt(d.getMonth())+1;
-		mo = mo.toString();
-		mo = mo.padStart(2,"0");
-		var y = d.getFullYear();
-		
-		var period = y+"-"+mo;
-		
-		$('#closePeriode').val(period);
-    });
-	
-    $("#save").click(function(){
-		
-		$('form#formClose').submit();   
-    });
-    
+
 </script>
 
 <script>

@@ -2,10 +2,10 @@
 session_start();
 include("../../assets/config/db.php");
 
-$closeID = $_GET[closeID];
+// $closeID = $_GET[closeID];
 $closeDate = $_GET[closeDate];
 $outletID = $_GET[outletID];
-$closeShift = $_GET[closeShift];
+// $closeShift = $_GET[closeShift];
 
 $query = "SELECT h.orderID, sum(p.total) AS total, sum(p.dpp) AS dpp, sum(p.VAT) AS VAT, sum(p.paymentAmount) AS paymentAmount FROM taborderheader h 
 INNER JOIN tabpaymentorder p ON h.orderID = p.orderID

@@ -49,28 +49,11 @@ if(isset($_POST['requestID'])){
 			$isPending = 0;
 			break;
 	}
-	
-
-	// echo $statusApprove;
-	// echo "<br>";
-	// echo $isPending;
-	// echo "<br>";
-	// exit;
 
 	/* Apabila status approval 2 (Di approve) */
 	if($statusApprove==2){
 
-		// $getDataTempStock = mysql_query("SELECT * FROM tabproductstocktemp WHERE productID = '$productRequest'");
-		// $rowTempStock = mysql_fetch_array($getDataTempStock);
-		// $productTemp = $rowTempStock['productID'];
-		// $stockTemp = $rowTempStock['newStock'];
-
 		$addNewStock = $stockTemp + $amountRequest;
-		// echo "Ini ID produk nya ".$rowTempStock['productID'];
-		// echo "<br>";
-		// echo "Ini stok di dapurnya ".$rowTempStock['newStock'];
-		// exit;
-
 		$getRequestDetail = mysql_query("SELECT * FROM tabrequestdetail WHERE requestID = '$requestID' and status = $statusApprove-1");
 
 		while($fetchRequestDetail = mysql_fetch_array($getRequestDetail)){
@@ -101,7 +84,6 @@ if(isset($_POST['requestID'])){
 				
 			}else{
 
-				// echo "logic B";
 				// exit;
 				$lastChanged = date("Y-m-d H:i:s");
 				$res = mysql_query("UPDATE mingredient SET curStock = '$ingredientNewStock', lastChanged = '$lastChanged' WHERE ingredientID = '$fetchRequestDetail[ingredientID]' AND outletID = '$rowRequest[outletID]' and status = 1");
@@ -227,14 +209,16 @@ if(isset($_POST['requestID'])){
 		$productTemp = $rowTempStock['productID'];
 		$newTempStock = $rowTempStock['tempStock']+$amountRequest;
 
-		if($productTemp == 0) {
+		if($productTemp == null) {
 			// echo $productTemp;
+			// echo $productRequest;
+			// echo "tambah produk baru dan stok baru";
 			// exit;
 			$insTempStock = mysql_query("INSERT INTO tabtempstock(productID, tempStock, dateCreated, lastChanged) VALUES('$productRequest', '$amountRequest', '$dateCreated', '$lastChanged')");
 			echo "<script type='text/javascript'>alert('Stok sudah masuk ke stok sementara(Dapur)')</script>";
 			
 		} else {
-			// echo $productTemp;
+			// echo "update stok produk yang sudah ada";
 			// exit;
 			$updTempStock = mysql_query("UPDATE tabtempstock SET tempStock = '$newTempStock', lastChanged = '$lastChanged' WHERE productID = '$productRequest'");
 			echo "<script type='text/javascript'>alert('Stok sudah diupdate ke stok sementara(Dapur)')</script>";

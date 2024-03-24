@@ -66,9 +66,10 @@ date_default_timezone_set('Asia/Jakarta');
 	$outletID = $_SESSION[outletID];
 
 	$today = date('Y-m-d');
-	$res = mysql_query("SELECT h.*, p.*, v.voucherName, v.voucherRequirement, v.voucherSaldo, v.description voucherDesc FROM tabOrderHeader h 
+	$res = mysql_query("SELECT h.*, p.*, d.pb1, d.servCharge5, v.voucherName, v.voucherRequirement, v.voucherSaldo, v.description voucherDesc FROM tabOrderHeader h 
 		INNER JOIN tabpaymentorder p ON h.orderID = p.orderID
-		LEFT JOIN mVoucher v ON p.voucherID = v.voucherCode WHERE p.orderID = '$orderID'");
+		LEFT JOIN mVoucher v ON p.voucherID = v.voucherCode
+		INNER JOIN taborderdetail d ON d.orderID = h.orderID WHERE p.orderID = '$orderID'");
 	$row = mysql_fetch_array($res);
 
 	$orderNo = $row['orderNo'];
@@ -89,6 +90,8 @@ date_default_timezone_set('Asia/Jakarta');
 	$disc = "Rp. ".number_format($row[discountPrice],0,",",".").",-";
 	$grand = "Rp. ".number_format($row[total],0,",",".").",-";
 	$payment = "Rp. ".number_format($row[paymentAmount],0,",",".").",-";
+	$servCharge5 = "Rp. ".number_format($row[servCharge5],0,",",".").",-";
+	$pb1 = "Rp. ".number_format($row[pb1],0,",",".").",-";
 	$changes = "Rp. ".number_format($change,0,",",".").",-";
 	
 
@@ -257,22 +260,21 @@ date_default_timezone_set('Asia/Jakarta');
 										</div>
 									</div>
 									<div class='row'>
-										<div class='col-2'>
+										<!-- <div class='col-2'>
 											<b>Discount</b>
-										</div>
+										</div> -->
 										<div class='col-4'>
 											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='discount' style='float:right;text-align:right;width:100px;font-weight:bold;vertical-align:top;' value='<?php echo $disc;?>'/>
 											<input type='hidden' id='disc' name='discount' value='<?php echo $row[discountPrice];?>'/>
 											<input type='hidden' id='discPer' name='discountPerc' value='<?php echo $row[discountPerc];?>'/>
 										</div>
-										<div class='col-2'>
+										<!-- <div class='col-2'>
 											<b>Grand Total</b>
 										</div>
 										<div class='col-4'>
 											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='<?php echo $grand;?>'/>
 											<input type='hidden' id='totPrice' name='totalPrice' value='<?php echo $row[total];?>' />
-											
-										</div>
+										</div> -->
 									</div>
 									<div class='row'>
 										<div class='col-4'>
@@ -295,6 +297,33 @@ date_default_timezone_set('Asia/Jakarta');
 										<div class='col-5'>
 											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='changeAmount' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='<?php echo $changes;?>'/>
 											<input type='hidden' id = 'change' name='changeAmount' value='<?php echo $change;?>'/>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-7'>
+											<b>Service Charge (5%)</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='serviceCharge' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='<?php echo $servCharge5;?>'/>
+											<input type='hidden' id = 'charge' name='serviceCharge' value='<?php echo $row[servCharge5];?>'/>
+										</div>
+									</div>
+									<div class='row'>
+										<div class='col-7'>
+											<b>PB1 (10%)</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='pb1' style='float:right;text-align:right;width:150px;font-weight:bold;vertical-align:top;' value='<?php echo $pb1;?>'/>
+											<input type='hidden' id = 'pb' name='pb1' value='<?php echo $row[pb1];?>'/>
+										</div>
+									</div>
+									<div class="row">
+									<div class='col-7'>
+											<b>Grand Total</b>
+										</div>
+										<div class='col-5'>
+											<input type='text' readonly class="form-control-sm form-control-plaintext" id ='totalPrice' style='float:right;text-align:right;width:120px;font-weight:bold;vertical-align:top;' value='<?php echo $grand;?>'/>
+											<input type='hidden' id='totPrice' name='totalPrice' value='<?php echo $row[total];?>' />
 										</div>
 									</div>
 								</div>
@@ -396,14 +425,13 @@ date_default_timezone_set('Asia/Jakarta');
 
 							</div>
 
-
+							<div class="row">
 							<?php
 								$resMenu = mysql_query("SELECT * FROM mProduct WHERE outletID = '$outletID' AND status = 1");
 								while($rowMenu = mysql_fetch_array($resMenu)){
 									$productID = $rowMenu['productID'];
 								echo"
-								<div class='row'>
-									<div class='col d-flex ml-1 productEntry'>
+									<div class='d-flex ml-1 productEntry'>
 										<div class='pt-2'>
 											<div class='col-12'>
 											    <div class='card' id='products'>
@@ -422,12 +450,11 @@ date_default_timezone_set('Asia/Jakarta');
 											</div>
 										</div>
 									</div>
-								</div>
 									";
 								}
 							
 							?>
-							
+							</div>
 						</div>
 					</div>
 				</div>
@@ -437,9 +464,19 @@ date_default_timezone_set('Asia/Jakarta');
 	</body>
 </html>
 <script type="text/javascript">
-	$(document).ready(function(){  
-        
-    });
+		
+		$(document).on('change', '#paymentMethod', function(){
+		var paymentMethod = $('#paymentMethod option:selected').text();
+		var totalPrice = $('#totPrice').val();
+
+		// console.log(payment);
+		
+		if(paymentMethod != 'CASH'){
+			$('#payment').val(totalPrice);
+		} else {
+			$('#payment').val(0);
+		}
+	});
 
     function searchProduct(){
    	const searchCategory = $("#categorySel").val();
@@ -483,12 +520,27 @@ date_default_timezone_set('Asia/Jakarta');
    $("#categorySel").change(function(){
    		searchProduct();
    });
+
+    function list(){
+    	var customerID = $("#listCust").val();
+    	$.ajax({
+    		url: 'getCustomer.php',
+    		data:"customerID="+customerID,
+    	}).success(function(data){
+    		var json = data,
+    		obj = JSON.parse(json);
+    		$('#customerName').val(obj.customerName);
+    		$('#customerPhone').val(obj.customerPhone);
+    		$('#customerEmail').val(obj.customerEmail);
+    	})
+    }
 	
     $(document).on("click", ".menu", function(){
 		var btn = $(this).attr("id");
 		var prodStockID = $('#stock_'+btn).attr("id");
 		var curStock=$('#'+prodStockID).val();
-
+		
+		//01-02-2023
 		var orderType = $('#methodList').val();
 		
 		var stockAfter=curStock-1;
@@ -506,11 +558,14 @@ date_default_timezone_set('Asia/Jakarta');
 			var html = '';
 			var price = "";
 			var productName = "";
-			// var get = "getProduct.php?productID="+btn;
 			var get = "getProduct.php?productID="+btn+"&priceID="+orderType;
+			var servCharge5 = "";
+			var pb1 = ""; 
 
 			$.get(get, function( data ) {
 				price = data.price;
+				servCharge5 = data.servCharge5;
+				pb1 = data.pb1;
 				productName = data.productName;
 
 				var numbering = price;
@@ -520,8 +575,11 @@ date_default_timezone_set('Asia/Jakarta');
 				html += "<tr id='additem"+new_chq_no+"'><td class = 'table-details' style='text-align:left;width:35%;padding-left:5px;'>"+productName+"</td>";
 				html += "<td class = 'table-details' style='text-align:left;width:1%;'>&nbsp;&nbsp;Rp. </td>";
 				html += "<td class = 'table-details' style='text-align:right;width:29%;padding-right:5px;'>";
-				html += "<input type='hidden' name='id[]' value='"+new_chq_no+"'/>";
 				html += "<input type='hidden' name='productID[]' value='"+btn+"'/>";
+				html += "<input type='hidden' name='servCharge5[]' value='"+servCharge5+"'/>";
+				html += "<input type='hidden' name='pb10[]' value='"+pb1+"'/>";
+				html += "<input type='hidden' name='ori_servCharge5[]' value='"+servCharge5+"'/>";
+				html += "<input type='hidden' name='ori_pb1[]' value='"+pb1+"'/>";
 				html += "<input type='text' name='productPrice[]' class = 'inps' style='width:100px;' value='"+price+"'/></td>";
 				html += "<td class = 'table-details' style='text-align:center;width:5%;'>";
 				html += "<input type='text' name='productQty[]' class='inps' style='width:40px;' value='1'/>";
@@ -538,13 +596,16 @@ date_default_timezone_set('Asia/Jakarta');
 				var dpp = parseFloat($('#dpp').val());
 				var grand = parseFloat($('#totPrice').val());
 				var discount = parseFloat($('#discPer').val());
-				var disc = 0;
 				var received = parseFloat($('#payAmount').val());
 				var change = parseFloat($('#change').val());
+				//var charge = parseFloat($('#charge').val());
+				//var pb = parseFloat($('#pb').val());
 				
 				if ( isNaN( received ) ){
 					received = 0;
 				}
+				
+				var disc = 0;
 
 				price = parseFloat(price);
 
@@ -570,42 +631,68 @@ date_default_timezone_set('Asia/Jakarta');
 
 				} );
 
+				var totalServCharge5 = 0;
+				$( 'input[name^=servCharge5]' ).each( function( i , e ) {
+					var v = parseInt( $( e ).val() );
+					if ( !isNaN( v ) ){
+						totalServCharge5 += v;
+					}
+				} );
+
+				var totalPb1 = 0;
+				$("#tableProduct").find( 'input[name^=pb10]' ).each( function( i , e ) {
+					var v = parseInt( $( e ).val() );
+					if ( !isNaN( v ) ){
+						totalPb1 += v;
+					}
+				} );
+				
+
 				totProd = sum;
 				dpp = sumVal;
+				charge = totalServCharge5;
+				pb = totalPb1;
 				disc = dpp*(discount/100);
-				grand = sumVal-disc;
+				grand = sumVal+charge+pb-disc;
 				change = received-grand;
-
 
 				var totalProduct = totProd;
 				var grossPrice = dpp;
 				var totalPrice = grand;
 				var discounts = disc;
 				var changeVal = change;
+				var servCharge = charge;
+				var pebe = pb;
 
 				$('#totalProd').val(totProd);
 				$('#dpp').val(dpp);
 				$('#disc').val(disc);
 				$('#totPrice').val(grand);
 				$('#change').val(change);
+				$('#charge').val(charge);
+				$('#pb').val(pb);
 
 				totalProduct = totalProduct.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 				grossPrice = "Rp. "+grossPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 				changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+				servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+				pebe = "Rp. "+pebe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 				$('#totalProduct').val(totalProduct);
 				$('#grossPrice').val(grossPrice);
 				$('#discount').val(discounts);
 				$('#totalPrice').val(totalPrice);
 				$('#changeAmount').val(changeVal);
+				$('#serviceCharge').val(servCharge);
+				$('#pb1').val(pebe);
 
 			}, "json" );
 		}
     });
 	
-	$('body').on('keyup', '.inps', function(event){
+	$(document).on('input', '.inps', function(event){
 		var $row = $(this).closest("tr"); //this is the closest common root of the input elements
     	var amount = parseInt($row.find('input[name^=productQty]').val());
         var unitPrice = parseFloat($row.find('input[name^=productPrice]').val());
@@ -614,13 +701,28 @@ date_default_timezone_set('Asia/Jakarta');
 		var curStock=$('#curProd_'+productID).val();
 		
 		var curSell = 0;
+		var totalServCharge5 = 0;
+		var totalPb1 = 0;
 		$( 'input[name^=productQty]' ).each( function( i , e ) {
 			var v = parseInt( $( e ).val() );
 			if ( !isNaN( v ) ){
 				var $rows = $(this).closest("tr");
 				var prodID = $rows.find('input[name^=productID]').val();
+				var _servCharge5 = $rows.find('input[name^=ori_servCharge5]').val();
+				var _pb1 = $rows.find('input[name^=ori_pb1]').val();
+				
 				if(prodID==productID){
 					curSell += v;
+					if(v != 0){
+						$rows.find('input[name^=servCharge5]').val(parseInt(_servCharge5) * v );
+						$rows.find('input[name^=pb10]').val(parseInt(_pb1) * v );
+						totalServCharge5 += parseInt(_servCharge5) * v;
+						totalPb1 += parseInt(_pb1) * v;
+					}
+				}
+				else{
+					totalServCharge5 += parseInt(_servCharge5);
+					totalPb1 += parseInt(_pb1);
 				}
 			}
 		} );
@@ -658,11 +760,12 @@ date_default_timezone_set('Asia/Jakarta');
 			var disc = 0;
 			var received = parseFloat($('#payAmount').val());
 			var change = parseFloat($('#change').val());
+			var charge = totalServCharge5;
+			var pb = totalPb1;
 
 			if ( isNaN( received ) ){
 				received = 0;
 			}
-
 
 			var sum = 0;
 			var sumVal = 0;
@@ -684,12 +787,12 @@ date_default_timezone_set('Asia/Jakarta');
 					sum += 0;
 				}
 
-			} );
+			});
 
 			totProd = sum;
 			dpp = sumVal;
 			disc = dpp*(discount/100);
-			grand = sumVal-disc;
+			grand = sumVal+charge+pb-disc;
 			change = received-grand;
 
 			var totalProduct = totProd;
@@ -697,6 +800,8 @@ date_default_timezone_set('Asia/Jakarta');
 			var totalPrice = grand;
 			var discounts = disc;
 			var changeVal = change;
+			var servCharge = charge;
+			var pebe = pb;
 
 			$('#totalProd').val(totProd);
 			$('#dpp').val(dpp);
@@ -709,12 +814,18 @@ date_default_timezone_set('Asia/Jakarta');
 			discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			pebe = "Rp. "+pebe.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#totalProduct').val(totalProduct);
 			$('#grossPrice').val(grossPrice);
 			$('#discount').val(discounts);
 			$('#totalPrice').val(totalPrice);
 			$('#changeAmount').val(changeVal);
+			$('#charge').val(servCharge);
+			$('#pb').val(pebe);
+			$('#serviceCharge').val(servCharge);
+			$('#pb1').val(pebe);
 		}
 	});		
 	
@@ -726,29 +837,35 @@ date_default_timezone_set('Asia/Jakarta');
 		var prodStockID = $('#stock_'+productID).attr("id");
 		var curStock=$('#curProd_'+productID).val();
 		
-		//delete from db if any
-//		var get = "detail_delete.php?id="+btn;
-//		$.get(get, function( data ) {
-//			
-//			
-//		}, "json" );
-		
 		$('#'+id).remove();
 		$('tr.deft').remove();
 		
 		var curSell = 0;
+		var totalServCharge5 = 0;
+		var totalPb1 = 0;
 		$( 'input[name^=productQty]' ).each( function( i , e ) {
 			var v = parseInt( $( e ).val() );
 			if ( !isNaN( v ) ){
 				var $rows = $(this).closest("tr");
 				var prodID = $rows.find('input[name^=productID]').val();
+				var _servCharge5 = $rows.find('input[name^=ori_servCharge5]').val();
+				var _pb1 = $rows.find('input[name^=ori_pb1]').val();
+				
 				if(prodID==productID){
 					curSell += v;
+					$rows.find('input[name^=servCharge5]').val(parseInt(_servCharge5) * v );
+					$rows.find('input[name^=pb10]').val(parseInt(_pb1) * v );
+					totalServCharge5 += parseInt(_servCharge5) * v;
+					totalPb1 += parseInt(_pb1) * v;
+				}
+				else{
+					totalServCharge5 += parseInt(_servCharge5) * v;
+					totalPb1 += parseInt(_pb1) * v;
 				}
 			}
 		} );
 		var stockAfter=curStock-curSell;
-		
+		console.log([totalServCharge5, totalPb1]);
 		if(stockAfter<0){
 			alert("PRODUCT OUT OF STOCK");
 			$('#'+prodStockID).val(0);
@@ -768,6 +885,7 @@ date_default_timezone_set('Asia/Jakarta');
 			var disc = 0;
 			var received = parseFloat($('#payAmount').val());
 			var change = parseFloat($('#change').val());
+			//var charge = parseFloat($('#charge').val());
 
 			if ( isNaN( received ) ){
 				received = 0;
@@ -811,44 +929,59 @@ date_default_timezone_set('Asia/Jakarta');
 				html += "<td class = 'table-details' style='text-align:left;width:5%;padding-left:5px;'>";
 				html += "<button type='button' class='del' style='border:none;margin-left:-10px;background-color:rgba(255, 255, 255, 0);'><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-trash' viewBox='0 0 16 16'><path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/><path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/></svg></button></td></tr>";
 
-				$('#tableProduct tbody').append(html);     
+				$('#tableProduct tbody').append(html);   
 				totProd = 0;
 				dpp = 0;
 				grand = 0;
 				disc = 0;
 				change = 0;
+				charge = 0;
+
 			}else{
+				
 				totProd = sum;
 				dpp = sumVal;
 				disc = dpp*(discount/100);
 				grand = sumVal-disc;
 				change = received-grand;
+				//charge = dpp*(5/100);
 			}
+
+			
 			var totalProduct = totProd;
 			var grossPrice = dpp;
-			var totalPrice = grand;
+			var totalPrice = grand+totalServCharge5+totalPb1;
 			var discounts = disc;
 			var changeVal = change;
+			var servCharge = totalServCharge5;
+			var pb = totalPb1
 
 			$('#totalProd').val(totProd);
 			$('#dpp').val(dpp);
 			$('#disc').val(disc);
 			$('#totPrice').val(grand);
 			$('#change').val(change);
+			$('#charge').val(servCharge);
+			$('#pb').val(totalPb1);
 
 			totalProduct = totalProduct.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 			grossPrice = "Rp. "+grossPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			discounts = "Rp. "+discounts.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			totalPrice = "Rp. "+totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 			changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			servCharge = "Rp. "+servCharge.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+			pb = "Rp. "+pb.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 
 			$('#totalProduct').val(totalProduct);
 			$('#grossPrice').val(grossPrice);
 			$('#discount').val(discounts);
 			$('#totalPrice').val(totalPrice);
 			$('#changeAmount').val(changeVal);
+			$('#serviceCharge').val(servCharge);
+			$('#pb1').val(pb);
 		}
     });	
+	
 	
 	$('body').on('keyup', '#payment', function(event){
 		var pay = $('#payment').val();
@@ -858,10 +991,12 @@ date_default_timezone_set('Asia/Jakarta');
 		if (pay==""){
 			pay = 0;
 		}
+		
 		var pays = pay;
 		pays = "Rp. "+pays.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 		$('#paymentAmount').val(pays);
 		$('#payAmount').val(pay);
+		
 		
 		change = pay-grand;
 		var changeVal = change;
@@ -911,19 +1046,26 @@ date_default_timezone_set('Asia/Jakarta');
 					$('#payAmount').val(0);
 					var payAmo = "Rp. 0,-";
 					$('#paymentAmount').val(payAmo);
+					
+					change = 0-total;
+					var changeVal = change;
+					$('#change').val(change);
+					changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+					$('#changeAmount').val(changeVal);
+					
 				}else{
 					if(total >= voucherRequirement){
 						$('#voucherDesc').val(desc); 
 						$('#voucherDesc').css("color", "green");
 						$('#voucherDesc').css("font-weight", "bold");
 						$('#voucherVal').val(voucherSaldo); 
-
+						
 						change = voucherSaldo-total;
 						var changeVal = change;
 						$('#change').val(change);
 						changeVal = "Rp. "+changeVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
 						$('#changeAmount').val(changeVal);
-						
+
 						var payAmount = $('#payAmount').val(); 
 
 						$('#payAmount').val(voucherSaldo);
@@ -1012,51 +1154,53 @@ date_default_timezone_set('Asia/Jakarta');
 				var promoStatus = "";
 				var dpp = $('#dpp').val();
 
+				console.log(now);
+
 				switch(day){
 					case 0:
-						if(isSunday==1){
+						if(isSunday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 1:
-						if(isMonday==1){
+						if(isMonday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 2:
-						if(isTuesday==1){
+						if(isTuesday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 3:
-						if(isWednesday==1){
+						if(isWednesday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 4:
-						if(isThursday==1){
+						if(isThursday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 5:
-						if(isFriday==1){
+						if(isFriday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
 						}
 						break;
 					case 6:
-						if(isSaturday==1){
+						if(isSaturday!=1){
 							promoStatus = "AVAILABLE";
 						}else{
 							promoStatus = "UNAVAILABLE";
@@ -1160,7 +1304,7 @@ date_default_timezone_set('Asia/Jakarta');
 			}, "json" );
 		}
 		
-	});	
+	});
 	
 	
 	

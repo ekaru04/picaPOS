@@ -28,7 +28,7 @@ if($_GET['requestID']==""){
 		<div class="container-fluid">
 			<div class='entry-box-basic'>
                 <h1 class>
-                    MAKE REQUEST PRODUCT
+                    BUAT PERMINTAAN PRODUKSI
 <?php 
 
 					if($_GET['requestID']!=""){
@@ -53,7 +53,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
 					<div class='row mt-3 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' disabled value='REQUEST DATE' />
+                            <h6><b>TANGGAL PERMINTAAN</b></h6>
                             <?php
                                 date_default_timezone_set('Asia/Jakarta');
                                 $dateNow = date("Y-m-d");
@@ -66,11 +66,11 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                     <div class='row  mt-3 '>
                         <div class='col-2 label'>
-                         <input type='text' class='form-control-plaintext' disabled value='OUTLET' />
+                         <h6><b>OUTLET</b></h6>
                         </div>
                         <div class='col-4'>
                             <select class='select-cust form-control' name='outletID' id='outletID' style='width:300px;' required>
-                                <option value=''>-SELECT OUTLET-</option>
+                                <option value=''>-PILIH OUTLET-</option>
                                 <?php
                                     $queryOutlet="select * from moutlet where status != 0";
                                     $resOutlet=mysql_query($queryOutlet);
@@ -89,11 +89,11 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                     <div class='row  mt-3'>
                         <div class='col-2 label'>
-                         <input type='text' class='form-control-plaintext' disabled value='CATEGORY' />
+                         <h6><b>KATEGORI</b></h6>
                         </div>
                             <div class='col-4'>
                                 <select class='select-cust form-control' name='categoryID' id='categoryID' style='width:300px;' required>
-                                    <option value=''>-SELECT CATEGORY-</option>
+                                    <option value=''>-PILIH KATEGORI-</option>
                                     <?php
                                         $queryCategory="SELECT * FROM mcategory WHERE status != 0";
                                         $resCategory=mysql_query($queryCategory);
@@ -112,11 +112,11 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                     <div class='row  mt-3 '>
                         <div class='col-2 label'>
-                         <input type='text' class='form-control-plaintext' disabled value='PRODUCT' />
+                         <h6><b>PRODUK</b></h6>
                         </div>
                         <div class='col-4'>
                             <select class='select-cust form-control' name='productID' id='productID' style='width:300px;' required>
-                                <option value=''>-SELECT PRODUCT-</option>
+                                <option value=''>-PILIH PRODUK-</option>
                                 <?php
                                     $queryProduct="select * from mproduct where status != 0";
                                     $resProduct=mysql_query($queryProduct);
@@ -135,7 +135,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                     <div class='row mt-3'>
                         <div class='col-2 label'>
-                         <input type='text' class='form-control-plaintext' disabled value='AMOUNT' />
+                         <h6><b>JUMLAH</b></h6>
                         </div>
                         <div class='col-3'>
                             <input type='number' class='type-input form-control' name='amount' placeholder='Current Stock' style='width:300px' value='<?php echo $row[amount]; ?>' required />
@@ -144,10 +144,10 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                     <div class='row mt-3'>
                         <div class='col-2 label'>
-                         <input type='text' class='form-control-plaintext' disabled value='MEASUREMENT' />
+                         <h6><b>SATUAN</b></h6>
                         </div>
                         <select class='select-cust ml-3 form-control' name='measurementID' style='width:300px;' required>
-                                <option value=''>-CHOOSE ONE-</option>
+                                <option value=''>-PILIH SATU-</option>
                                 <?php
                                     $queryMeasurement="select * from mmeasurement where status != 0";
                                     $resMeasurement=mysql_query($queryMeasurement);
@@ -162,7 +162,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                     <div class='row  mt-3 '>
                         <div class='col-2 label'>
-                         <input type='text' class='form-control-plaintext' disabled value='REMARKS' />
+                         <h6><b>REMARKS</b></h6>
                         </div>
                         <div class='col-3'>
                             <textarea class='type-input form-control' name='remarks' placeholder='Insert notes here' rows='4' cols='50'><?php echo $row[remarks]; ?></textarea>

@@ -20,7 +20,7 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='entry-box-basic'>
-      <h4 align='center'>PRODUCTION INPUT</h4>
+      <h4 align='center'>BUAT PRODUK</h4>
       <div class="row mb-2">
           <div class="col">
             <h1 class="m-0 text-dark text-center"></h1>
@@ -29,7 +29,7 @@ if (!isset($_SESSION["username"]))
           </div>
           <div class="">
             <!-- <button type='button' id='addStock' class='btn btn-primary mr-1' style='float: right;margin-top:13px; font-size:13px;'>ADD CURRENT STOCK</button> -->
-            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>ADD NEW PRODUCTIONS</button>
+            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>TAMBAH PRODUKSI PRODUK BARU</button>
           </a>
           </div>
           <div class="col">
@@ -43,16 +43,16 @@ if (!isset($_SESSION["username"]))
           <thead>
             <tr>
               <th style='vertical-align:middle;'>NO</th>
-              <th style='vertical-align:middle;'>REQUEST DATE</th>
-              <th style='vertical-align:middle;'>PRODUCT NAME</th>
-              <th style='vertical-align:middle;'>CATEGORY NAME</th>
+              <th style='vertical-align:middle;'>TGL PERMINTAAN</th>
+              <th style='vertical-align:middle;'>NAMA PRODUK</th>
+              <th style='vertical-align:middle;'>KATEGORI</th>
               <th style='vertical-align:middle;'>OUTLET</th>
-              <th style='vertical-align:middle;'>AMOUNT REQUEST</th>
+              <th style='vertical-align:middle;'>JUMLAH DIMINTA</th>
               <th style='vertical-align:middle;'>FULLNAME</th>
-              <th style='vertical-align:middle;'>MEASUREMENT</th>
+              <th style='vertical-align:middle;'>SATUAN</th>
               <th style='vertical-align:middle;'>REMARKS</th>
               <th style='vertical-align:middle;'>STATUS</th>
-              <th style='vertical-align:middle;'>ACTION</th>
+              <th style='vertical-align:middle;'>AKSI</th>
             </tr>
           </thead>
           <tbody>

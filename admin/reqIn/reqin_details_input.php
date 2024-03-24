@@ -26,7 +26,7 @@ if($_GET['requestID']==""){
 		<div class="container-fluid">
 			<div class='entry-box-basic'>
                 <h1 class>
-                    MAKE REQUEST PRODUCTION
+                BUAT PERMINTAAN PRODUKSI
 <?php 
 
 					if($_GET['requestID']!=""){
@@ -49,7 +49,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3 '>
                                 <div class='col-2'>
-                                    METHOD NAME
+                                <h6><b>TANGGAL PERMINTAAN</b></h6>
                                     <?php
                                         date_default_timezone_set('Asia/Jakarta');
                                         $dateNow = date("Y-m-d");
@@ -61,7 +61,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row  mt-3'>
                                 <div class='col-2'>
-                                CATEGORY
+                                <h6><b>KATEGORI</b></h6>
                                 </div>
                                  <div class='col-4'>
                                   <?php
@@ -79,7 +79,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row  mt-3 '>
                                 <div class='col-2'>
-                                    OUTLET
+                                <h6><b>OUTLET</b></h6>
                                 </div>
                                 <div class='col-4'>
                                  <?php
@@ -97,7 +97,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row  mt-3 '>
                                 <div class='col-2'>
-                                    PRODUCT
+                                <h6><b>PRODUK</b></h6>
                                 </div>
                                 <div class='col-4'>
                                  <?php
@@ -116,7 +116,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3'>
                                 <div class='col-2'>
-                                    AMOUNT
+                                <h6><b>JUMLAH</b></h6>
                                 </div>
                                 <div class='col-3'>
                                     <input type='number' class='type-input' name='amount' placeholder='Current Stock' style='width:300px' value='<?php echo $row[amount]; ?>' readonly />
@@ -124,7 +124,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3'>
                                 <div class='col-2'>
-                                    MEASUREMENT
+                                <h6><b>SATUAN</b></h6>
                                 </div>
                                     <?php
                                      $queryMeasurement="select * from mmeasurement where status != 0";
@@ -141,14 +141,14 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row  mt-3 '>
                                 <div class='col-2'>
-                                    REMARKS
+                                <h6><b>REMARKS</b></h6>
                                 </div>
                                 <div class='col-3'>
                                     <textarea class='type-input' name='remarks' placeholder='Insert notes here' readonly rows='4' cols='50'><?php echo $row[remarks]; ?></textarea>
                                 </div>
                             </div>
                                 <div class='col-2'>
-                                    INGREDIENT LIST
+                                    LIST BAHAN BAKU
                                 </div>
                             <?php
                             $subQ = "SELECT i.ingredientID, i.ingredient, d.amount, m.measurementName, i.measurementID

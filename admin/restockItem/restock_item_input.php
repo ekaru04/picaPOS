@@ -32,7 +32,7 @@ if($_GET['transItemID']==""){
                 <a href='/picaPOS/admin/restockItem' style='text-decoration:none;color:black;'><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
     </svg>
-                        ADD NEW ITEM RESTOCK
+                        TAMBAH RESTOK BARANG BARU
                     </a>
 <?php 
 
@@ -64,7 +64,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                         </div>
                         <div class="row">
                             <div class="form-group col-4">
-                                <h6><b>TRANSACTION DATE</b></h6>
+                                <h6><b>TGL TRANSAKSI</b></h6>
                                 <?php
                                     date_default_timezone_set('Asia/Jakarta');
                                     $dateNow = date("Y-m-d");
@@ -78,7 +78,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             <div class='form-group col-6'>
                                 <h6><b>SUPPLIER</b></h6>
                                 <select class='select-cust form-control' name='supplierID' required>
-                                        <option value=''>-CHOOSE ONE-</option>
+                                        <option value=''>-PILIH SATU-</option>
                                         <?php
                                             $querySupplier="select * from msupplier where status != 0";
                                             $resSupplier=mysql_query($querySupplier);
@@ -97,7 +97,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             <div class='form-group col-6'>
                                 <h6><b>OUTLET</b></h6>
                                 <select class='select-cust form-control' name='outletID' id='outletID' required>
-                                    <option value=''>-CHOOSE ONE-</option>
+                                    <option value=''>-PILIH SATU-</option>
                                     <?php
                                         $queryOutlet="select * from moutlet where status != 0";
                                         $resOutlet=mysql_query($queryOutlet);
@@ -116,9 +116,9 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 
                         <div class="row">
                             <div class='form-group col-4'>
-                                <h6><b>CATEGORY ITEM</b></h6>
+                                <h6><b>KATEGORI BARANG</b></h6>
                                     <select class='select-cust form-control' name='categoryStockID' id='categoryStockID' required>
-                                        <option value=''>-CHOOSE ONE-</option>
+                                        <option value=''>-PILIH SATU-</option>
                                         <?php
                                             $queryStock="select * from mstockcategory where status != 0";
                                             $resStock=mysql_query($queryStock);
@@ -134,9 +134,9 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                                     </select>
                             </div>
                             <div class='form-group col-4'>
-                                <h6><b>ITEM NAME</b></h6>
+                                <h6><b>NAMA BARANG</b></h6>
                                     <select class='select-cust form-control' name='stockID' id='stockID' required>
-                                        <option value=''>-CHOOSE ONE-</option>
+                                        <option value=''>-PILIH SATU-</option>
                                         <?php
                                             $queryStock="select * from mstock where status != 0";
                                             $resStock=mysql_query($queryStock);
@@ -174,11 +174,11 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                                     </select>
                             </div> -->
                             <div class="form-group col-sm-2">
-                                <h6><b>Amount</b></h6>
+                                <h6><b>Jumlah</b></h6>
                                 <input type="text" class="form-control" name="amount" required value='<?php echo $row[amount]; ?>'>
                             </div>
                             <div class='form-group col-sm-2'>
-                                <h6><b>Conv. Measurement</b></h6>
+                                <h6><b>Satuan</b></h6>
                                 <select class='select-cust form-control' name='measurementID' id='measurementID' required>
                                         <option value=''>-</option>
                                         <?php
@@ -198,11 +198,11 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                         </div>
                         <div class='row'>
                             <div class="form-group col-sm-2">
-                                <h6><b>Total Price</b></h6>
+                                <h6><b>Total Harga</b></h6>
                                 <input type="text" class="form-control" name="totalPrice" value='<?php echo $row[totalPrice]; ?>' required>
                             </div>
                             <div class="form-group col-sm-2">
-                                <h6><b>Discount (%)</b></h6>
+                                <h6><b>Diskon (%)</b></h6>
                                 <input type="text" class="form-control" name="discount" value='<?php echo $row[discount]; ?>' required>
                             </div>
                             <div class="form-group">

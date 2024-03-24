@@ -38,9 +38,8 @@ if($_GET['closeID']==""){
 	
 }else{
     $closeID = $_GET['closeID'];
-    $query = "SELECT c.*,u.fullName FROM tabCloseCashierHeader c INNER JOIN mUser u ON u.userID = c.userID WHERE c.closeID ='$closeID'";
-    $res = mysql_query($query);
-    $row = mysql_fetch_array($res);
+    $query = mysql_query("SELECT c.*,u.fullName FROM tabCloseCashierHeader c INNER JOIN mUser u ON u.userID = c.userID WHERE c.closeID ='$closeID'");
+	$row = mysql_fetch_array($query);
 	$closeDate = $row['closeDate'];
 	$periode = $row['closePeriode'];
 	$fullName = $row['fullname'];
@@ -66,7 +65,7 @@ if($_GET['closeID']==""){
 					
 					<div class='row  mt-3 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='CLOSE ID' />
+                            <h6><b>CLOSE ID</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' name='closeID' id='closeID' style='width:300px' value='<?php echo $closeID; ?>' required readonly/>
@@ -75,16 +74,16 @@ if($_GET['closeID']==""){
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='CLOSE DATE' />
+							<h6><b>TANGGAL CLOSE</b></h6>
                         </div>
                         <div class='col-4'>
-                            <input type='date' class='form-control' name='closeDate' id='closeDate' style='width:300px' value='<?php echo $closeDate; ?>' required />
+                            <input type='date' class='form-control' name='closeDate' id='closeDate' style='width:300px' value='<?php echo date('Y-m-d'); ?>' required />
                         </div>
 					</div>
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='OUTLET' />
+                            <h6><b>OUTLET</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' name='outletName' id='outletName' style='width:300px' value='<?php echo $outletName; ?>' disabled />
@@ -94,7 +93,7 @@ if($_GET['closeID']==""){
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='PERIODE' />
+                            <h6><b>PERIODE</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' name='closePeriode' id='closePeriode' style='width:300px' value='<?php echo $periode; ?>' readonly required />
@@ -103,7 +102,7 @@ if($_GET['closeID']==""){
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='CASHIER' />
+                            <h6><b>KASIR</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' name='fullName' id='fullName' style='width:300px' value='<?php echo $fullName; ?>'readonly required />
@@ -111,7 +110,7 @@ if($_GET['closeID']==""){
                         </div>
 					</div>
 					
-					<div class='row  mt-1 '>
+					<!-- <div class='row  mt-1 '>
                         <div class='col-2 label'>
                             <input type='text' class='form-control-plaintext' style='width:150px' disabled value='SESSION' />
                         </div>
@@ -122,11 +121,11 @@ if($_GET['closeID']==""){
                                 <option value='2' $session2 >2</option>
 							</select>
                         </div>
-					</div>
+					</div> -->
 					
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TOTAL' />
+                            <h6><b>TOTAL</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' id='dppTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
@@ -135,7 +134,7 @@ if($_GET['closeID']==""){
 					</div>
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='TAX' />
+                            <h6><b>PAJAK</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' id='taxTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
@@ -144,7 +143,34 @@ if($_GET['closeID']==""){
 					</div>
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='GRANDTOTAL' />
+                            <h6><b>MODAL AWAL</b></h6>
+                        </div>
+                        <div class='col-4'>
+                            <input type='text' class='form-control' id='modalTotal' style='width:300px' value='<?php echo $grandTot; ?>' readonly required />
+							<input type='hidden' name='modalTotal' id = 'modalTot' value='<?php echo $grandTotal; ?>'>
+                        </div>
+					</div>
+					<div class='row  mt-1 '>
+                        <div class='col-2 label'>
+                            <h6><b>MODAL TAMBAHAN</b></h6>
+                        </div>
+                        <div class='col-4'>
+                            <input type='text' class='form-control' id='newModal' style='width:300px' value='<?php echo $grandTot; ?>' required />
+							<input type='hidden' name='newModal' id = 'newMod' value='<?php echo $grandTotal; ?>'>
+                        </div>
+					</div>
+					<div class='row  mt-1 '>
+                        <div class='col-2 label'>
+                            <h6><b>PENGELUARAN</b></h6>
+                        </div>
+                        <div class='col-4'>
+                            <input type='text' class='form-control' id='outTotal' style='width:300px' value='' readonly required />
+							<input type='hidden' name='outTotal' id = 'outTot' value=''>
+                        </div>
+					</div>
+					<div class='row  mt-1 '>
+                        <div class='col-2 label'>
+                            <h6><b>GRANDTOTAL PENJUALAN</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' id='grandTotal' style='width:300px' value='<?php echo $grandTot; ?>'readonly required />
@@ -178,11 +204,21 @@ echo			   "<div class='row mt-1 '>
 ?>
 					<div class='row  mt-1 '>
                         <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' style='width:150px' disabled value='RECEIVED' />
+                            <h6><b>DITERIMA</b></h6>
                         </div>
                         <div class='col-4'>
                             <input type='text' class='form-control' id='totalReceived' style='width:300px' value='<?php echo $received; ?>'readonly required />
-							<input type='text' name='totalReceived' id = 'received' value='<?php echo $totalReceived; ?>'>
+							<input type='hidden' name='totalReceived' id = 'received' value='<?php echo $totalReceived; ?>'>
+                        </div>
+					</div>
+
+					<div class='row  mt-1 '>
+                        <div class='col-2 label'>
+                            <h6><b>FINAL</b></h6>
+                        </div>
+                        <div class='col-4'>
+                            <input type='text' class='form-control' id='finalOwned' style='width:300px' value='<?php echo $received; ?>'readonly required />
+							<input type='hidden' name='finalOwned' id = 'finalOwn' value='<?php echo $totalReceived; ?>'>
                         </div>
 					</div>
 					
@@ -248,6 +284,8 @@ echo			   "<div class='row mt-1 '>
 		var grand = 0;
 		var received = 0;
 		var method = $('#payID').val();
+
+		// console.log(newModal);
 		
 		var detailData = $('#detailData').DataTable(
 		{
@@ -275,6 +313,56 @@ echo			   "<div class='row mt-1 '>
 				{"className": "dt-center", "targets": "_all"}
 			]
 		});
+
+		// var outTotal = parseFloat($('#outTot').val());
+
+		// if(outTotal) {
+
+		// } else {
+		// 	outTotal = 0;
+		// }
+
+		var getIngre = "detail_ingre.php?transDate="+closeDate;
+		var getStock = "detail_stock.php?transItemDate="+closeDate;
+		var getModal = "detail_modal.php?openDate="+closeDate+"&outletID="+outletID;
+
+		$.get(getIngre, function(dataIngre) {
+			var totalIngre = parseFloat(dataIngre.total);
+			console.log("Total Ingredients:", totalIngre);
+
+			// Perform AJAX request for total stock
+			$.get(getStock, function(dataStock) {
+				var totalStock = parseFloat(dataStock.total);
+				console.log("Total Stock:", totalStock);
+
+				// Calculate totalAll
+				var totalAll = totalStock + totalIngre;
+				console.log("Total All:", totalAll);
+				$('#outTotal').val(totalAll);
+
+				// Proceed with other actions that depend on the completion of both requests
+				// For example:
+				// updateUI(totalAll);
+			}, "json").fail(function(jqXHR, textStatus, errorThrown) {
+				console.error("Error fetching total stock:", errorThrown);
+			});
+
+			$.get(getModal, function( dataModal ) {
+				var modalTotal = dataModal.nominalOpen;
+
+				// console.log(data);
+				$('#modalTot').val(modalTotal);
+				modalTotal = "Rp. "+modalTotal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")+",-";
+				// console.log(modalTotal);
+				$('#modalTotal').val(modalTotal);
+
+			}, "json" );
+
+			
+
+		}, "json").fail(function(jqXHR, textStatus, errorThrown) {
+			console.error("Error fetching total ingredients:", errorThrown);
+		});		
 		
 		var get = "detail_sum.php?closeID="+closeID+"&closeDate="+closeDate+"&outletID="+outletID+"&closeShift="+closeShift;
 		$.get(get, function( data ) {
@@ -282,6 +370,10 @@ echo			   "<div class='row mt-1 '>
 			var VAT = data.VAT;
 			var total = data.total;
 			var paymentAmount = data.paymentAmount;
+
+			// var modalAwal = $('#modalTot').val();
+
+			console.log("modal awal:", modalTot);
 
 			// var totalA = dataA.total;
 			// var paymentAmountA = dataA.paymentAmount;

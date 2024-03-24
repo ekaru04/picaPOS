@@ -49,7 +49,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class="row mt-3">
                             <div class='col-2 label'>
-                            <input type='text' class='form-control-plaintext' disabled value='REQUEST DATE' />
+                            <h6><b>TANGGAL PERMINTAAN</b></h6>
                             <?php
                                 date_default_timezone_set('Asia/Jakarta');
                                 $dateNow = date("Y-m-d");
@@ -62,7 +62,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                         </div>
                             <div class='row mt-3'>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='CATEGORY' />
+                            <h6><b>KATEGORI</b></h6>
                             </div>
                               <div class='col-4'>
                                <?php
@@ -80,7 +80,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row  mt-3 '>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='OUTLET' />
+                            <h6><b>OUTLET</b></h6>
                             </div>
                                 <div class='col-4'>
                                  <?php
@@ -98,7 +98,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row  mt-3 '>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='PRODUCT' />
+                            <h6><b>PRODUK</b></h6>
                             </div>
                                 <div class='col-4'>
                                  <?php
@@ -117,7 +117,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3'>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='AMOUNT' />
+                            <h6><b>JUMLAH</b></h6>
                             </div>
                                 <div class='col-3'>
                                     <input type='number' class='type-input form-control' name='amount' placeholder='Current Stock' style='width:300px' value='<?php echo $row[amount]; ?>' readonly />
@@ -125,7 +125,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3'>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='MEASUREMENT' />
+                            <h6><b>SATUAN</b></h6>
                             </div>
                                     <?php
                                      $queryMeasurement="select * from mmeasurement where status != 0";
@@ -142,7 +142,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3'>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='REMARKS' />
+                            <h6><b>REMARKS</b></h6>
                             </div>
                                 <div class='col-3'>
                                     <textarea class='type-input form-control' name='remarks' placeholder='Insert notes here' readonly rows='4' cols='50'><?php echo $row[remarks]; ?></textarea>
@@ -150,7 +150,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
                             </div>
                             <div class='row mt-3'>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='INGREDIENT LIST' />
+                            <h6><b>LIST BAHAN BAKU</b></h6>
                             </div>
                             
                             <?php
@@ -194,7 +194,7 @@ echo "<button type='button' id='del' style='border:none;background-color:rgba(25
 					
                     <div class='row  mt-3 '>
                             <div class='col-2 label'>
-                                <input type='text' class='form-control-plaintext' disabled value='REMARKS' />
+                            <h6><b>REMARKS</b></h6>
                             </div>
                                 <div class='col-3'>
                                     <textarea class='type-input form-control' name='reason' placeholder='Insert notes here' rows='4' cols='50'></textarea>

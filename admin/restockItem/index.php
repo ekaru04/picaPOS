@@ -21,7 +21,7 @@ if (!isset($_SESSION["username"]))
     <div class='clear height-20 mt-3'></div>
     <div class="container-fluid">
       <div class='entry-box-basic'>
-      <h4 align='center'>TRANSACTION RESTOCK ITEM</h4>
+      <h4 align='center'>TRANSAKSI RESTOK BARANG</h4>
       <div class="row mb-2">
           <div class="col">
             <h1 class="m-0 text-dark text-center"></h1>
@@ -30,7 +30,7 @@ if (!isset($_SESSION["username"]))
           </div>
           <div class="">
             <!-- <button type='button' id='addStock' class='btn btn-primary mr-1' style='float: right;margin-top:13px; font-size:13px;'>ADD CURRENT STOCK</button> -->
-            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>ADD NEW TRANSACTIONS</button>
+            <button type='button' id='add' class='btn btn-primary' style='float: right;margin-top:13px; font-size:13px;'>TAMBAH TRANSAKSI BARU</button>
           </a>
           </div>
           <div class="col">
@@ -44,14 +44,14 @@ if (!isset($_SESSION["username"]))
           <thead>
             <tr>
               <th style='vertical-align:middle;'>NO</th>
-              <th style='vertical-align:middle;'>TRANS DATE</th>
+              <th style='vertical-align:middle;'>TGL TRANSAKSI</th>
               <th style='vertical-align:middle;'>SUPPLIER</th>
-              <th style='vertical-align:middle;'>ITEM</th>
-              <th style='vertical-align:middle;'>ADDING STOCK</th>
-              <th style='vertical-align:middle;'>MEASUREMENT</th>
-              <th style='vertical-align:middle;'>TOTAL PRICE</th>
-              <th style='vertical-align:middle;'>DISC. PRICE</th>
-              <th style='vertical-align:middle;'>AFTER DISC.</th>
+              <th style='vertical-align:middle;'>BARANG</th>
+              <th style='vertical-align:middle;'>STOK YANG DITAMBAH</th>
+              <th style='vertical-align:middle;'>SATUAN</th>
+              <th style='vertical-align:middle;'>TOTAL HARGA</th>
+              <th style='vertical-align:middle;'>HARGA DISKON</th>
+              <th style='vertical-align:middle;'>HARGA SETELAH DISKON</th>
               <th style='vertical-align:middle;'>USER</th>
               
               <!-- <th style='vertical-align:middle;'>ACTION</th> -->
